@@ -1,0 +1,1 @@
+We are GIU students developing a web-application to keep track of an Engineering Equipment Inventory system 
