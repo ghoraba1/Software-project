@@ -1,4 +1,4 @@
-const database= require(./DB/Index.js)
+const DB= require(../DB/Index.js)
 
 function get_session_tok(req){
 
