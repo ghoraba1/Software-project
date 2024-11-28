@@ -1,6 +1,6 @@
 const DB= require('../DB/Index.js')
 
-function get_session_tok(req){
+function get_session_token(req){
   //check first if the user has a cookie
   if(!req.headers.cookie){
     return null
@@ -26,7 +26,7 @@ function get_session_tok(req){
 
 function get_user(req){
 //check if the user has a session token otherwise, redirect back to '/'
-    const sessionToken = getSessionToken(req);
+    const sessionToken = get_session_token(req);
   if (!sessionToken) {
     console.log("no session token is found")
     return res.status(301).redirect('/');
@@ -45,4 +45,4 @@ function get_user(req){
   return user;  
 
 }
-module.exports = {get_session_tok , get_user};
+module.exports = {get_session_token , get_user};
