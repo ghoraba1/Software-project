@@ -1,5 +1,10 @@
 
 require('dotenv').config();
+const {PublicAPIs} = require('./APIs/Public_APIs.js')
+const {EquipmentAPIs} = require('./APIs/Equipment.js')
+const {CartAPIs} = require('./APIs/Cart.js')
+const {UserAPIs} = require('./APIs/User.js')
+const{Middleware} =require('./Middleware/Admin.js')
 
 const express = require("express") ;    
 const  app=express() ;

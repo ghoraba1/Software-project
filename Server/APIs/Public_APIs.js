@@ -1,6 +1,6 @@
 
-function Public_APIs(app){
+function PublicAPIs(app){
 
 }
 
-module.exports={Public_APIs} ;
+module.exports={PublicAPIs} ;
