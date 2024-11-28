@@ -45,3 +45,4 @@ function get_user(req){
   return user;  
 
 }
+module.exports = {get_session_tok , get_user};
