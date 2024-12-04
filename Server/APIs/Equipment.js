@@ -4,19 +4,18 @@ function EquipmentAPIs(app) {
   
 
 const AdminCheck = async (req, res, next) => {
-  // Uncomment this block to make this function work and remove the "next();".
-  
-  /*try {
+  try {
     const user = await get_user(req);
+    //checks if user is admin using the get_user func from middleware.
     if (user.role !== "admin") {
-      return res.status(401).json({ error: "Not admin, kill yourself." });
+      return res.status(401).json({ error: "User not admin." });
     }
+    //if admin proceeds, if not code doesn't send.
     next();
   } catch (error) {
     console.error("Error:", error);
     return res.status(400).send("Authorization failed.");
-  }*/
- //there so code doesn't break when disabled
+  }
  next();
 };
 
@@ -41,17 +40,26 @@ app.post('/api/v1/equipment/new', AdminCheck , async (req, res) => {
     }
 });
 
-///// TASK ii ---No authorization needed.
-app.get('/api/v1/equipment/view', async (req, res) => {
-  try{
-    const result = await db.raw(`SELECT * FROM equipment`);
-    console.log(`Result: `,result.rows);
-    return res.status(200).send(result.rows);}
-  catch(err){
-    console.log("Error: ", err.message);
-    return res.status(400).send(`Unable to view equipment.`);
-  }
-});
+ ///// TASK ii ---No authorization needed.
+  app.get('/api/v1/equipment/view', async (req, res) => {
+    // added SQL join
+    try {
+      const result = await db.raw(`
+        SELECT 
+          e.*, 
+          c.category_name, 
+          s.supplier_name 
+        FROM equipment e
+        LEFT JOIN categories c ON e.category_id = c.category_id
+        LEFT JOIN suppliers s ON e.supplier_id = s.supplier_id
+      `);
+      console.log(`Result: `, result.rows);
+      return res.status(200).send(result.rows);
+    } catch (err) {
+      console.log("Error: ", err.message);
+      return res.status(400).send(`Unable to view equipment.`);
+    }
+  });
 
 ///// TASK iii ---Authorization needed.
 app.put('/api/v1/equipment/:id', AdminCheck , async (req, res) => {
