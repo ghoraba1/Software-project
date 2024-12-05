@@ -1,5 +1,5 @@
 const DB =require('../DB/Index.js')
-const get_token = require('./Sec_functions.js')
+const {get_session_token} = require('./Sec_functions.js')
 
  async function Middleware(req,res,next)
 {
@@ -34,7 +34,7 @@ let result = await db.raw(`select exists (
     return res.send("you need to create database table Session in schema backendTutorial")
   }
 
-  const sessionToken = getSessionToken(req);
+  const sessionToken = get_session_token(req);
 
   if (!sessionToken) {
     console.log("sesison token is null")
