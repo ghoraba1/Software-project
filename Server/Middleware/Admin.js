@@ -34,7 +34,7 @@ let result = await db.raw(`select exists (
     return res.send("you need to create database table Session in schema backendTutorial")
   }
 
-  const sessionToken = getSessionToken(req);
+  const sessionToken = get_session_token(req);
 
   if (!sessionToken) {
     console.log("sesison token is null")
