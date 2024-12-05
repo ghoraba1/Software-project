@@ -1,5 +1,5 @@
 const DB =require('../DB/Index.js')
-const get_token = require('./Sec_functions.js')
+const {get_session_token} = require('./Sec_functions.js')
 
  async function Middleware(req,res,next)
 {
