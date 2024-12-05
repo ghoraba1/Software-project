@@ -1,5 +1,5 @@
 const DB = require('../DB/Index.js'); 
-const { get_user } = require('../DB/Index.js');
+const { get_user } = require('../Middleware/Sec_functions.js');
 
 function CartAPIs(app) {
  
