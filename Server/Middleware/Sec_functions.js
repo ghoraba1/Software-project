@@ -24,7 +24,7 @@ function get_session_tok(req){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-function get_user(req){
+async function  get_user(req){
 //check if the user has a session token otherwise, redirect back to '/'
     const sessionToken = getSessionToken(req);
   if (!sessionToken) {

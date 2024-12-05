@@ -1,4 +1,5 @@
 const DB =require('../DB/Index.js')
+//User APIs will access the database so we need to include th file 
 
 function UserAPIs(app){
 
@@ -16,7 +17,21 @@ function UserAPIs(app){
      }   
     } )
 
+    app.post('/api/v1/users/new',async(req,res)=>{
+      
+      try{
+         const{username,email,password,role,created_at}=req.body ;
+   //Do I need to get the created_at from the user ?
+
+      }
+      catch(err){
+  
+      }
+
+   } )
 
 }
 
 module.exports= {UserAPIs} ;
+
+// We will export the UserAPIs to be able to use it in the server_mainfile 
