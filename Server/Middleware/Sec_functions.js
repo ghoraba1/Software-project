@@ -33,7 +33,7 @@ async function  get_user(req){
 
   //query the db to search for the user that has this session token
   //note : put the name of the schema instead of (schema_name)//
-  const user = await db.select('*')
+  const user = await DB.select('*')
     .from({ s: 'schema_name.Session' })
     .where('token', sessionToken)
     .innerJoin('schema_name.User as u', 's.userId', 'u.id')
