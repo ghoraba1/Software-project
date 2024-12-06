@@ -3,7 +3,7 @@ const {get_session_token} = require('./Sec_functions.js')
 
  async function Middleware(req,res,next)
 {
-  //////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////// equipment
 let result = await db.raw(`select exists ( 
     select * 
     from information_schema.tables 
@@ -11,9 +11,9 @@ let result = await db.raw(`select exists (
     and table_name = 'Employee');`);
   let status = result.rows[0].exists;
   if(status == false){
-    return res.send("you need to create database table Employee in schema backendTutorial")
+    return res.send("you need to create database table Equipment")
   }
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////// categories
   result = await db.raw(`select exists (  
     select * 
     from information_schema.tables 
@@ -21,9 +21,9 @@ let result = await db.raw(`select exists (
     and table_name = 'User');`);
   status = result.rows[0].exists;
   if(status == false){
-    return res.send("you need to create database table User in schema backendTutorial")
+    return res.send("you need to create database table Categories")
   }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////// suppliers
   result = await db.raw(`select exists (    
     select * 
     from information_schema.tables 
@@ -31,9 +31,34 @@ let result = await db.raw(`select exists (
     and table_name = 'Session');`);
   status = result.rows[0].exists;
   if(status == false){
-    return res.send("you need to create database table Session in schema backendTutorial")
+    return res.send("you need to create database table Suppliers")
+  }
+////////////////////////////////////////////////////////////////////////////////////////////////////////// ssession
+  result = await db.raw(`select exists (    
+    select * 
+    from information_schema.tables 
+    where table_schema = 'backendTutorial' 
+    and table_name = 'Session');`);
+  status = result.rows[0].exists;
+  if(status == false){
+    return res.send("you need to create database table Session")
+  }
+////////////////////////////////////////////////////////////////////////////////////////////////////////// users
+  result = await db.raw(`select exists (    
+    select * 
+    from information_schema.tables 
+    where table_schema = 'backendTutorial' 
+    and table_name = 'Session');`);
+  status = result.rows[0].exists;
+  if(status == false){
+    return res.send("you need to create database table Users")
   }
 
+
+
+
+
+ 
   const sessionToken = get_session_token(req);
 //this checks if the user has got a session id or not, if he doesnt have one, this mean that he hasnt set any cookies on this site yet and therefore he cant be logged in
   if (!sessionToken) {
