@@ -4,8 +4,8 @@ const {get_user}=require('../Middleware/Sec_functions.js')
 //To chech autorization of the user
 function UserAPIs(app){
 
-    app.get('GET/api/v1/users/view',async (req,res)=>{
-      user=getuser(req);
+    app.get('/api/v1/users/view',async (req,res)=>{
+      user = get_user(req);
 if(user.role == "admin"){
        try{
         const result =await DB.raw(`SELECT * FROM users`)
