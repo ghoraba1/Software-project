@@ -53,9 +53,36 @@ let result = await DB.raw(`select exists (
   if(status == false){
     return res.send("you need to create database table Users")
   }
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////// Orders
+  result = await DB.raw(`select exists (    
+    select * 
+    from information_schema.tables 
+    where table_schema = 'schema_name' 
+    and table_name = 'Orders');`);
+  status = result.rows[0].exists;
+  if(status == false){
+    return res.send("you need to create database table Orders")
+  }
+////////////////////////////////////////////////////////////////////////////////////////////////////////// Cart
+  result = await DB.raw(`select exists (    
+    select * 
+    from information_schema.tables 
+    where table_schema = 'schema_name' 
+    and table_name = 'Cart');`);
+  status = result.rows[0].exists;
+  if(status == false){
+    return res.send("you need to create database table Cart")
+  }
+////////////////////////////////////////////////////////////////////////////////////////////////////////// Rating
+  result = await DB.raw(`select exists (    
+    select * 
+    from information_schema.tables 
+    where table_schema = 'schema_name' 
+    and table_name = 'Rating');`);
+  status = result.rows[0].exists;
+  if(status == false){
+    return res.send("you need to create database table Rating")
+  }
 
 
  
