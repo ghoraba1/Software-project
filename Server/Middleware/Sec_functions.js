@@ -23,12 +23,13 @@ function get_session_token(req){
 }
 
 
-async function  get_user(req){
+async function  get_user(req,res){
 //check if the user has a session token otherwise, redirect back to '/'
     const sessionToken = get_session_token(req);
   if (!sessionToken) {
     console.log("no session token is found")
-    return res.status(301).redirect('/');
+    res.status(301).redirect('/');
+    return null;
   }
 
   //query the db to search for the user that has this session token
