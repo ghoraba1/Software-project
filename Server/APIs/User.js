@@ -24,7 +24,7 @@ if(user.role == "admin"){
    }
     } )
 
-    app.post('POST/api/v1/users/new',async(req,res)=>{
+    app.post('/api/v1/users/new',async(req,res)=>{
       
       try{
          const{username,email,password,role,created_at}=req.body ;
@@ -44,7 +44,7 @@ if(user.role == "admin"){
 
    } )
 
-   app.put('PUT/api/V1/users/:id',async(req,res)=>{
+   app.put('/api/V1/users/:id',async(req,res)=>{
       try{
          const{username,email,password,role}=req.body ;
          const query=`UPDATE users
@@ -66,7 +66,7 @@ if(user.role == "admin"){
       
    
    })
-   app.delete('DELETE/api/v1/users/:id',async(req,res)=>
+   app.delete('/api/v1/users/:id',async(req,res)=>
    {
       try{
          const query=`DELETE from users WHERE id=${req.params.id}`
