@@ -33,11 +33,10 @@ async function  get_user(req){
   }
 
   //query the db to search for the user that has this session token
-  //note: this part is incomplete as i need to know the names of the schemas/tables
   const user = await db.select('*')
-    .from({ s: 'backendTutorial.Session' })
+    .from({ s: 'Session' })
     .where('token', sessionToken)
-    .innerJoin('backendTutorial.User as u', 's.userId', 'u.id')
+    .innerJoin('User as u', 's.userId', 'u.id')
     .first(); 
 
   
