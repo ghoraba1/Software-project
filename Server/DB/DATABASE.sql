@@ -62,3 +62,10 @@ foreign key(user_ID) references Users(user_ID),
 foreign key(equipment_ID) references equipments(equipment_ID)
 
 );
+
+create table Session(
+    "id" serial primary key,
+    "userId" integer not null,
+    "token" text not null,
+    "expiresAt" timestamp not null
+);
