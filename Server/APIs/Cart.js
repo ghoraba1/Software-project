@@ -4,11 +4,11 @@ const { get_user } = require('../DB/Index.js');
 function CartAPIs(app) {
  
   app.post('/api/v1/rating/new', async (req, res) => {
-   /* try {
+    try {
       const user = await get_user(req);
       if (!user) {
         return res.status(403).json({ message:'Unauthorized access'});
-      }*/
+      }
    
       if (user.role!=='standard user') {
         return res.status(403).json({ message: 'Only standard users can add ratings' });
@@ -30,12 +30,12 @@ function CartAPIs(app) {
   });
 
   app.post('/api/v1/cart/new', async (req, res) => {
-   /* try {
+    try {
       const user = await get_user(req);
 
       if (!user) {
         return res.status(403).json({ message: 'Unauthorized access' });
-      }*/
+      }
 
       const { equipment_id, quantity } = req.body;
       await DB('Cart').insert({
@@ -51,12 +51,12 @@ function CartAPIs(app) {
     }
   });
   app.delete('/api/v1/cart/delete/:cartId', async (req, res) => {
-    /*try {
+    try {
       const user = await get_user(req);
 
       if (!user) {
         return res.status(403).json({ message: 'Unauthorized access' });
-      }*/
+      }
 
       const { cartId } = req.params;
 
@@ -76,12 +76,12 @@ function CartAPIs(app) {
   });
  
   app.post('/api/v1/order/new', async (req, res) => {
-  /*  try {
+     try {
       const user = await get_user(req);
 
       if (!user) {
         return res.status(403).json({ message: 'Unauthorized access' });
-      }*/
+      }
 
       // Create a new order
       const [orderId] = await DB('Orders').insert(
