@@ -5,12 +5,15 @@ const {get_user}=require('../Middleware/Sec_functions.js')
 function UserAPIs(app){
 
     app.get('/api/v1/users/view',async (req,res)=>{
-      user = get_user(req);
+      user = await get_user(req,res);
+      if (!user) {
+         return; // Stops execution after redirection or error
+     }
 if(user.role == "admin"){
        try{
         const result =await DB.raw(`SELECT * FROM users`)
         console.log(`results :`,result.rows)
-        return res.status(200).send(result.rows) ;
+        return res.status(200).send(result.rows);
 
        }
      catch(err){
