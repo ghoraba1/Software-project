@@ -15,4 +15,4 @@ app.listen(PORT,()=>{
     console.log(`Server is listening to port ${PORT}`) 
 }) ;
 
-UserAPIs(app) ;
+UserAPIs(app);
