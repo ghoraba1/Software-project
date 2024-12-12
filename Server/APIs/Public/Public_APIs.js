@@ -10,8 +10,8 @@ function HandlePublicAPIs(app){
     app.post('/api/v1/users/new',async(req,res)=>{ //register new user 
      //Checking if user exists using email.
       const userExists = await DB.select('*').from('public.users').where('email', req.body.email); 
-      console.log("UE",userExists)
       if (userExists.length > 0) {
+        console.log("UE",userExists)
         return res.status(400).send('user exists');
       }
 
@@ -38,11 +38,11 @@ function HandlePublicAPIs(app){
          const{username,email,password,role}=req.body ;
          const hashedPassword = await bcrypt.hash(password, saltRounds); 
          const query=`UPDATE users
-         set username='${username}',
+         SET username='${username}',
          email='${email}',
-         password=${hashedPassword},
+         password='${hashedPassword}',
          role='${role}'
-         WHERE id=${req.params.id}`
+         WHERE user_id=${req.params.id}`
          
          const result =await DB.raw(query) ;
          return res.status(200).send("Your account is updated") ;
@@ -60,7 +60,7 @@ function HandlePublicAPIs(app){
     app.get('/api/v1/equipment/view', async (req, res) => {
         // added SQL join
         try {
-          const result = await db.raw(`
+          const result = await DB.raw(`
             SELECT 
               e.*, 
               c.category_name, 
@@ -77,12 +77,12 @@ function HandlePublicAPIs(app){
         }
       });
 
-    app.get('/api/vi/rating/:id', async (req, res)=> {
+    app.get('/api/v1/rating/:id', async (req, res)=> {
         try {
-          const query = `SELECT * FROM "rating" WHERE rating_ID = ${req.params.id}`;
+          const query = `SELECT * FROM "rating" WHERE rating_id = ${req.params.id}`;
           console.log("req.params id",req.params.id);
-          const result = await db.raw(query);
-          return res.status(200).send("Result: ",result.rows);
+          const result = await DB.raw(query);
+          return res.status(200).json({ message: "Result:", data: result.rows });
         } catch (err) {
           console.log("Error: ", err.message);
           return res.status(400).send("Unable to view ratings.");
@@ -119,7 +119,7 @@ function HandlePublicAPIs(app){
         // set the expiry time as 30 minutes after the current time
         const token = v4();
         const currentDateTime = new Date();
-        const expiresAt = new Date(+currentDateTime + 18000000); // expire in 3 minutes
+        const expiresAt = new Date(+currentDateTime + 30*60*1000); // expire in 30 minutes
   
         // create a session containing information about the user and expiry time
         const session = {
