@@ -111,11 +111,11 @@ function HandlePublicAPIs(app){
         }
         user = user[0];
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        if (user.password !== hashedPassword) {
-          return res.status(400).send('Password does not match');
-        }
-  
+    // Compare the provided password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+        return res.status(400).send('Password does not match');
+    }
         // set the expiry time as 30 minutes after the current time
         const token = v4();
         const currentDateTime = new Date();
@@ -123,26 +123,22 @@ function HandlePublicAPIs(app){
   
         // create a session containing information about the user and expiry time
         const session = {
-          user_id: user.id,
+          user_id: user.user_id,
           token,
           expiresAt,
         };
         try {
-          await DB('public.Session').insert(session);
+          await DB('public.session').insert(session);
           // In the response, set a cookie on the client with the name "session_cookie"
           // and the value as the UUID we generated. We also set the expiration time.
           return res.cookie("session_token", token, { expires: expiresAt }).status(200).send('login successful');
         } catch (e) {
+          console.log(session)
           console.log(e.message);
           return res.status(400).send('Could not register user');
         }
       });
   
-
-
-
-
-
       
 }
         // We will export the UserAPIs to be able to use it in the server_mainfile 
