@@ -4,29 +4,6 @@ const {get_user}=require('../Middleware/Sec_functions.js')
 //To chech autorization of the user
 function UserAPIs(app){
 
-    app.get('/api/v1/users/view',async (req,res)=>{
-      user = await get_user(req,res);
-      if (!user) {
-         return; // Stops execution after redirection or error
-     }
-if(user.role == "admin"){
-       try{
-        const result =await DB.raw(`SELECT * FROM users`)
-        console.log(`results :`,result.rows)
-        return res.status(200).send(result.rows);
-
-       }
-     catch(err){
-    
-        console.log(`error message`, err.message)
-        return res.status(400).send("Failed to get all the users") ;
-     }   
-   }
-   else{
-      return res.status(400).send("You are not an admin")
-   }
-    } )
-
     app.post('/api/v1/users/new',async(req,res)=>{
       
       try{

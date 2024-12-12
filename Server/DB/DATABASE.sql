@@ -32,7 +32,7 @@ user_id serial primary key ,
 username text NOT NULL ,
 email text not null,
 password text not null,
-role text not null,
+role text DEFAULT 'standard_user' not null,
 created_at Date not null
 );
 
