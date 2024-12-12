@@ -2,9 +2,6 @@ const express = require("express");
 require('dotenv').config();
 
 const {HandlePublicAPIs} = require('./APIs/Public/Public_APIs.js')
-// const {EquipmentAPIs} = require('./APIs/Equipment.js')
-// const {CartAPIs} = require('./APIs/RatingCartOrder.js')
-// const {UserAPIs} = require('./APIs/User.js')
 const{Middleware} =require('./Middleware/Admin.js');
 const {HandlePrivateAPIs} = require("./APIs/Private/PrivateAPIs.js");
 
