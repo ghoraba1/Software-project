@@ -14,7 +14,7 @@ address text NOT NULL
 create table equipment(
 equipment_ID serial primary key,
 equipment_name text NOT NULL,
-equipment_img bytea NOT NULL, 
+equipment_img bytea ,       /*khalleha null 3ady*/  
 rating integer DEFAULT '5' NOT NULL,
 model_number integer NOT NULL,
 purchase_date date NOT NULL,
@@ -58,7 +58,7 @@ comment text ,
 score integer not null ,
 user_ID  integer not null,
 equipment_ID integer not null ,
-foreign key(user_ID) references Users(user_ID),
+foreign key(user_ID) references users(user_id),
 foreign key(equipment_ID) references equipment(equipment_ID)
 
 );
