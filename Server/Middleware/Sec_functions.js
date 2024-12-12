@@ -35,9 +35,9 @@ async function  get_user(req,res){
   //query the db to search for the user that has this session token
   //note : put the name of the schema instead of (schema_name)//
   const user = await DB.select('*')
-    .from({ s: 'public.Session' })
+    .from({ s: 'public.session' })
     .where('token', sessionToken)
-    .innerJoin('public.users as u', 's.userId', 'u.id')
+    .innerJoin('public.users as u', 's.user_id', 'u.user_id')
     .first(); 
 
   

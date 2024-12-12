@@ -28,7 +28,7 @@ foreign key(supplier_ID) references suppliers(supplier_ID)
 );
 
 CREATE table Users(
-user_ID serial primary key ,
+user_id serial primary key ,
 username text NOT NULL ,
 email text not null,
 password text not null,
@@ -39,8 +39,8 @@ created_at Date not null
 create table Orders (
 order_ID serial primary key,
 date Date not null ,
-user_ID  integer not null,
-foreign key(user_ID) references Users(user_ID)
+user_id  integer not null,
+foreign key(user_id) references Users(user_id)
 );
 
 create table Cart (
@@ -65,7 +65,8 @@ foreign key(equipment_ID) references equipments(equipment_ID)
 
 create table Session(
     "id" serial primary key,
-    "userId" integer not null,
+    "user_id" integer not null,
     "token" text not null,
-    "expiresAt" timestamp not null
+    "expiresAt" timestamp not null ,
+    foreign key(user_id) references Users(user_id)
 );
