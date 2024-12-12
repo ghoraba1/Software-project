@@ -3,15 +3,15 @@ const {get_session_token} = require('./Sec_functions.js')
 
  async function Middleware(req,res,next)
 {
-  ////////////////////////////////////////////////////////////////////////////////////////////////////// equipments
+  ////////////////////////////////////////////////////////////////////////////////////////////////////// equipment
 let result = await DB.raw(`select exists ( 
     select * 
     from information_schema.tables 
     where table_schema = 'public' 
-    and table_name = 'equipments');`);
+    and table_name = 'equipment');`);
   let status = result.rows[0].exists;
   if(status == false){
-    return res.send("you need to create database table Equipments")
+    return res.send("you need to create database table Equipment")
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////// categories
   result = await DB.raw(`select exists (  

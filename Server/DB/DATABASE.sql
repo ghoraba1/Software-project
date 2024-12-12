@@ -49,7 +49,7 @@ quantity integer not null ,
 user_ID  integer not null,
 equipment_ID integer not null ,
 foreign key(user_ID) references Users(user_ID),
-foreign key(equipment_ID) references equipments(equipment_ID)
+foreign key(equipment_ID) references equipment(equipment_ID)
 );
 
 create table Rating ( 
@@ -59,7 +59,7 @@ score integer not null ,
 user_ID  integer not null,
 equipment_ID integer not null ,
 foreign key(user_ID) references Users(user_ID),
-foreign key(equipment_ID) references equipments(equipment_ID)
+foreign key(equipment_ID) references equipment(equipment_ID)
 
 );
 

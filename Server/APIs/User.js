@@ -1,6 +1,6 @@
 const DB =require('../DB/Index.js')
 //User APIs will access the database so we need to include th file 
-const {get_user}=require('../Middleware/Sec_functions.js')
+//const {get_user}=require('../Middleware/Sec_functions.js')
 //To chech autorization of the user
 function UserAPIs(app){
 
@@ -13,7 +13,7 @@ function UserAPIs(app){
             VALUES ('${username}','${email}',crypt('${password}',gen_salt('bf')),'${role}','${created_at}')`)
 
             return res.status(200).send("New user has been scucessfully added")
-   //Do I need to get the created_at from the user ?
+
 
       }
       catch(err){
