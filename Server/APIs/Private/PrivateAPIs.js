@@ -45,7 +45,7 @@ function HandlePrivateAPIs(app){
     app.delete('/api/v1/users/:id',async(req,res)=>
         {
           try{
-             const query=`DELETE from users WHERE id=${req.params.id}`
+             const query=`DELETE from users WHERE user_id=${req.params.id}`
              const resuslt = await DB.raw(query) ;
              return res.status(200).send("Deleted successfully")
         
@@ -61,21 +61,19 @@ function HandlePrivateAPIs(app){
 //equipment APIs----------------------------------------------------
     app.post('/api/v1/equipment/new', AdminCheck , async (req, res) => {
      try{
-       console.log("req",req.body);
+       //console.log("req",req.body);
        const {equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status, location, 
          category_id, supplier_id} = req.body;
-    
-       const result = await db.raw(
+       const result = await DB.raw(
          `INSERT INTO equipment (equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status,
           location, category_id, supplier_id) 
          VALUES ('${equipment_name}', '${equipment_img}', '${rating}', '${model_number}',
           '${purchase_date}', '${quantity}', '${status}', '${location}', '${category_id}', '${supplier_id}');`);
-       
-       return res.status(200).send('Equipment successfully added');
+       return res.status(200);
      } catch (err) {
        console.log("Error:", err.message);
        return res.status(400).send('Unable to create equipment');
-     }
+    }
     });
 
     app.put('/api/v1/equipment/:id', AdminCheck , async (req, res) => {
@@ -132,9 +130,9 @@ function HandlePrivateAPIs(app){
             return res.status(403).json({ message: 'Only standard users can add ratings' });
           }
        
-          const { equipment_id, comment, score } = req.body;
-          await DB('Rating').insert({
-            user_id: user.id,
+          const { equipment_id, comment, score} = req.body;
+          await DB('rating').insert({
+            user_id: user.user_id,
             equipment_id,
             comment,
             score,
@@ -147,85 +145,85 @@ function HandlePrivateAPIs(app){
         }
       });
     
-      app.post('/api/v1/cart/new', async (req, res) => {
-        try {
-          const user = await get_user(req);
+    app.post('/api/v1/cart/new', async (req, res) => {
+      try {
+        const user = await get_user(req);
+  
+        if (!user) {
+          return res.status(403).json({ message: 'Unauthorized access' });
+        }
+  
+        const { equipment_id, quantity } = req.body;
+        await DB('Cart').insert({
+          user_id: user.id,
+          equipment_id,
+          quantity,
+        });
+  
+        res.status(201).json({ message: 'Successfully added to cart' });
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    app.delete('/api/v1/cart/delete/:cartId', async (req, res) => {
+      try {
+        const user = await get_user(req);
+  
+        if (!user) {
+          return res.status(403).json({ message: 'Unauthorized access' });
+        }
+  
+        const { cartId } = req.params;
+  
+        const result = await DB('Cart')
+          .where({ id: cartId, user_id: user.id })
+          .del();
+  
+        if (result === 0) {
+          return res.status(404).json({ message: 'Item not found in cart' });
+        }
+  
+        res.status(200).json({ message: 'Successfully deleted item from cart' });
+      } catch (error) {
+        console.error('Error deleting from cart:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
     
-          if (!user) {
-            return res.status(403).json({ message: 'Unauthorized access' });
-          }
-    
-          const { equipment_id, quantity } = req.body;
-          await DB('Cart').insert({
-            user_id: user.id,
-            equipment_id,
-            quantity,
+    app.post('/api/v1/order/new', async (req, res) => {
+       try {
+        const user = await get_user(req);
+  
+        if (!user) {
+          return res.status(403).json({ message: 'Unauthorized access' });
+        }
+  
+        // Create a new order
+        const [orderId] = await DB('Orders').insert(
+          { user_id: user.id, date: DB.fn.now() }, // Line 123: Modified to use `date` instead of `created_at`
+          ['id']
+        );
+  
+        const cartItems = await DB('Cart')
+          .select('equipment_id', 'quantity')
+          .where({ user_id: user.id });
+       
+        for (const item of cartItems) {
+          await DB('EquipmentOrder').insert({
+            order_id: orderId,
+            equipment_id: item.equipment_id,
+            quantity: item.quantity,
           });
-    
-          res.status(201).json({ message: 'Successfully added to cart' });
-        } catch (error) {
-          console.error('Error adding to cart:', error);
-          res.status(500).json({ error: 'Internal server error' });
         }
-      });
-      app.delete('/api/v1/cart/delete/:cartId', async (req, res) => {
-        try {
-          const user = await get_user(req);
-    
-          if (!user) {
-            return res.status(403).json({ message: 'Unauthorized access' });
-          }
-    
-          const { cartId } = req.params;
-    
-          const result = await DB('Cart')
-            .where({ id: cartId, user_id: user.id })
-            .del();
-    
-          if (result === 0) {
-            return res.status(404).json({ message: 'Item not found in cart' });
-          }
-    
-          res.status(200).json({ message: 'Successfully deleted item from cart' });
-        } catch (error) {
-          console.error('Error deleting from cart:', error);
-          res.status(500).json({ error: 'Internal server error' });
-        }
-      });
-     
-      app.post('/api/v1/order/new', async (req, res) => {
-         try {
-          const user = await get_user(req);
-    
-          if (!user) {
-            return res.status(403).json({ message: 'Unauthorized access' });
-          }
-    
-          // Create a new order
-          const [orderId] = await DB('Orders').insert(
-            { user_id: user.id, date: DB.fn.now() }, // Line 123: Modified to use `date` instead of `created_at`
-            ['id']
-          );
-    
-          const cartItems = await DB('Cart')
-            .select('equipment_id', 'quantity')
-            .where({ user_id: user.id });
-         
-          for (const item of cartItems) {
-            await DB('EquipmentOrder').insert({
-              order_id: orderId,
-              equipment_id: item.equipment_id,
-              quantity: item.quantity,
-            });
-          }
-         
-          await DB('Cart').where({ user_id: user.id }).del();
-          res.status(201).json({ message: 'Successfully placed order', orderId });
-        } catch (error) {
-          console.error('Error placing order:', error);
-          res.status(500).json({ error: 'Internal server error' });
-        }
-      });
+       
+        await DB('Cart').where({ user_id: user.id }).del();
+        res.status(201).json({ message: 'Successfully placed order', orderId });
+      } catch (error) {
+        console.error('Error placing order:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
 }
 
 module.exports = {HandlePrivateAPIs};
