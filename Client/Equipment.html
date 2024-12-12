@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment_Mangment_Page</title>
+</head>
+<body>
+    <dev class="Equipment_Mangment_Page">
+         <!-- Filter Options -->
+  <div class="filters">
+    <label for="category-filter">Category:</label>
+    <select id="category-filter">
+      <option value="all">All</option>
+      <option value="Mecanical">mecanical </option>
+      <option value="Electrical">Electrical </option>
+      <option value="Civil">Civil </option>
+        <!-- Add categories here -->
+
+      <label for="supplier-filter">Supplier:</label>
+      <select id="supplier-filter">
+        <option value="all">All</option>
+        <option value="Schnider">Schnider</option>
+        <option value="ABB">ABB</option>
+        <option value="Meco">Meco</option>
+        <!-- Add suppliers here -->
+    </dev>
+    
+    <!-- Equipment List -->
+  <table class="equipment-list">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Supplier</th>
+        <th>Quantity</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Equipment items will be listed here -->
+    </tbody>
+  </table>
+    
+</body>
+</html>
