@@ -1,25 +1,32 @@
 const DB = require('../../DB/Index.js')
+const bcrypt =require('bcrypt') ; 
+const saltRounds =10 ;
 //User APIs will access the database so we need to include th file 
 
 function HandlePublicAPIs(app){
-    app.get('/', function(req, res) {
-        return res.status(200).send('login page');
-        });
-        
+
+
     app.post('/api/v1/users/new',async(req,res)=>{
-      try{
-         const{username,email,password,role,created_at}=req.body ;
-    
-         const result =DB.raw(`INSERT INTO users (username,email,password,role,created_at)
-            VALUES ('${username}','${email}',crypt('${password}',gen_salt('bf')),'${role}','${created_at}')`)
-    
-            return res.status(200).send("New user has been scucessfully added")
-    //Do I need to get the created_at from the user ?
-    
+
+      const userExists = await DB.select('*').from('public.users').where('email', req.body.email);
+      console.log("UE",userExists)
+      if (userExists.length > 0) {
+        return res.status(400).send('user exists');
       }
-      catch(err){
-         console.log("error",err.message)
-         return res.status(400).send("Failed to add your account")
+
+      try{
+        const newUser = req.body;
+        const hashedPassword = await bcrypt.hash(newUser.password, saltRounds); //inserting the password as hashed values
+        newUser.password = hashedPassword;
+
+        newUser.created_at = new Date(); // seting created at to the real time the user at which the user creates his account
+
+        const user = await DB('public.users').insert(newUser).returning('*');
+        console.log("user new",user);
+        return res.status(200).json(user);
+      } catch (e) {
+        console.log(e.message);
+        return res.status(400).send('Could not register user'); 
     
       }
     
