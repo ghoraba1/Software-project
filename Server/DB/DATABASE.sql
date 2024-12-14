@@ -70,3 +70,10 @@ create table Session(
     "expiresAt" timestamp not null ,
     foreign key(user_id) references Users(user_id)
 );
+
+create table EquipmentOrder(
+    "order_ID" serial primary key,
+    "equipment_ID" integer not null,
+    "quantity" integer not null,
+    foreign key(equipment_ID) references equipment(equipment_ID)
+);
