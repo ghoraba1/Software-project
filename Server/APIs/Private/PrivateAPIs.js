@@ -59,24 +59,32 @@ function HandlePrivateAPIs(app){
                })
 
 //equipment APIs----------------------------------------------------
-    app.post('/api/v1/equipment/new', AdminCheck , async (req, res) => {
+    app.post('/api/v1/equipment/new', async (req, res) => {
      try{
-       //console.log("req",req.body);
-       const {equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status, location, 
-         category_id, supplier_id} = req.body;
-       const result = await DB.raw(
-         `INSERT INTO equipment (equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status,
-          location, category_id, supplier_id) 
-         VALUES ('${equipment_name}', '${equipment_img}', '${rating}', '${model_number}',
-          '${purchase_date}', '${quantity}', '${status}', '${location}', '${category_id}', '${supplier_id}');`);
-       return res.status(200);
+      await AdminCheck
+       //console.log("req",req.body)
+        const {equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status, location, 
+          category_id, supplier_id} = req.body;
+          const eq = {equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status, location, 
+            category_id, supplier_id}
+       await DB('public.equipment').insert(eq)
+        // DB.insert(
+        //  `INSERT INTO equipment (equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status,
+        //   location, category_id, supplier_id) 
+        //  VALUES ('${equipment_name}', '${equipment_img}', '${rating}', '${model_number}',
+        //   '${purchase_date}', '${quantity}', '${status}', '${location}', '${category_id}', '${supplier_id}');`)
+        console.log("equpment success")
+      res.status(200).send("done!");
      } catch (err) {
        console.log("Error:", err.message);
-       return res.status(400).send('Unable to create equipment');
+       if (!res.headersSent) {
+        //res.status(400).send("Unable to add equipment.");
+      }
     }
     });
 
-    app.put('/api/v1/equipment/:id', AdminCheck , async (req, res) => {
+    app.put('/api/v1/equipment/:id', async (req, res) => {
+      await AdminCheck;
         try{
           const { equipment_name, equipment_img, rating, model_number,
              purchase_date, quantity, status, location, category_id, supplier_id } = req.body;
@@ -94,11 +102,11 @@ function HandlePrivateAPIs(app){
                           category_id = '${category_id}',
                           supplier_id = '${supplier_id}'
                           WHERE equipment_id = ${req.params.id}`;
-        const result = await db.raw(query);
-        return res.status(200).send("Succesfully updated.");
+        const result = await DB.raw(query);
+        return res.status(200).json("Succesfully updated.");
         } catch (err) {
         console.log("Error:", err.message);
-        return res.status(400).send("Unable to update equipment.");
+        return res.status(400).json("Unable to update equipment.");
       };
       });
 
