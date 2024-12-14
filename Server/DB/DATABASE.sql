@@ -27,7 +27,7 @@ foreign key(category_ID) references categories(category_ID),
 foreign key(supplier_ID) references suppliers(supplier_ID)
 );
 
-CREATE table Users(
+CREATE table users(
 user_id serial primary key ,
 username text NOT NULL ,
 email text not null,
