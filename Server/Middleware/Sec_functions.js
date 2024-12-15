@@ -40,7 +40,11 @@ async function  get_user(req,res){
     .innerJoin('public.users as u', 's.user_id', 'u.user_id')
     .first(); 
 
-  
+  if(user == undefined){
+    console.log("user not found")
+    res.status(301).redirect('/');
+    return null;
+  }
   console.log('user =>', user)
   return user;  
 
