@@ -10,7 +10,8 @@ const{Middleware} =require('./Middleware/Admin.js');
 const {HandlePrivateAPIs} = require("./APIs/Private/PrivateAPIs.js");
 const {handlePublicFrontEndView} = require("./APIs/Public/View.js")
 
-app.set('views', '../client/public');
+app.set('views', '../Client/public/Views');
+app.set('view engine', 'hjs');
 app.use(express.static('./public'));
 
 handlePublicFrontEndView(app);
@@ -18,9 +19,7 @@ HandlePublicAPIs(app);
 app.use(Middleware);
 HandlePrivateAPIs(app);
 
-app.set('views', './client/public/views');
-app.set('view engine', 'hjs');
-app.use(express.static('./public'));
+
 
 const PORT = process.env.PORT;
 app.listen(PORT,()=>{
