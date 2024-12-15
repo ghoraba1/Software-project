@@ -2,17 +2,18 @@
 
     $(document).ready(function() {
         $.ajax({
-            url: '/api/v1/equipment/view',
+            url: 'http://localhost:3000/api/v1/equipment/view',
             method: 'GET',
             dataType: 'json',
             success: function(data) {
-                let tbody = $('.equipment-list tbody');
+                console.log("NICE_JOB")
+                let tbody = $('.equipment-list');
                 tbody.empty();
                 data.forEach(function(item) {
                     tbody.append(`
                         <tr>
-                            <td>${item.name}</td>
-                            <td>${item.category}</td>
+                            <td>${item.equipment_name}</td>
+                            <td>${item.category_id}</td>
                             <td>${item.supplier}</td>
                             <td>${item.quantity}</td>
                             <td>${item.status}</td>

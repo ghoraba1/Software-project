@@ -70,7 +70,7 @@ function HandlePublicAPIs(app){
             LEFT JOIN suppliers s ON e.supplier_id = s.supplier_id
           `);
           console.log(`Result: `, result.rows);
-          return res.status(200).send(result.rows);
+          return res.status(200).json(result.rows);
         } catch (err) {
           console.log("Error: ", err.message);
           return res.status(400).send(`Unable to view equipment.`);
