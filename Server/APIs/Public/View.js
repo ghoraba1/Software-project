@@ -3,7 +3,7 @@
 function handlePublicFrontEndView(app)
 {
 app.get('/', function(req, res) {
-    return res.render('login page');
+    return res.render('login');
     });
 
  app.get('/register', function(req, res) {
