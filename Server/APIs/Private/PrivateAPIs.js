@@ -223,38 +223,59 @@ function HandlePrivateAPIs(app){
     });
     
     app.post('/api/v1/order/new', async (req, res) => {
-       try {
+      try {
+        // Get the authenticated user
         const user = await get_user(req);
-  
+    
         if (!user) {
           return res.status(403).json({ message: 'Unauthorized access' });
         }
-  
-        // Create a new order
-        const [orderId] = await DB('Orders').insert(
-          { user_id: user.id, date: DB.fn.now() }, // Line 123: Modified to use `date` instead of `created_at`
-          ['id']
-        );
-  
-        const cartItems = await DB('Cart')
+    
+        // Fetch the cart items for the user
+        const cartItems = await DB('cart')
           .select('equipment_id', 'quantity')
-          .where({ user_id: user.id });
-       
-        for (const item of cartItems) {
-          await DB('EquipmentOrder').insert({
-            order_id: orderId,
-            equipment_id: item.equipment_id,
-            quantity: item.quantity,
-          });
+          .where({ user_id: user.user_id });
+    
+        if (!cartItems || cartItems.length === 0) {
+          return res.status(400).json({ message: 'Cart is empty. Cannot place an order.' });
         }
-       
-        await DB('Cart').where({ user_id: user.id }).del();
-        res.status(201).json({ message: 'Successfully placed order', orderId });
+    
+        // Create a new order and return the inserted order's ID
+        const [order] = await DB('orders').insert(
+          {
+            user_id: user.user_id,
+            date: DB.fn.now(),
+          },
+          ['order_id'] // Return the order_id from the inserted row
+        );
+    
+        const orderId = order.order_id;
+    
+        // Add the cart items to the EquipmentOrder table
+        const equipmentOrderEntries = cartItems.map((item) => ({
+          order_id: orderId,
+          equipment_id: item.equipment_id,
+          quantity: item.quantity,
+        }));
+    
+        await DB('equipmentorder').insert(equipmentOrderEntries);
+    
+        // Clear the user's cart after the order is placed
+        await DB('cart').where({ user_id: user.user_id }).del();
+    
+        // Respond with success and the order ID
+        return res.status(201).json({
+          message: 'Successfully placed order',
+          orderId: orderId,
+        });
       } catch (error) {
+        // Log the error for debugging
         console.error('Error placing order:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      }
-    });
+    
+        // Respond with a generic error message
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
 }
 
 module.exports = {HandlePrivateAPIs};
