@@ -12,6 +12,9 @@ padding: 0;
 display: block;
 background-color: #333;
 overflow: hidden;
+position: -webkit-sticky; /* Safari */
+position: sticky;
+top: 0;
     }
 
 li {
