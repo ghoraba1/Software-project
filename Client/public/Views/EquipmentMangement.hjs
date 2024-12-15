@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="..../server/node_modules/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="..../server/node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
-    <script src="../Src/EquipmentMangement.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <title>Equipment_Mangment_Page</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <label for="category-filter">Category:</label>
     <select id="category-filter">
       <option value="all">All</option>
-      <option value="Mecanical">mecanical </option>
+      <option value="Mecanical">Mecanical </option>
       <option value="Electrical">Electrical </option>
       <option value="Civil">Civil </option>
         <!-- Add categories here -->
@@ -37,8 +37,7 @@
     </div>
     
  <div>   <!-- Equipment List -->
-  <table class="equipment-list">
-    <thead>
+  <table border="1" id="myTable">
       <tr>
         <th>Name</th>
         <th>Category</th>
@@ -47,10 +46,7 @@
         <th>Status</th>
         <th>Actions</th>
       </tr>
-    </thead>
-    <tbody>
       <!-- Equipment items will be listed here -->
-    </tbody>
   </table>
 </div>         
     <button id="addEquipmentBtn" >Add Equipment</button>

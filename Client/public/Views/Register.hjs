@@ -4,7 +4,7 @@
   <title>Register page</title>
 
   <style>
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
     ul{
 list-style-type: none;
 margin: 0; 
@@ -16,6 +16,7 @@ overflow: hidden;
 
 li {
 float: left;
+border-right: 1px solid #bbb;
 }
 
 li a {
@@ -33,7 +34,6 @@ background-color: #111;
 .active {
 background-color: #04AA6D;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
     
     h1{
 text-align:center;
