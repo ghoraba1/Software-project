@@ -157,7 +157,7 @@ function HandlePrivateAPIs(app){
             return res.status(403).json({ message:'Unauthorized access'});
           }
        
-          if (user.role!=='standard user') {
+          if (user.role!=='standard_user') {
             return res.status(403).json({ message: 'Only standard users can add ratings' });
           }
        
@@ -185,8 +185,8 @@ function HandlePrivateAPIs(app){
         }
   
         const { equipment_id, quantity } = req.body;
-        await DB('Cart').insert({
-          user_id: user.id,
+        await DB('cart').insert({
+          user_id: user.user_id,
           equipment_id,
           quantity,
         });
@@ -207,8 +207,8 @@ function HandlePrivateAPIs(app){
   
         const { cartId } = req.params;
   
-        const result = await DB('Cart')
-          .where({ id: cartId, user_id: user.id })
+        const result = await DB('cart')
+          .where({ cart_id: cartId, user_id: user.user_id })
           .del();
   
         if (result === 0) {
@@ -246,12 +246,12 @@ function HandlePrivateAPIs(app){
             user_id: user.user_id,
             date: DB.fn.now(),
           },
-          ['order_id'] // Return the `order_id` from the inserted row
+          ['order_id'] // Return the order_id from the inserted row
         );
     
         const orderId = order.order_id;
     
-        // Add the cart items to the `EquipmentOrder` table
+        // Add the cart items to the EquipmentOrder table
         const equipmentOrderEntries = cartItems.map((item) => ({
           order_id: orderId,
           equipment_id: item.equipment_id,
@@ -274,9 +274,8 @@ function HandlePrivateAPIs(app){
     
         // Respond with a generic error message
         return res.status(500).json({ error: 'Internal server error' });
-      }
-    });
-    
-  }    
+      }
+    });
+}
 
 module.exports = {HandlePrivateAPIs};

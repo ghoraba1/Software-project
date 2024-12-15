@@ -27,7 +27,7 @@ foreign key(category_ID) references categories(category_ID),
 foreign key(supplier_ID) references suppliers(supplier_ID)
 );
 
-CREATE table Users(
+CREATE table users(
 user_id serial primary key ,
 username text NOT NULL ,
 email text not null,
@@ -64,10 +64,10 @@ foreign key(equipment_ID) references equipment(equipment_ID)
 );
 
 create table Session(
-    "id" serial primary key,
-    "user_id" integer not null,
-    "token" text not null,
-    "expiresAt" timestamp not null ,
+    session_id  serial primary key,
+    user_id integer not null,
+    token  text not null,
+    expiresAt  timestamp not null ,
     foreign key(user_id) references Users(user_id)
 );
 
