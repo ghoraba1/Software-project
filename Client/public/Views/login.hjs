@@ -134,7 +134,7 @@
       </div>
       <div class="button-group">
         <button type="button" class="login-btn" id="loginBtn">Login</button>
-        <button type="button" class="register-btn" id="registerBtn">Register</button>
+        <button type="button" class="register-btn" id="registerBtn" href="/Register">Register</button>
       </div>
     </form>
     <p id="errorMessage"></p>
