@@ -10,7 +10,7 @@ const{Middleware} =require('./Middleware/Admin.js');
 const {HandlePrivateAPIs} = require("./APIs/Private/PrivateAPIs.js");
 const {handlePublicFrontEndView} = require("./APIs/Public/View.js")
 
-app.set('views', './views');
+app.set('views', '../client/public');
 app.use(express.static('./public'));
 
 handlePublicFrontEndView(app);

@@ -12,7 +12,7 @@ app.get('/', function(req, res) {
 
 app.get('/EquipmentMangment',function(req,res)
 {
- return res.render('register') ;
+ return res.render('EquipmentMangment') ;
 }) ;    
 
 }
