@@ -276,6 +276,47 @@ function HandlePrivateAPIs(app){
         return res.status(500).json({ error: 'Internal server error' });
       }
     });
+app.put('/api/v1/cart/update/:cartId', async (req, res) => {
+  try {
+    const user = await get_user(req);
+    if (!user) {
+      return res.status(403).json({ message: 'Unauthorized access' });
+    }
+    // Extract cart ID and adjustment value
+    const { cartId } = req.params;
+    const { adjustment } = req.body; // adjustment can be positive (add) or negative (subtract)
+    // Validate adjustment input
+    if (typeof adjustment !== 'number' || adjustment === 0) {
+      return res.status(400).json({ message: 'Invalid adjustment value' });
+    }
+    // Fetch the current cart item
+    const [cartItem] = await DB('cart')
+      .select('quantity')
+      .where({ cart_id: cartId, user_id: user.user_id });
+
+    if (!cartItem) {
+      return res.status(404).json({ message: 'Item not found in cart' });
+    }
+    // Calculate the new quantity
+    const newQuantity = cartItem.quantity + adjustment;
+    if (newQuantity < 0) {
+      return res.status(400).json({ message: 'Quantity cannot be negative' });
+    }
+    // Update the cart item
+    await DB('cart')
+      .where({ cart_id: cartId, user_id: user.user_id })
+      .update({ quantity: newQuantity });
+
+    return res.status(200).json({
+      message: 'Cart updated successfully',
+      newQuantity,
+    });
+  } catch (error) {
+    console.error('Error updating cart:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 }
 
 module.exports = {HandlePrivateAPIs};
