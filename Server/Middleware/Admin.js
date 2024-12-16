@@ -86,7 +86,7 @@ let result = await DB.raw(`select exists (
 
 
  
-  const sessionToken = get_session_token(req);
+  const sessionToken = await get_session_token(req);
 //this checks if the user has got a session id or not, if he doesnt have one, this mean that he hasnt set any cookies on this site yet and therefore he cant be logged in
   if (!sessionToken) {
     console.log("sesison token is null")
@@ -101,7 +101,7 @@ let result = await DB.raw(`select exists (
 
     return res.status(301).redirect('/');
   }
- //if the user is logged in, but his session ended while he is using the website, he must be redirected to login page (or the '/')
+ //if the user is logged in, but his session ended while he is using the website, he must be redirected to  page (or the '/')
  //note: we define the session period, we can make it 5min, 4 hours or anything
   if (new Date() > userSession.expiresAt) {
     console.log("expired session");
