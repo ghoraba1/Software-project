@@ -27,7 +27,7 @@ async function  get_user(req,res){
 //check if the user has a session token otherwise, redirect back to '/'
     const sessionToken = get_session_token(req);
   if (!sessionToken) {
-    console.log("no session token is found")
+    console.log("no user session token is found")
     res.status(301).redirect('/');
     return null;
   }

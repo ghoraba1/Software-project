@@ -2,7 +2,7 @@
 
 function handlePublicFrontEndView(app)
 {
-app.get('/', function(req, res) {
+  app.get('/', function(req, res) {
     return res.render('login');
     });
 
@@ -11,4 +11,4 @@ app.get('/', function(req, res) {
       });
 
 }
-module.exports = {handlePublicFrontEndView}     
+module.exports = {handlePublicFrontEndView}

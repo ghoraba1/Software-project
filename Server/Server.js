@@ -6,6 +6,7 @@ app.use(cors())
 app.use(express.json())
 
 const {HandlePublicAPIs} = require('./APIs/Public/Public_APIs.js')
+const {handlePrivateFrontEndView} = require('./APIs/Private/view.js')
 const{Middleware} =require('./Middleware/Admin.js');
 const {HandlePrivateAPIs} = require("./APIs/Private/PrivateAPIs.js");
 const {handlePublicFrontEndView} = require("./APIs/Public/View.js")
@@ -17,7 +18,9 @@ app.use(express.static('./public'));
 handlePublicFrontEndView(app);
 HandlePublicAPIs(app);
 app.use(Middleware);
+handlePrivateFrontEndView(app)
 HandlePrivateAPIs(app);
+
 
 
 
