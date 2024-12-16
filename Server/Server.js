@@ -16,7 +16,7 @@ app.use(express.static('./public'));
 
 handlePublicFrontEndView(app);
 HandlePublicAPIs(app);
-app.use(Middleware);
+app.use('./APIs/private/privateAPIs.js',Middleware);
 HandlePrivateAPIs(app);
 
 

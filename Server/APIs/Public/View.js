@@ -10,7 +10,7 @@ app.get('/', function(req, res) {
         return res.render('register');
       });
 
-app.get('/EquipmentMangment',function(req,res)
+app.get('/EquipmentMangement',function(req,res)
 {
  return res.render('EquipmentMangement') ;
 }) ;    
