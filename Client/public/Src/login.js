@@ -1,5 +1,6 @@
-$ (function(){
+$(function(){
     $("#loginBtn").on("click", function() {
+      console.log(hi)
       const email = $('#email').val();
       const password = $('#password').val();
 
