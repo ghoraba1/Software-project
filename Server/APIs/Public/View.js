@@ -12,8 +12,12 @@ function handlePublicFrontEndView(app)
 
 app.get('/EquipmentMangement',function(req,res)
 {
+
  return res.render('EquipmentMangement') ;
 }) ;    
-
+app.get('/addEquipment',function(req,res)
+{
+ return res.render('addEquipment') ;
+}) ;    
 }
 module.exports = {handlePublicFrontEndView}

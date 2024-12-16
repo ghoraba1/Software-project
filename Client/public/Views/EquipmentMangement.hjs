@@ -3,9 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="..../server/node_modules/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../Js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../Src/EquipmentMangment.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+       $(document).ready(function() {
+            function fetchAndDisplayEquipment() {
+                $.ajax({
+                    url: 'http://localhost:3000/api/v1/equipment/view',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log("NICE_JOB");
+                        $('.equipment-list').empty();
+                        data.forEach(function(item) {
+                            $('.equipment-list').append(`
+                                <tr>
+                                    <td>${item.equipment_name}</td>
+                                    <td>${item.category_name}</td>
+                                    <td>${item.supplier_name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.status}</td>
+                                <button class="edit-btn">Edit</button
+                                </tr>
+                            `);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            function applyFilters() {
+                const categoryFilter = $('#category-filter').val();
+                const supplierFilter = $('#supplier-filter').val();
+
+                $.ajax({
+                    url: 'http://localhost:3000/api/v1/equipment/view',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('.equipment-list').empty();
+                        data.forEach(function(item) {
+                            if ((categoryFilter === 'all' || item.category_name === categoryFilter) &&
+                                (supplierFilter === 'all' || item.supplier_name === supplierFilter)) {
+                                $('.equipment-list').append(`
+                                    <tr>
+                                        <td>${item.equipment_name}</td>
+                                        <td>${item.category_name}</td>
+                                        <td>${item.supplier_name}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.status}</td>
+                                    </tr>
+                                `);
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            $('#category-filter, #supplier-filter').change(function() {
+                applyFilters();
+            });
+
+$('#addEquipmentBtn').click(function() {
+window.location.href = '/addEquipment' ;
+});
+            fetchAndDisplayEquipment();
+        });
+</script>
+ 
 
     <title>Equipment_Mangment_Page</title>
 </head>
@@ -16,7 +89,7 @@
     <label for="category-filter">Category:</label>
     <select id="category-filter">
       <option value="all">All</option>
-      <option value="Mecanical">Mecanical </option>
+      <option value="Mechanical">Mechanical </option>
       <option value="Electrical">Electrical </option>
       <option value="Civil">Civil </option>
         <!-- Add categories here -->
@@ -38,7 +111,7 @@
     </div>
     
  <div>   <!-- Equipment List -->
-  <table border="1" id="myTable">
+  <table border="1" class="equipment-list">
       <tr>
         <th>Name</th>
         <th>Category</th>
@@ -49,8 +122,10 @@
       </tr>
       <!-- Equipment items will be listed here -->
   </table>
-</div>         
-    <button id="addEquipmentBtn" >Add Equipment</button>
+</div> 
+    <button id="addEquipmentBtn">Add Equipment</button>
+    <button id="editEquipmentBtn">Edit Equipment</button>
+    <button id="deleteEquipmentBtn">Delete Equipment</button>
 </div> 
 </body>
 </html>
