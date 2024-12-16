@@ -1,11 +1,11 @@
-$ (function(){
+$(document).ready(function(){
     $("#loginBtn").on("click", function() {
       const email = $('#email').val();
       const password = $('#password').val();
 
       const data = {
         email,
-        password,
+        password
       };
       console.log(data);
 
