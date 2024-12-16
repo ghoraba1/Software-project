@@ -6,11 +6,9 @@
             method: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log("NICE_JOB")
-                let tbody = $('.equipment-list');
-                tbody.empty();
+                $('.equipment-list').empty();
                 data.forEach(function(item) {
-                    tbody.append(`
+                    $('.equipment-list').append(`
                         <tr>
                             <td>${item.equipment_name}</td>
                             <td>${item.category_id}</td>
