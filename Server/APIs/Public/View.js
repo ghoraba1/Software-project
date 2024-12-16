@@ -10,5 +10,10 @@ function handlePublicFrontEndView(app)
         return res.render('register');
       });
 
+app.get('/EquipmentMangement',function(req,res)
+{
+ return res.render('EquipmentMangement') ;
+}) ;    
+
 }
 module.exports = {handlePublicFrontEndView}
