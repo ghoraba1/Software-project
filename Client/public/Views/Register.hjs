@@ -3,38 +3,6 @@
 
 <head>
   <title>Register page</title>
-
-  <style>
-   .reg h1 {
-      text-align: center;
-
-    }
-
-    .reg form {
-      text-align: center;
-      color: blue;
-    }
-        .regcont {
-  height: 200px;
-  position: relative;
-}
-       .regbutton button {
-        margin: 10;
-        top: 20%;
-        left:25%;
-        position: absolute;
-        width: 50%;
-        border-radius: 20px;
-        cursor: pointer;
-        background-color: #007bff;
-        color: yellow;
-        height: 50px;
-        align-items: center;
-        }
-        .regbutton button:hover{
-          background-color:darkblue;
-        }
-  </style>
 </head>
 
 <body>
