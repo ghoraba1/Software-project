@@ -19,5 +19,13 @@ app.get('/addEquipment',function(req,res)
 {
  return res.render('addEquipment') ;
 }) ;    
+  app.get('/About1',function(req,res)
+{
+ return res.render('About(not_Logged)') ;
+}) ;   
+  app.get('/Profile',function(req,res)
+{
+ return res.render('Profile') ;
+}) ;   
 }
 module.exports = {handlePublicFrontEndView}
