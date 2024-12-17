@@ -43,11 +43,11 @@
   <header>
     <nav class="navbar">
       <ul>
-        <li><a class="active" href="">Home</a></li>
-        <li><a class="active" href="">Your Profile</a></li>
-        <li><a class="active" href="">About</a></li>
-        <li style="float:right;"><a class="active" href="">Login</a></li>
-        <li style="float:right;"><a class="active" href="">Cart</a></li>
+        <li><a href="">Home</a></li>
+        <li><a href="">Your Profile</a></li>
+        <li><a href="">About</a></li>
+        <li style="float:right;"><a href="">Login</a></li>
+        <li style="float:right;"><a href="">Cart</a></li>
       </ul>
     </nav>
   </header>
