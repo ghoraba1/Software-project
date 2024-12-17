@@ -5,7 +5,7 @@
   <title>Register page</title>
 
   <style>
-    ul {
+    .navbar ul{
       list-style-type: none;
       margin: 0;
       padding: 0;
@@ -18,12 +18,12 @@
       top: 0;
     }
 
-    li {
+    .navbar li {
       float: left;
       border-right: 1px solid #bbb;
     }
 
-    li a {
+    .navbar li a {
       display: block;
       color: white;
       text-align: center;
@@ -31,40 +31,43 @@
       text-decoration: none;
     }
 
-    li a:hover {
+   .navbar li a:hover {
       background-color: #111;
     }
 
-    .active {
-      background-color: #04AA6D;
+    .anvbar a.active,a:hover {
+      transition: 0.75s;
     }
 
-    h1 {
+   .reg h1 {
       text-align: center;
 
     }
 
-    form {
+    .reg form {
       text-align: center;
       color: blue;
     }
-
-        .button-group {
-        display: flex;
-        justify-content: space-between;
-        
-        }
-        
-        .button-group button {
-        width: 100%;
-        padding: 10px;
-        border: 1;
-        border-radius: 5px;
+        .regcont {
+  height: 200px;
+  position: relative;
+}
+       .regbutton button {
+        margin: 10;
+        top: 20%;
+        left:25%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        position: absolute;
+        width: 50%;
+        border-radius: 20px;
         cursor: pointer;
         background-color: #007bff;
         color: yellow;
+        height: 50px;
+        align-items: center;
         }
-        .button-group button:hover{
+        .regbutton button:hover{
           background-color:darkblue;
         }
   </style>
@@ -73,20 +76,21 @@
 <body>
 
   <header>
-    <nav>
+    <nav class="navbar">
       <ul>
-        <li><a href="">Electrical</a></li>
-        <li><a href="">Civil</a></li>
-        <li><a href="">Mechanical</a></li>
-        <li style="float:right;"><a href="">Login</a></li>
-        <li style="float:right;"><a href="">Cart</a></li>
+        <li><a class="active" href="">Home</a></li>
+        <li><a class="active" href="">About</a></li>
+        <li style="float:right;"><a class="active" href="">Login</a></li>
+        <li style="float:right;"><a class="active" href="">Cart</a></li>
       </ul>
     </nav>
   </header>
 
 
 
-  <h1>Register new</h1>
+  
+  <div class="reg">
+    <h1>Register new</h1>
   <form action="/submit" method="post">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required><br><br>
@@ -94,10 +98,12 @@
     <input type="email" id="email" name="email" required><br><br>
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br><br>
-    <div class="button-group">
+    </div>
+    <div class="regcont">
+    <div class="regbutton">
       <button type="submit" class="register-btn" id="registerBtn">Register</button>
     </div>
-    
+    </div>
   </form>
 
 
