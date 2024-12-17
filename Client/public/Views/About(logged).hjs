@@ -4,40 +4,6 @@
 <head>
   <title>About us</title>
   <style>
-    .navbar ul{
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      display: block;
-      background-color: #333;
-      overflow: hidden;
-      position: -webkit-sticky;
-      /* Safari */
-      position: sticky;
-      top: 0;
-    }
-
-    .navbar li {
-      float: left;
-      border-right: 1px solid #bbb;
-    }
-
-    .navbar li a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 16px 16px;
-      text-decoration: none;
-    }
-
-   .navbar li a:hover {
-      background-color: #111;
-    }
-
-    .anvbar a.active,a:hover {
-      transition: 0.75s;
-    }
-
    .reg h1 {
       text-align: center;
 
