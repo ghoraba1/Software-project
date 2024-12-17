@@ -284,10 +284,11 @@ app.put('/api/v1/cart/update/:cartId', async (req, res) => {
     }
     // Extract cart ID and adjustment value
     const { cartId } = req.params;
-    const { adjustment } = req.body; // adjustment can be positive (add) or negative (subtract)
-    // Validate adjustment input
-    if (typeof adjustment !== 'number' || adjustment === 0) {
-      return res.status(400).json({ message: 'Invalid adjustment value' });
+    const { adjustment } = req.body;
+    const adjustmentNumber = Number(adjustment);
+    
+    if (typeof adjustmentNumber != "number" || adjustmentNumber === 0) {
+        return res.status(400).json({ message: 'Invalid adjustment value' });
     }
     // Fetch the current cart item
     const [cartItem] = await DB('cart')
@@ -298,7 +299,7 @@ app.put('/api/v1/cart/update/:cartId', async (req, res) => {
       return res.status(404).json({ message: 'Item not found in cart' });
     }
     // Calculate the new quantity
-    const newQuantity = cartItem.quantity + adjustment;
+    const newQuantity = Number(cartItem.quantity) +Number(adjustment);
     if (newQuantity < 0) {
       return res.status(400).json({ message: 'Quantity cannot be negative' });
     }
