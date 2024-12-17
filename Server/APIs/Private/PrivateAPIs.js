@@ -19,7 +19,7 @@ function HandlePrivateAPIs(app){
     //   };
 
 //user APIs----------------------------------------------------
-    app.get('/api/v1/users/view',async (req,res)=>{
+    app.get('/api/v1/user/view',async (req,res)=>{
       user = await get_user(req,res);
       if (!user) {
          return res.status(403).json({ message: 'Unauthorized access' }); // Stops execution after redirection or error
