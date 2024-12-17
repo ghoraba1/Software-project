@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>About us</title>
+  <style>
+    .navbar ul{
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: block;
+      background-color: #333;
+      overflow: hidden;
+      position: -webkit-sticky;
+      /* Safari */
+      position: sticky;
+      top: 0;
+    }
+
+    .navbar li {
+      float: left;
+      border-right: 1px solid #bbb;
+    }
+
+    .navbar li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 16px 16px;
+      text-decoration: none;
+    }
+
+   .navbar li a:hover {
+      background-color: #111;
+    }
+
+    .anvbar a.active,a:hover {
+      transition: 0.75s;
+    }
+
+   .reg h1 {
+      text-align: center;
+
+    }
+
+    .reg form {
+      text-align: center;
+      color: blue;
+    }
+        .regcont {
+  height: 200px;
+  position: relative;
+}
+       .regbutton button {
+        margin: 10;
+        top: 20%;
+        left:25%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        position: absolute;
+        width: 50%;
+        border-radius: 20px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: yellow;
+        height: 50px;
+        align-items: center;
+        }
+        .regbutton button:hover{
+          background-color:darkblue;
+        }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar">
+      <ul>
+        <li><a class="active" href="">Home</a></li>
+        <li><a class="active" href="">About</a></li>
+        <li style="float:right;"><a class="active" href="">Login</a></li>
+        <li style="float:right;"><a class="active" href="">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+<p style="text-align: center;">We are a group of Software engineers designing a site to sell products from various companies</p> 
+<ul>
+  <li>Abdelrahman Ghoraba (add IDs if you want)</li>
+  <li>Abdelrahman Elkhouly</li>
+  <li>Mohamed Motawea</li>
+  <li>Ali Wael</li>
+  <li>Ahmad Alaa</li>
+  <li>Omar Atef</li>
+  <li>Ahmad Waleed</li>
+</ul>
+<p>We hope you like it :)</p>
+  <footer>
+    <p>&copy; 2024 The superior bros</p>
+  </footer>
+
+</body>
+
+
+</html>
