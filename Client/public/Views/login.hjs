@@ -1,55 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="/Client/public/Src/login.js" type="text/javascript"></script>
-  <script> 
-    document.addEventListener("DOMContentLoaded", function () {
-    const loginBtn = document.getElementById("loginBtn");
-
-    loginBtn.addEventListener("click", function () {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        const data = {
-            email,
-            password,
-        };
-
-//        console.log(data);
-
-        // Use the Fetch API to make an AJAX POST request
-        fetch('/api/v1/user/login', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(errorText => {
-                    throw new Error(errorText);
-                });
-            }
-            return response; // Parse the JSON response
-        })
-        .then(serverResponse => {
-            alert("Login successfully");
-            console.log("Going to dashboard");
-            location.href = '/equipmentmangement';
-        })
-        .catch(error => {
-            alert(`User login error: ${error.message}`);
-        });
-    });
-});
-
-  </script>
+  {{!-- <script src="/Client/public/Src/login.js" type="text/javascript"></script> --}}
   <title>Login and Register</title>
   <style>
     ul{
@@ -188,6 +143,35 @@
   <footer>
     <p>&copy; 2024 The superior bros</p>
   </footer>
+  <script> 
+      $(document).ready(function(){
+  //  alert("jQuery is working!");
+    $("#loginBtn").click(function() {
+        const email = $('#email').val();
+        const password = $('#password').val();
+        data = {email,password}
+        console.log(data)
+        $.ajax({
+          type: "POST",
+          url: '/api/v1/user/login',
+          data  ,
+          success: function(serverResponse) {
+            if(serverResponse) {
+              alert("login successfully");
+              console.log("got to dahsboard")
+              location.href = '/dashboard';
+            }
+          },
+          error: function(errorResponse) {
+            if(errorResponse) {
+              alert(`User login error: ${errorResponse.responseText}`);
+            }            
+          }
+        });
+    })
+  });
+  </script>
 </body>
+  
 
 </html>

@@ -94,6 +94,7 @@ function HandlePublicAPIs(app){
       app.post('/api/v1/user/login', async function(req, res) {
         // get users credentials from the JSON body
         const { email, password } = req.body
+        console.log(email)
         if (!email) {
           // If the email is not present, return an HTTP unauthorized code
           return res.status(400).send('email is required');
