@@ -7,7 +7,7 @@ const { v4 } = require('uuid');
 function HandlePublicAPIs(app){
 
 
-    app.post('/api/v1/users/new',async(req,res)=>{ //register new user 
+    app.post('/api/v1/user/new',async(req,res)=>{ //register new user 
      //Checking if user exists using email.
       const userExists = await DB.select('*').from('public.users').where('email', req.body.email); 
       if (userExists.length > 0) {
@@ -33,7 +33,7 @@ function HandlePublicAPIs(app){
     
      })
     
-    app.put('/api/V1/users/:id',async(req,res)=>{
+    app.put('/api/V1/user/:id',async(req,res)=>{
       try{
          const{username,email,password,role}=req.body ;
          const hashedPassword = await bcrypt.hash(password, saltRounds); 
