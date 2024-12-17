@@ -103,8 +103,9 @@
     <div class="regbutton">
       <button type="submit" class="register-btn" id="registerBtn">Register</button>
     </div>
+    </form>
     </div>
-  </form>
+  
 
 
   <footer>
