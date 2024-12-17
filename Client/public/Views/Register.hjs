@@ -22,8 +22,6 @@
         margin: 10;
         top: 20%;
         left:25%;
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
         position: absolute;
         width: 50%;
         border-radius: 20px;
@@ -44,10 +42,10 @@
   <header>
     <nav class="navbar">
       <ul>
-        <li><a href="">Home</a></li>
-        <li><a href="">About</a></li>
-        <li style="float:right;"><a href="">Login</a></li>
-        <li style="float:right;"><a href="">Cart</a></li>
+        <li><a class="active" href="">Home</a></li>
+        <li><a class="active" href="">About</a></li>
+        <li style="float:right;"><a class="active" href="">Login</a></li>
+        <li style="float:right;"><a class="active" href="">Cart</a></li>
       </ul>
     </nav>
   </header>
@@ -60,9 +58,9 @@
   <form action="/submit" method="post">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required><br><br>
-    <label for="email">Email:</label>
+    <label for="email" style="padding:13px">Email:</label>
     <input type="email" id="email" name="email" required><br><br>
-    <label for="password">Password:</label>
+    <label for="password" style="padding:1px">Password:</label>
     <input type="password" id="password" name="password" required><br><br>
     </div>
     <div class="regcont">
