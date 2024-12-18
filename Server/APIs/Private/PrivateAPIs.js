@@ -1,6 +1,6 @@
 const DB = require('../../DB/Index.js');
 const {get_user}=require('../../Middleware/Sec_functions.js');
-
+const {get_session_token} = require('../../Middleware/Sec_functions.js');
 function HandlePrivateAPIs(app){
     // const AdminCheck = async (req, res, next) => {
     //     try {
@@ -352,7 +352,33 @@ app.get('/api/v1/cart/view', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
+app.post('/api/v1/user/logout', async function(req, res) {  
+  // Retrieve session token using your existing middleware function  
+  const sessionToken = get_session_token(req);  
 
+  // If no session token is found, respond with an error  
+  if (!sessionToken) {  
+      return res.status(400).json({ message: 'No session token provided' });  
+  }  
+
+  try {  
+      // Delete the session from the database  
+      const result = await DB('public.session').where('token', sessionToken).del();  
+
+      // If no session was found and deleted  
+      if (result === 0) {  
+          return res.status(400).json({ message: 'No active session found' });  
+      }  
+
+      // Since we're handling sessions in the database, we won't clear the cookie  
+      return res.status(200).json({ message: 'Successfully logged out' });  
+  } catch (error) {  
+      console.error(error.message);  
+      return res.status(500).json({ message: 'An error occurred while logging out' });  
+  }  
+});  
+
+// Start
 }
 
 module.exports = {HandlePrivateAPIs};

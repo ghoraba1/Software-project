@@ -98,7 +98,7 @@
     $('#searchBtn').click(function () {
       const query = $('#search').val();
       const filter = $('#filter').val();
-      alert(Searching for: ${query} with filter: ${filter});
+      alert(`Searching for: ${query} with filter: ${filter}`);
       // Use AJAX or backend logic to fetch filtered results
     });
   </script>
