@@ -125,10 +125,7 @@
             </tbody>
         </table>
 
-        <div class="text-center">
-            <button id="addEquipmentBtn" class="btn btn-primary">Add Equipment</button>
 
-        </div>
 
     </div>
 <!-- Modal -->
