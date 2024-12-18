@@ -18,6 +18,10 @@ app.get('/EquipmentMangement',function(req,res)
 app.get('/addEquipment',function(req,res)
 {
  return res.render('addEquipment') ;
-}) ;    
+}) ;      
+  app.get('/Profile',function(req,res)
+{
+ return res.render('Profile') ;
+}) ;   
 }
 module.exports = {handlePublicFrontEndView}

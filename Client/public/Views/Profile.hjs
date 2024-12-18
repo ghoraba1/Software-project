@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Your Profile</title>
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar">
+      <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="">Your Profile</a></li>
+        <li><a href="">About</a></li>
+        <li style="float:right;"><a href="">Login</a></li>
+        <li style="float:right;"><a href="">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+<br>
+<a>Your Profile:-</a>
+
+<ul>
+ <li style="list-style-type: none;">Name: ${{username}}</li>
+ <li style="list-style-type: none;">Email: ${{email}}</li>
+ <li style="list-style-type: none;">Role: ${{role}}</li>
+ <li style="list-style-type: none;">Created at: ${{created_at}}</li>
+</ul>
+
+
+
+  <footer class="text-center mt-4">
+    <p>We are a group of Software engineers designing a site to sell products from various
+      companies</p>
+    <p> = Contributers include:-</p>
+    <ul style="list-style-type: none">
+      <li>Abdelrahman Ghoraba (add IDs if you want)</li>
+      <li>Abdelrahman Elkhouly</li>
+      <li>Mohamed Motawea</li>
+      <li>Ali Wael</li>
+      <li>Ahmad Alaa</li>
+      <li>Omar Atef</li>
+      <li>Ahmad Waleed</li>
+    </ul>
+    <p>We hope you like it :)</p>
+    <p>&copy; 2024 The Superior Bros</p>
+  </footer>
+
+</body>
+
+
+</html>
