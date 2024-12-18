@@ -76,7 +76,7 @@ $(document).ready(function () {
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password" required>
       </div>
       <div class="button-group d-flex justify-content-between">
-        <div style="position: relative;left:280px">
+        <div style="position: relative;left:725px">
         <button type="button" class="btn btn-outline-success">Register</button>
         </div>
       </div>
