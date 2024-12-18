@@ -12,9 +12,5 @@ function handlePrivateFrontEndView(app){
 
       }
     })
-    app.get('/About2',function(req,res)
-{
- return res.render('About(logged)') ;
-}) ;   
 }
 module.exports = {handlePrivateFrontEndView}
