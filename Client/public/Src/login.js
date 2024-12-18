@@ -26,10 +26,6 @@ $(document).ready(function () {
     }
   });
 
-  // Handle register button click
-  $('#registerBtn').click(function (event) {
-    event.preventDefault(); // Prevent form reload
-    window.location.href = '/register'; // Redirect to the registration page
-  });
-
+  
+  
 });
