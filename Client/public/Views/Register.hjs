@@ -32,7 +32,7 @@ $(document).ready(function () {
     // Perform the AJAX POST request
     $.ajax({
       type: "POST",
-      url: '/api/v1/users/new',
+      url: '/api/v1/user/new',
       data: JSON.stringify(data),  // Convert data to JSON string
       contentType: "application/json",  // Set content type as JSON
       success: function (serverResponse) {
