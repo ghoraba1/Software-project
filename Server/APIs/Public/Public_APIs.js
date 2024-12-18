@@ -69,7 +69,8 @@ function HandlePublicAPIs(app){
             LEFT JOIN categories c ON e.category_id = c.category_id
             LEFT JOIN suppliers s ON e.supplier_id = s.supplier_id
           `);
-          console.log(`Result: `, result.rows);
+          // console.log(`Result: `, result.rows);
+          console.log("Equipments data fetched succesfully.")
           return res.status(200).json(result.rows);
         } catch (err) {
           console.log("Error: ", err.message);
@@ -93,6 +94,7 @@ function HandlePublicAPIs(app){
       app.post('/api/v1/user/login', async function(req, res) {
         // get users credentials from the JSON body
         const { email, password } = req.body
+        console.log(email)
         if (!email) {
           // If the email is not present, return an HTTP unauthorized code
           return res.status(400).send('email is required');
@@ -105,7 +107,7 @@ function HandlePublicAPIs(app){
         // validate the provided password against the password in the database
         // if invalid, send an unauthorized code
         let user = await DB.select('*').from('public.users').where('email', email);
-        console.log("user : : ",user)
+        console.log("Logged in as user: ",user)
         if (user.length == 0) {
           return res.status(400).send('user does not exist');
         }
