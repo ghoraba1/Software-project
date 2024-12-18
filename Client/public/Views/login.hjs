@@ -10,29 +10,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="../Src/login.js" type="text/javascript"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f4;
-    }
-
-    .form-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      margin: 50px auto;
-    }
-
-    #errorMessage {
-      color: red;
-      text-align: center;
-      margin-top: 10px;
-    }
-  </style>
   <script>
     $(document).ready(function () {
       // Handle login button click
@@ -42,7 +19,7 @@
         var password = $('#password').val();
 
         if (email === '' || password === '') {
-          $('#errorMessage').text('Please fill in all fields.');
+          $('#errorMessage').text('Please fill in all fields.').addClass('text-danger');
         } else {
           // Perform login
           $.ajax({
@@ -51,28 +28,28 @@
             contentType: 'application/json',
             data: JSON.stringify({ email: email, password: password }),
             success: function (response) {
-              $('#errorMessage').text('Login successful!');
-               window.location.href = '/EquipmentMangement';
+              $('#errorMessage').text('Login successful!').addClass('text-success');
+              window.location.href = '/EquipmentMangement';
             },
             error: function (xhr) {
-              $('#errorMessage').text(xhr.responseText);
+              $('#errorMessage').text(xhr.responseText).addClass('text-danger');
             }
           });
         }
-        
       });
-        $('#registerBtn').click(function (event) {
-    event.preventDefault(); // Prevent form reload
-    window.location.href = '/register'; // Redirect to the registration page
-  });
 
-      // Handle register button click
-
+      // Redirect to register page
+      $('#registerBtn').click(function (event) {
+        event.preventDefault();
+        window.location.href = '/register';
+      });
     });
   </script>
 </head>
 
-<body>
+<body class="bg-light">
+
+  <!-- Header -->
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">Superior Bros</a>
@@ -89,31 +66,37 @@
       </div>
     </nav>
   </header>
-  <div class="form-container">
-    <h2 class="text-center">Login/Register</h2>
-    <form id="authForm">
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" name="email" required>
+
+  <!-- Form Container -->
+  <div class="container mt-5">
+    <div class="card shadow-sm mx-auto" style="max-width: 400px;">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Login/Register</h2>
+        <form id="authForm">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+            <button type="button" class="btn btn-success" id="registerBtn">Register</button>
+          </div>
+          <p id="errorMessage" class="mt-3 text-center"></p>
+        </form>
       </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-      </div>
-      <div class="button-group d-flex justify-content-between">
-        <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
-        <button type="button" class="btn btn-success" id="registerBtn">Register</button>
-      </div>
-    </form>
-    <p id="errorMessage"></p>
+    </div>
   </div>
 
-  <footer class="text-center mt-4">
-    <p>We are a group of Software engineers designing a site to sell products from various
-      companies</p>
-    <p> = Contributers include:-</p>
-    <ul style="list-style-type: none">
-      <li>Abdelrahman Ghoraba (add IDs if you want)</li>
+  <!-- Footer -->
+  <footer class="text-center mt-5 py-4 bg-dark text-white">
+    <p>We are a group of Software engineers designing a site to sell products from various companies.</p>
+    <p>Contributors include:</p>
+    <ul class="list-unstyled">
+      <li>Abdelrahman Ghoraba</li>
       <li>Abdelrahman Elkhouly</li>
       <li>Mohamed Motawea</li>
       <li>Ali Wael</li>
@@ -124,34 +107,7 @@
     <p>We hope you like it :)</p>
     <p>&copy; 2024 The Superior Bros</p>
   </footer>
-  <script> 
-      $(document).ready(function(){
-  //  alert("jQuery is working!");
-    $("#loginBtn").click(function() {
-        const email = $('#email').val();
-        const password = $('#password').val();
-        data = {email,password}
-        console.log(data)
-        $.ajax({
-          type: "POST",
-          url: '/api/v1/user/login',
-          data  ,
-          success: function(serverResponse) {
-            if(serverResponse) {
-              alert("login successfully");
-              console.log("got to dahsboard")
-              location.href = '/dashboard';
-            }
-          },
-          error: function(errorResponse) {
-            if(errorResponse) {
-              alert(`User login error: ${errorResponse.responseText}`);
-            }            
-          }
-        });
-    })
-  });
-  </script>
+
 </body>
   
 
