@@ -1,29 +1,31 @@
- $(document).ready( $(function(){
-      $("#loginBtn").click(function(){
-        const email = $("#email").val().trim()
-        const password = $("#password").val().trim()
-        console.log("Email:", email); // Debugging
-        console.log("Password:", password); // Debugging
-        $.ajax({
-          url: 'http://localhost:3000/api/v1/user/login',
-          method: 'POST',
-          data: JSON.stringify({
-            email: email,
-            password: password
-          }),
-          success: function(serverResponse) {
-          if(serverResponse) {
-            alert("login successfully");
-            console.log("got to dahsboard")
-            location.href = '/equipmentmangement';
-          }
+
+$(document).ready(function () {
+  // Handle login button click
+  $('#loginBtn').click(function (event) {
+    event.preventDefault();
+    var email = $('#email').val();
+    var password = $('#password').val();
+
+    if (email === '' || password === '') {
+      $('#errorMessage').text('Please fill in all fields.');
+    } else {
+      // Perform login
+      $.ajax({
+        url: '/api/v1/user/login',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ email: email, password: password }),
+        success: function (response) {
+          $('#errorMessage').text('Login successful!');
+           window.location.href = '/EquipmentMangement';
         },
-        error: function(errorResponse) {
-          if(errorResponse) {
-            alert(`User login error: ${errorResponse.responseText}`);
-          }            
+        error: function (xhr) {
+          $('#errorMessage').text(xhr.responseText);
         }
-        })
-      })
-    })
-)
+      });
+    }
+  });
+
+  // Handle register button click
+
+});

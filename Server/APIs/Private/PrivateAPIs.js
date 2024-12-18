@@ -19,10 +19,10 @@ function HandlePrivateAPIs(app){
     //   };
 
 //user APIs----------------------------------------------------
-    app.get('/api/v1/users/view',async (req,res)=>{
+    app.get('/api/v1/user/view',async (req,res)=>{
       user = await get_user(req,res);
       if (!user) {
-         return; // Stops execution after redirection or error
+         return res.status(403).json({ message: 'Unauthorized access' }); // Stops execution after redirection or error
      }
     if(user.role == "admin"){
        try{
@@ -62,7 +62,7 @@ function HandlePrivateAPIs(app){
     app.post('/api/v1/equipment/new', async (req, res) => {
       user = await get_user(req,res);
       if (!user) {
-         return; // Stops execution after redirection or error
+         return res.status(403).json({ message: 'Unauthorized access' }); // Stops execution after redirection or error
      }
     if(user.role == "admin"){
        try{
@@ -89,7 +89,7 @@ function HandlePrivateAPIs(app){
     app.put('/api/v1/equipment/:id', async (req, res) => {
       user = await get_user(req,res);
       if (!user) {
-         return; // Stops execution after redirection or error
+         return res.status(403).json({ message: 'Unauthorized access' }); // Stops execution after redirection or error
      }
     if(user.role == "admin"){
        try{
@@ -276,6 +276,83 @@ function HandlePrivateAPIs(app){
         return res.status(500).json({ error: 'Internal server error' });
       }
     });
+app.put('/api/v1/cart/update/:cartId', async (req, res) => {
+  try {
+    const user = await get_user(req);
+    if (!user) {
+      return res.status(403).json({ message: 'Unauthorized access' });
+    }
+    // Extract cart ID and adjustment value
+    const { cartId } = req.params;
+    const { adjustment } = req.body;
+    const adjustmentNumber = Number(adjustment);
+    
+    if (typeof adjustmentNumber != "number" || adjustmentNumber === 0) {
+        return res.status(400).json({ message: 'Invalid adjustment value' });
+    }
+    // Fetch the current cart item
+    const [cartItem] = await DB('cart')
+      .select('quantity')
+      .where({ cart_id: cartId, user_id: user.user_id });
+
+    if (!cartItem) {
+      return res.status(404).json({ message: 'Item not found in cart' });
+    }
+    // Calculate the new quantity
+    const newQuantity = Number(cartItem.quantity) +Number(adjustment);
+    if (newQuantity < 0) {
+      return res.status(400).json({ message: 'Quantity cannot be negative' });
+    }
+    // Update the cart item
+    await DB('cart')
+      .where({ cart_id: cartId, user_id: user.user_id })
+      .update({ quantity: newQuantity });
+
+    return res.status(200).json({
+      message: 'Cart updated successfully',
+      newQuantity,
+    });
+  } catch (error) {
+    console.error('Error updating cart:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+app.get('/api/v1/cart/view', async (req, res) => {
+  try {
+    // Authenticate the user
+    const user = await get_user(req);
+    if (!user) {
+      return res.status(403).json({ message: 'Unauthorized access' });
+    }
+
+    // Query the cart for the authenticated user
+    const cartItems = await DB('cart')
+      .join('equipment', 'cart.equipment_id', '=', 'equipment.equipment_id')
+      .select(
+        'cart.cart_id',
+        'cart.quantity',
+        'equipment.equipment_name',
+        'equipment.equipment_img',
+        'equipment.model_number',
+      )
+      .where({ 'cart.user_id': user.user_id });
+
+    // If the cart is empty
+    if (cartItems.length === 0) {
+      return res.status(200).json({ message: 'Cart is empty', cart: [] });
+    }
+
+    // Return the cart items
+    return res.status(200).json({
+      cart: cartItems,
+    });
+  
+  }catch (error) {
+    console.error('Error fetching cart:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 }
 
 module.exports = {HandlePrivateAPIs};

@@ -1,13 +1,16 @@
-function handlePrivateFrontEndView(app){
-    // app.get('/', function(req, res) {
-    // return res.render('index' , 
-    //   {title : "Tutorial 9" , 
-    //   desc : "Tutorial is mainly about UI connection with server.",
-    //   });
-    // });
 
-    app.get('/EquipmentMangement', function(req, res){
-      return res.render('EquipmentMangement');
+
+
+function handlePrivateFrontEndView(app){
+
+    app.get('/EquipmentMangementAdmin', async (req, res)=>{
+      user = await get_user(req,res);
+      if (user.role == admin){
+    
+      
+      return res.render('EquipmentMangementAdmin');
+
+      }
     })
 }
 module.exports = {handlePrivateFrontEndView}
