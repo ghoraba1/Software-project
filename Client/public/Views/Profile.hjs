@@ -30,20 +30,21 @@
 
 
 
-  <footer>
-<p>We are a group of Software engineers designing a site to sell products from various companies</p> 
-<p> = Contributers include:-</p>
-<ul>
-  <li>Abdelrahman Ghoraba (add IDs if you want)</li>
-  <li>Abdelrahman Elkhouly</li>
-  <li>Mohamed Motawea</li>
-  <li>Ali Wael</li>
-  <li>Ahmad Alaa</li>
-  <li>Omar Atef</li>
-  <li>Ahmad Waleed</li>
-</ul>
-<p>We hope you like it :)</p>
-    <p>&copy; 2024 The superior bros</p>
+  <footer class="text-center mt-4">
+    <p>We are a group of Software engineers designing a site to sell products from various
+      companies</p>
+    <p> = Contributers include:-</p>
+    <ul style="list-style-type: none">
+      <li>Abdelrahman Ghoraba (add IDs if you want)</li>
+      <li>Abdelrahman Elkhouly</li>
+      <li>Mohamed Motawea</li>
+      <li>Ali Wael</li>
+      <li>Ahmad Alaa</li>
+      <li>Omar Atef</li>
+      <li>Ahmad Waleed</li>
+    </ul>
+    <p>We hope you like it :)</p>
+    <p>&copy; 2024 The Superior Bros</p>
   </footer>
 
 </body>
