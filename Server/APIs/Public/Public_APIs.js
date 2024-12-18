@@ -131,7 +131,15 @@ function HandlePublicAPIs(app){
           await DB('public.session').insert(session);
           // In the response, set a cookie on the client with the name "session_cookie"
           // and the value as the UUID we generated. We also set the expiration time.
-          return res.cookie("session_token", token, { expires: expiresAt }).status(200).send('login successful');
+          return res.cookie("session_token", token, { expires: expiresAt }).status(200).json({
+            message:"login successful",
+            user: {
+              user_id: user.user_id,
+              role: user.role,
+              email: user.email
+            }
+
+          })
         } catch (e) {
           console.log(session)
           console.log(e.message);

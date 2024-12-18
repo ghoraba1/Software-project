@@ -10,10 +10,11 @@
       <nav class="navbar navbar-inverse" style="padding-left:130px;">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
-            <li ><a href="/EquipmentMangement">equipment</a></li>
+            <li ><a href="/EquipmentMangement">Equipment</a></li>
             <li><a href="/profile">Profile</a></li>
-            <li><a href="/employee">Employee</a></li>
-            <li><a href="/addEmployee">Add</a></li>
+            <li><a href="/cart">Cart</a></li>
+            <li><a href="/login">Login</a></li>
+           <li><a href="/login">Register</a></li>
           </ul>
       </nav>
     </div>

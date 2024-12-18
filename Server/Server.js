@@ -6,21 +6,20 @@ app.use(cors())
 app.use(express.json())
 
 const {HandlePublicAPIs} = require('./APIs/Public/Public_APIs.js')
-const {handlePrivateFrontEndView} = require('./APIs/Private/view.js')
+const {HandlePrivateFrontEndView} = require('./APIs/Private/view.js')
 const{Middleware} =require('./Middleware/Admin.js');
 const {HandlePrivateAPIs} = require("./APIs/Private/PrivateAPIs.js");
-const {handlePublicFrontEndView} = require("./APIs/Public/View.js")
+const {HandlePublicFrontEndView} = require("./APIs/Public/View.js")
 
 app.set('views', '../Client/public/Views');
 app.set('view engine', 'hjs');
 app.use(express.static('./public'));
 
-handlePublicFrontEndView(app);
+HandlePublicFrontEndView(app);
 HandlePublicAPIs(app);
 app.use(Middleware);
 HandlePrivateAPIs(app);
-
-
+HandlePrivateFrontEndView(app) ;
 
 
 const PORT = process.env.PORT;
