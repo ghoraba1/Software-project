@@ -59,7 +59,12 @@
             }
           });
         }
+        
       });
+        $('#registerBtn').click(function (event) {
+    event.preventDefault(); // Prevent form reload
+    window.location.href = '/register'; // Redirect to the registration page
+  });
 
       // Handle register button click
 
@@ -97,7 +102,7 @@
       </div>
       <div class="button-group d-flex justify-content-between">
         <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
-        <button type="submit" class="btn btn-success" id="registerBtn">Register</button>
+        <button type="button" class="btn btn-success" id="registerBtn">Register</button>
       </div>
     </form>
     <p id="errorMessage"></p>
