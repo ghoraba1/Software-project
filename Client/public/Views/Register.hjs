@@ -8,6 +8,47 @@
   <script src="../Js/jquery-3.7.1.min.js" type="text/javascript"></script>
   <script src="../Js/bootstrap.min.js" type="text/javascript"></script>
   <script src="../Src/Register.js" type="text/javascript"></script>
+  
+  <script>
+    
+$(document).ready(function () {
+  $("#registerBtn").click(function () {
+    // Collect input values
+    const username = $('#username').val();
+    const email = $('#email').val();
+    const password = $('#password').val();
+
+    // Construct the data object
+    const data = {
+      username,
+      email,
+      password
+    };
+
+    console.log("Data to be sent:", data);
+
+    // Perform the AJAX POST request
+    $.ajax({
+      type: "POST",
+      url: '/api/v1/users/new',
+      data: JSON.stringify(data),  // Convert data to JSON string
+      contentType: "application/json",  // Set content type as JSON
+      success: function (serverResponse) {
+        // On success
+        alert("Registered successfully!");
+        console.log("Server Response:", serverResponse);
+        location.href = '/login';  // Redirect to login page
+      },
+      error: function (errorResponse) {
+        // On error
+        console.error("Error Response:", errorResponse);
+        alert(`Register error: ${errorResponse.responseText || "Unknown error"}`);
+      }
+    });
+  });
+});
+
+  </script>
 </head>
 
 <body>
