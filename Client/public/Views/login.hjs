@@ -29,7 +29,15 @@
             data: JSON.stringify({ email: email, password: password }),
             success: function (response) {
               $('#errorMessage').text('Login successful!').addClass('text-success');
-              window.location.href = '/EquipmentMangement';
+
+
+                        // Check user role and redirect accordingly
+          if (response.user.role === 'admin') {
+            window.location.href = '/HomeAdmin';
+          } else {
+            window.location.href = '/HomeUser';
+          }
+           
             },
             error: function (xhr) {
               $('#errorMessage').text(xhr.responseText).addClass('text-danger');
