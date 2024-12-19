@@ -32,14 +32,24 @@
           </a>
         </li>
 
+        
         <!-- Order Section -->
         <li class="nav-item">
           <a class="nav-link" href="#">Orders</a>
         </li>
 
+        <!-- Profile icon -->
+         <li class="nav-item">
+          <a class="nav-link" href="/Profile">
+            <span class="mr-2">Your Profile</span>
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+        </li>
+
+
         <!-- Search -->
         <li class="nav-item d-flex align-items-center">
-          <input type="text" class="form-control ml-2" id="search" placeholder="Search for equipment">
+          <input type="text" class="form-control ml-2 " id="search" placeholder="Search for equipment">
           <select class="form-control ml-2" id="filter">
             <option value="all">Equipment</option>
             <option value="category">Category</option>
