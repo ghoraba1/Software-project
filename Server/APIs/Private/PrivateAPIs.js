@@ -178,12 +178,11 @@ function HandlePrivateAPIs(app){
             return res.status(403).json({ message: 'Only standard users can add ratings' });
           }
        
-          const { equipment_id, comment, score} = req.body;
+          const { equipment_id, rating} = req.body;
           await DB('rating').insert({
             user_id: user.user_id,
             equipment_id,
-            comment,
-            score,
+            rating
           });
     
           res.status(201).json({ message:'Successfully added rating'});
