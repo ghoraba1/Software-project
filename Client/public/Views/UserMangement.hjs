@@ -59,11 +59,41 @@
 
     <script>
         $(document).ready(function() {
-            const users = [
-                { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-                { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-                { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Moderator' }
-            ];
+            let UserData = [];
+            $.ajax({
+                url : "http://localhost:3000/api/v1/user/view",
+                method: "GET" ,
+                dataType:"json" ,
+                success: function(data) {
+                UserData = data;
+                     $('.equipment-list tbody').empty();
+                  data.forEach(function(item) {
+                     $('.equipment-list tbody').append(`
+                                <tr>
+                                    <td>${item.equipment_img}</td>
+                                    <td>${item.equipment_name}</td>
+                                    <td>${item.equipment_id}</td>
+                                    <td>${item.category_name}</td>
+                                    <td>${item.supplier_name}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.status}</td>
+                                    <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
+                                    <td><button class="btn btn-outline-primary">Edit</button>
+                                    <button id = "details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
+                                    <button type="button" class="btn btn-outline-danger delete " data-id="${item.equipment_id}">Delete</button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+
+
+            })
+
+
 
             function renderUsers() {
                 const userTableBody = $('#userTable tbody');
