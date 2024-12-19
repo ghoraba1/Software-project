@@ -1,254 +1,296 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>  
+<html lang="en">  
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - User</title>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</head>
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Home - User</title>  
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>  
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>  
+  <style>  
+    .filters-container {  
+      margin: 20px 0;  
+      display: flex;  
+      justify-content: center;  
+      align-items: center;  
+    }  
+    .filter-select {  
+      width: 200px;  
+      margin: 0 10px;  
+    }  
+    .search-container {  
+      display: flex;  
+      align-items: center;  
+      margin-left: auto;  
+    }  
+    #searchInput {  
+      margin-right: 10px;  
+    }  
+  </style>  
+</head>  
 
-<body class="bg-light">
+<body class="bg-light">  
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Superior Bros</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <!-- Navbar -->  
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">  
+    <a class="navbar-brand" href="#">Superior Bros</a>  
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">  
+      <span class="navbar-toggler-icon"></span>  
+    </button>  
 
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <ul class="navbar-nav mr-auto">
-        <!-- Cart Icon -->
-        <li class="nav-item">
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#cartModal">
-            <span class="mr-2">Cart</span>
-            <i class="fas fa-shopping-cart"></i>
-          </a>
-        </li>
+    <div class="collapse navbar-collapse" id="navbarContent">  
+      <ul class="navbar-nav mr-auto">  
+        <li class="nav-item">  
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#cartModal">  
+            <span class="mr-2">Cart</span>  
+            <i class="fas fa-shopping-cart"></i>  
+          </a>  
+        </li>  
+        <li class="nav-item">  
+          <a class="nav-link" href="#">Orders</a>  
+        </li>  
+        <li class="nav-item">  
+          <a class="nav-link" href="/Profile">  
+            <span class="mr-2">Your Profile</span>  
+            <i class="fas fa-user"></i>  
+          </a>  
+        </li>  
+      </ul>  
 
+      <div class="search-container">  
+        <input type="text" id="searchInput" class="form-control" placeholder="Search for equipment">  
+        <button class="btn btn-primary">Search</button>  
+      </div>  
+      <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>  
+    </div>  
+  </nav>  
+
+  <!-- Main Content -->  
+  <div class="container mt-4">  
+    <h2 class="text-center mb-4">Available Equipment</h2>  
+
+    <div class="filters-container">  
+      <div>  
+        <label for="category-filter" class="mr-2">Category:</label>  
+        <select class="form-control filter-select" id="category-filter">  
+          <option value="all">All</option>  
+          <!-- Categories populated dynamically here -->  
+        </select>  
+      </div>  
+      <div>  
+        <label for="supplier-filter" class="mr-2">Supplier:</label>  
+        <select class="form-control filter-select" id="supplier-filter">  
+          <option value="all">All</option>  
+          <!-- Suppliers populated dynamically here -->  
+        </select>  
+      </div>  
+      <button class="btn btn-secondary" id="filterBtn">Apply Filters</button>  
+    </div>  
+
+    <div class="row" id="equipmentList">  
+      <!-- Equipment items will be inserted here by JavaScript -->  
+    </div>  
+  </div>  
+
+  <!-- Cart Modal -->  
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">  
+    <div class="modal-dialog modal-lg">  
+      <div class="modal-content">  
+        <div class="modal-header">  
+          <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>  
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">  
+            <span aria-hidden="true">&times;</span>  
+          </button>  
+        </div>  
+        <div class="modal-body" id="cartItems">  
+          <!-- Cart items will be dynamically inserted here -->  
+        </div>  
+        <div class="modal-footer">  
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>  
+          <button type="button" class="btn btn-primary" id="makeOrderBtn">Make Order</button>  
+        </div>  
+      </div>  
+    </div>  
+  </div>  
+
+  <!-- Footer -->  
+  <footer class="bg-dark text-white text-center py-3 mt-4">  
+    <p>&copy; 2024 The Superior Bros. All rights reserved.</p>  
+    <p>Designed by Superior Bros Team</p>  
+  </footer>  
+
+  <script>  
+    $(document).ready(function () {  
+      let categories = [];  
+      let suppliers = [];  
+
+      // Load equipment, categories, and suppliers  
+      function loadEquipment() {  
+        $.ajax({  
+          type: 'GET',  
+          url: 'http://localhost:3000/api/v1/equipment/view',  
+          success: function (data) {  
+            const equipmentList = $('#equipmentList');  
+            equipmentList.empty();  
+            categories = [];  
+            suppliers = [];  
+
+            data.forEach(equipment => {  
+              // Populate categories and suppliers  
+              if (!categories.includes(equipment.category_name)) {  
+                categories.push(equipment.category_name);  
+              }  
+              if (!suppliers.includes(equipment.supplier_name)) {  
+                suppliers.push(equipment.supplier_name);  
+              }  
+
+              const equipmentItem = `  
+                <div class="col-md-4 mb-4">  
+                  <div class="card h-100 shadow-sm">  
+                    <img src="${equipment.equipment_img || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Equipment Image">  
+                    <div class="card-body">  
+                      <h5 class="card-title">${equipment.equipment_name}</h5>  
+                      <p class="card-text">Category: ${equipment.category_name}</p>  
+                      <p class="card-text">Supplier: ${equipment.supplier_name}</p>  
+                      <p class="card-text">Status: ${equipment.status}</p>  
+                    </div>  
+                    <div class="card-footer d-flex justify-content-between">  
+                      <span class="text-primary font-weight-bold available-quantity" data-quantity="${equipment.quantity}">  
+                        ${equipment.quantity} Available  
+                      </span>  
+                      <button class="btn btn-sm btn-success addToCartBtn" data-id="${equipment.equipment_id}" data-quantity="${equipment.quantity}">  
+                        Add to Cart  
+                      </button>  
+                    </div>  
+                  </div>  
+                </div>`;  
+              equipmentList.append(equipmentItem);  
+            });  
+            populateFilters();  
+            attachAddToCartEvent();  
+          },  
+          error: function (error) {  
+            console.error('Error fetching equipment data:', error);  
+          }  
+        });  
+      }  
+
+      // Populate dropdown filters for categories and suppliers  
+      function populateFilters() {  
+        const categoryFilter = $('#category-filter');  
+        const supplierFilter = $('#supplier-filter');  
         
-        <!-- Order Section -->
-        <li class="nav-item">
-          <a class="nav-link" href="#">Orders</a>
-        </li>
+        categoryFilter.empty().append('<option value="all">All</option>');  
+        supplierFilter.empty().append('<option value="all">All</option>');  
 
-        <!-- Profile icon -->
-         <li class="nav-item">
-          <a class="nav-link" href="/Profile">
-            <span class="mr-2">Your Profile</span>
-            <i class="fas fa-shopping-cart"></i>
-          </a>
-        </li>
+        categories.forEach(category => {  
+          categoryFilter.append(`<option value="${category}">${category}</option>`);  
+        });  
 
+        suppliers.forEach(supplier => {  
+          supplierFilter.append(`<option value="${supplier}">${supplier}</option>`);  
+        });  
+      }  
 
-        <!-- Search -->
-        <li class="nav-item d-flex align-items-center">
-          <input type="text" class="form-control ml-2 " id="search" placeholder="Search for equipment">
-          <select class="form-control ml-2" id="filter">
-            <option value="all">Equipment</option>
-            <option value="category">Category</option>
-            <option value="supplier">Supplier</option>
-            <option value="availability">Availability</option>
-          </select>
-          <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
-        </li>
-      </ul>
+      // Apply filters and search  
+      function applyFilters() {  
+        const categoryFilter = $('#category-filter').val();  
+        const supplierFilter = $('#supplier-filter').val();  
+        const searchKeyword = $('#searchInput').val().toLowerCase();  
 
-      <!-- Logout Button -->
-      <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
-    </div>
-  </nav>
+        $.ajax({  
+          url: 'http://localhost:3000/api/v1/equipment/view',  
+          method: 'GET',  
+          dataType: 'json',  
+          success: function (data) {  
+            const equipmentList = $('#equipmentList');  
+            equipmentList.empty();  
 
-  <!-- Main Content -->
-  <div class="container mt-4">
-    <h2 class="text-center mb-4">Available Equipment</h2>
-    <div class="row" id="equipmentList">
-      <!-- Equipment items will be inserted here by JavaScript -->
-    </div>
-  </div>
+            data.forEach(function (item) {  
+              if ((categoryFilter === 'all' || item.category_name === categoryFilter) &&  
+                  (supplierFilter === 'all' || item.supplier_name === supplierFilter) &&  
+                  (searchKeyword === '' || item.equipment_name.toLowerCase().includes(searchKeyword))) {  
+                const equipmentItem = `  
+                  <div class="col-md-4 mb-4">  
+                    <div class="card h-100 shadow-sm">  
+                      <img src="${item.equipment_img || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Equipment Image">  
+                      <div class="card-body">  
+                        <h5 class="card-title">${item.equipment_name}</h5>  
+                        <p class="card-text">Category: ${item.category_name}</p>  
+                        <p class="card-text">Supplier: ${item.supplier_name}</p>  
+                        <p class="card-text">Status: ${item.status}</p>  
+                      </div>  
+                      <div class="card-footer d-flex justify-content-between">  
+                        <span class="text-primary font-weight-bold available-quantity" data-quantity="${item.quantity}">  
+                          ${item.quantity} Available  
+                        </span>  
+                        <button class="btn btn-sm btn-success addToCartBtn" data-id="${item.equipment_id}" data-quantity="${item.quantity}">  
+                          Add to Cart  
+                        </button>  
+                      </div>  
+                    </div>  
+                  </div>`;  
+                equipmentList.append(equipmentItem);  
+              }  
+            });  
 
-  <!-- Cart Modal -->
-  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="cartModalLabel">Your Cart</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="cartItems">
-          <!-- Cart items will be dynamically inserted here -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+            attachAddToCartEvent();  
+          },  
+          error: function (error) {  
+            console.error('Error fetching equipment data with filters:', error);  
+          }  
+        });  
+      }  
 
-  <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-3 mt-4">
-    <p>&copy; 2024 The Superior Bros. All rights reserved.</p>
-    <p>Designed by Superior Bros Team</p>
-  </footer>
+      // Attach event handler for "Add to Cart" button  
+      function attachAddToCartEvent() {  
+        $('.addToCartBtn').off('click').on('click', function () {  
+          const button = $(this);  
+          const equipmentId = button.data('id');  
+          const availableSpan = button.siblings('.available-quantity');  
+          let currentQuantity = parseInt(availableSpan.data('quantity'));  
+          const addQuantity = 1; // Quantity to add to cart  
 
-  <!-- Same structure as provided -->
+          if (currentQuantity >= addQuantity) {  
+            $.ajax({  
+              type: 'POST',  
+              url: 'http://localhost:3000/api/v1/cart/new',  
+              contentType: 'application/json',  
+              data: JSON.stringify({ equipment_id: equipmentId, quantity: addQuantity }),  
+              success: function (response) {  
+                alert('Item added to cart!');  
+                currentQuantity -= addQuantity;  
+                availableSpan.data('quantity', currentQuantity);  
+                availableSpan.text(`${currentQuantity} Available`);  
+              },  
+              error: function (error) {  
+                console.error('Error adding to cart:', error);  
+                alert('Failed to add item to cart.');  
+              }  
+            });  
+          } else {  
+            alert('Insufficient stock available!');  
+          }  
+        });  
+      }  
 
-<script>
-  $(document).ready(function () {
-    // Fetch and display equipment
-    function loadEquipment(query = '', filter = 'all') {
-      $.ajax({
-        type: 'GET',
-        url: 'http://localhost:3000/api/v1/equipment/view',
-        success: function (data) {
-          const equipmentList = $('#equipmentList');
-          equipmentList.empty();
+      // Initial load  
+      loadEquipment();  
 
-          const filteredData = data.filter(equipment => {
-            const matchesQuery = equipment.equipment_name.toLowerCase().includes(query.toLowerCase());
-            if (filter === 'category') {
-              return matchesQuery && equipment.category_name.toLowerCase().includes(query.toLowerCase());
-            } else if (filter === 'supplier') {
-              return matchesQuery && equipment.supplier_name.toLowerCase().includes(query.toLowerCase());
-            } else if (filter === 'availability') {
-              return matchesQuery && equipment.status.toLowerCase().includes(query.toLowerCase());
-            }
-            return matchesQuery;
-          });
+      // Filter button click logic  
+      $('#filterBtn').click(function () {  
+        applyFilters();  
+      });  
 
-          filteredData.forEach(equipment => {
-            const equipmentItem = `
-              <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                  <img src="${equipment.equipment_img || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Equipment Image">
-                  <div class="card-body">
-                    <h5 class="card-title">${equipment.equipment_name}</h5>
-                    <p class="card-text">Category: ${equipment.category_name}</p>
-                    <p class="card-text">Supplier: ${equipment.supplier_name}</p>
-                    <p class="card-text">Rating: ${equipment.rating}</p>
-                    <p class="card-text">Location: ${equipment.location}</p>
-                    <p class="card-text">Status: ${equipment.status}</p>
-                  </div>
-                  <div class="card-footer d-flex justify-content-between">
-                    <span class="text-primary font-weight-bold available-quantity" data-quantity="${equipment.quantity}">
-                      ${equipment.quantity} Available
-                    </span>
-                    <button class="btn btn-sm btn-success addToCartBtn" data-id="${equipment.equipment_id}" data-quantity="${equipment.quantity}">
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>`;
-            equipmentList.append(equipmentItem);
-          });
-
-          // Add to Cart button click handler
-          $('.addToCartBtn').click(function () {
-            const button = $(this);
-            const equipmentId = button.data('id');
-            const availableSpan = button.siblings('.available-quantity');
-            let currentQuantity = parseInt(availableSpan.data('quantity'));
-            const addQuantity = 1; // Quantity to add to cart
-
-            if (currentQuantity >= addQuantity) {
-              // Call the API to add to cart
-              $.ajax({
-                type: 'POST',
-                url: 'http://localhost:3000/api/v1/cart/new',
-                contentType: 'application/json',
-                data: JSON.stringify({ equipment_id: equipmentId, quantity: addQuantity }),
-                success: function (response) {
-                  alert('Item added to cart!');
-                  currentQuantity -= addQuantity;
-                  availableSpan.data('quantity', currentQuantity); // Update data attribute
-                  availableSpan.text(`${currentQuantity} Available`); // Update UI
-                  loadCart(); // Refresh the cart
-                },
-                error: function (error) {
-                  console.error('Error adding to cart:', error);
-                  alert('Failed to add item to cart.');
-                }
-              });
-            } else {
-              alert('Insufficient stock available!');
-            }
-          });
-        },
-        error: function (error) {
-          console.error('Error fetching equipment data:', error);
-        }
-      });
-    }
-
-    // Load cart
-    function loadCart() {
-      $.ajax({
-        type: 'GET',
-        url: 'http://localhost:3000/api/v1/cart/view',
-        success: function (response) {
-          const cartList = $('#cartItems');
-          cartList.empty();
-
-          if (response.cart.length === 0) {
-            cartList.append('<p>Your cart is empty.</p>');
-          } else {
-            response.cart.forEach(item => {
-              const cartItem = `
-                <div class="card mb-2">
-                  <div class="card-body d-flex align-items-center">
-                    <img src="${item.equipment_img || 'https://via.placeholder.com/100'}" alt="${item.equipment_name}" class="img-thumbnail mr-3" style="width: 100px;">
-                    <div>
-                      <h5 class="card-title">${item.equipment_name}</h5>
-                      <p class="card-text">Model: ${item.model_number}</p>
-                      <p class="card-text">Quantity: ${item.quantity}</p>
-                    </div>
-                  </div>
-                </div>`;
-              cartList.append(cartItem);
-            });
-          }
-        },
-        error: function (error) {
-          console.error('Error loading cart:', error);
-        }
-      });
-    }
-
-    // Initial load
-    loadEquipment();
-
-    // Search Button Logic
-    $('#searchBtn').click(function () {
-      const query = $('#search').val();
-      const filter = $('#filter').val();
-      loadEquipment(query, filter);
-    });
-
-    // Logout Button Logic
-    $('#logoutBtn').click(function () {
-      $.ajax({
-        type: 'POST',
-        url: 'http://localhost:3000/api/v1/user/logout',
-        success: function () {
-          window.location.href = '/login'; // Redirect to login page
-        },
-        error: function (error) {
-          console.error('Error logging out:', error);
-        }
-      });
-    });
-  });
-</script>
-
-
-</body>
+      // Search input keyup event  
+      $('#searchInput').on('keyup', function () {  
+        applyFilters();  
+      });  
+    });  
+  </script>  
+</body>  
 
 </html>
