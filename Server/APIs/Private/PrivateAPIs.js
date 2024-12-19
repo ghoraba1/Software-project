@@ -19,6 +19,22 @@ function HandlePrivateAPIs(app){
     //   };
 
 //user APIs----------------------------------------------------
+    app.get('/api/v1/user/profile',async (req,res)=>{ ///////////////////////////////////////////////////////
+  user = await get_user(req,res);
+
+   try{
+    return res.json(user);
+
+   }
+    catch(err){
+
+    console.log(`error message`, err.message)
+    return res.status(400).send("Failed to get user info") ;
+ }   
+
+
+} )
+///////////////////////////////////////////////////////////////////////////////////////////////////// abdo added this api to make the profile
     app.get('/api/v1/user/view',async (req,res)=>{
       user = await get_user(req,res);
       if (!user) {
