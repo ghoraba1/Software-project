@@ -41,7 +41,7 @@
     
     <div class="container mt-5">
         <h1 class="text-center">User Management</h1>
-        <table class="table table-striped mt-4" id="userTable">
+        <table class="table table-striped mt-4 Users" id="userTable">
             <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
@@ -66,20 +66,15 @@
                 dataType:"json" ,
                 success: function(data) {
                 UserData = data;
-                     $('.equipment-list tbody').empty();
+                     $('.Users tbody').empty();
                   data.forEach(function(item) {
-                     $('.equipment-list tbody').append(`
+                     $('.Users tbody').append(`
                                 <tr>
-                                    <td>${item.equipment_img}</td>
-                                    <td>${item.equipment_name}</td>
-                                    <td>${item.equipment_id}</td>
-                                    <td>${item.category_name}</td>
-                                    <td>${item.supplier_name}</td>
-                                    <td>${item.quantity}</td>
-                                    <td>${item.status}</td>
-                                    <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
-                                    <td><button class="btn btn-outline-primary">Edit</button>
-                                    <button id = "details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
+                                    <td>${item.user_id}</td>
+                                    <td>${item.username}</td>
+                                    <td>${item.email}</td>
+                                    <td>${item.role}</td>
+                                  <td><button class="btn btn-outline-primary">Edit</button>
                                     <button type="button" class="btn btn-outline-danger delete " data-id="${item.equipment_id}">Delete</button>
                                     </td>
                                 </tr>
