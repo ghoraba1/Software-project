@@ -136,6 +136,8 @@
                 <div class="modal-body">
                     <p><strong>Preview</strong> <span id="modal-equipment-img"></span></p>
                     <p><strong>Name:</strong> <span id="modal-equipment-name"></span></p>
+                    <p><strong>ID:</strong> <span id="modal-equipment-id"></span></p>
+                    <!-- needed for id selection -->
                     <p><strong>Category:</strong> <span id="modal-category-name"></span></p>
                     <p><strong>Rating</strong> <span id="modal-equipment-rate"></span></p>
                     <p><strong>Supplier:</strong> <span id="modal-supplier-name"></span></p>
@@ -146,14 +148,28 @@
                     <p><strong>purchase Date:</strong> <span id="modal-purchase-date"></span></p>
                     <p><strong>Location:</strong> <span id="modal-location"></span></p>
                     <p><strong>Category ID</strong> <span id="modal-category-id"></span></p>
+
+                <!-- Image Upload Section -->
+                    <div class="form-group">
+                        <label for="equipment-image">Upload Equipment Image:</label>
+                        <input type="file" class="form-control-file" id="equipment-image" accept="image/*">
+                    </div>
+                    <!-- Preview the uploaded image -->
+                    <div class="mt-3">
+                        <p><strong>Image Preview:</strong></p>
+                        <img id="uploaded-image-preview" src="" alt="No Image" style="max-width: 100%; height: auto;">
+                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="upload-image-btn">Upload Image</button>
                 </div>
             </div>
         </div>
     </div>
         <script>
+        let selectedImageFile = null; //at the start to make sure no image selected
             function displayEquipment(data) {
                     $('.equipment-list tbody').empty();
                     data.forEach(function(item) {
@@ -355,6 +371,57 @@ function applyFilters() {
     });
     // Event delegation for dynamically generated elements
     // Event delegation for dynamically generated elements
+
+// Image Upload - Preview and Submit
+            $('#equipment-image').change(function() {
+                const file = this.files[0];
+                //console.log(temp);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#uploaded-image-preview').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                    selectedImageFile = file;
+                }
+            });
+
+$('#upload-image-btn').click(function() {
+    const equipmentId = $('#modal-equipment-id').text(); // Fetch the actual ID from the modal content
+
+    if (!equipmentId || isNaN(equipmentId)) { // Validate that it's a valid numeric ID
+        alert('Invalid or missing Equipment ID.');
+        return;
+    }
+
+    if (!selectedImageFile) {
+        alert('No image file selected.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('equipment_img', selectedImageFile);
+
+    $.ajax({
+        url: `http://localhost:3000/api/v1/equipment/update-image/${equipmentId}`, // Use the actual ID
+        method: 'PUT',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            alert('Image uploaded successfully!');
+            $('#detailsModal').modal('hide'); // Close the modal on success
+            fetchAndDisplayEquipment(); // Refresh the equipment list
+        },
+        error: function(xhr, status, error) {
+            console.error('Error updating image:', error);
+            alert('Image failed to upload.');
+        }
+    });
+});
+
+
+
     $(document).on('click', '.delete', function(){
         var equipmentID = $(this).data('id');
         $.ajax({
@@ -375,6 +442,7 @@ $(document).on('click', '.details', function () {
     // Update modal with the item details
     $('#modal-equipment-img').attr('src', item.equipment_img);
     $('#modal-equipment-name').text(item.equipment_name);
+    $('#modal-equipment-id').text(item.equipment_id);
     $('#modal-category-name').text(item.category_name);
     $('#modal-supplier-name').text(item.supplier_name);
     $('#modal-supplier-id').text(item.supplier_id);
