@@ -151,7 +151,7 @@ function HandlePrivateAPIs(app){
         //Just in case row is already deleted or non existant, you can delete it if we dont care about special cases like this
         if (result.rowCount === 0) {
           return res.status(404).send("Equipment not found.");
-        } 
+        }
         return res.status(200).send("Deletion successful.");
        }
         catch(err){
