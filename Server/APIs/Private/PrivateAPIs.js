@@ -86,8 +86,9 @@ function HandlePrivateAPIs(app){
           category_id, supplier_id} = req.body;
           const eq = {equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status, location, 
             category_id, supplier_id}
+
        await DB('public.equipment').insert(eq);
-       console.log("equpment success")
+       console.log("equpment success",eq)
        res.status(200).send("equipment added!");
        }
         catch(err){

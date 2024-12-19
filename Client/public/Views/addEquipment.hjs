@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
     <title>Add New Equipment</title>
     <script>
         $(document).ready(function() {
@@ -46,7 +47,7 @@
 <body class="bg-light">
     
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id = "navbarId">
-        <a class="navbar-brand" href="#">Superior Bros</a>
+        <a class="navbar-brand" href="/HomeAdmin">Superior Bros</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
