@@ -7,11 +7,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="../Src/EquipmentMangment.js"></script>
-    <title>Equipment Management Page</title>
+    <title>Admin Dashboard</title>
     <style>
-        .filters {
-            margin-bottom: 20px;
-        }
         .equipment-list th, .equipment-list td {
             text-align: center;
             vertical-align: middle;
@@ -19,15 +16,62 @@
         .equipment-list {
             margin-top: 20px;
         }
+        #navbarId {
+            margin-bottom: 20px;
+        }
+        .equipment-list tbody td {
+            white-space: nowrap; /* Prevents buttons from stacking vertically */
+        }
+
+        .equipment-list tbody td .btn {
+            margin-right: 5px; /* Adds spacing between buttons */
+        }
+        .table-responsive{
+            width: 90%;
+            margin: auto;
+            padding-left: ;
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Equipment Management Page</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id = "navbarId">
+    <a class="navbar-brand" href="#">Superior Bros</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav mr-auto">
+        <!-- Cart Icon -->
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <span class="mr-2">User Management Page</span>
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+        </li>
+        <!-- Order Section -->
+        <li class="nav-item">
+          <a class="nav-link" href="#">Orders</a>
+        </li>
+
+        <!-- Search -->
+        <li class="nav-item d-flex align-items-center">
+          <input type="text" class="form-control ml-2" id="search" placeholder="Search for equipment">
+          <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
+        </li>
+      </ul>
+
+      <!-- Logout Button -->
+      <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
+    </div>
+  </nav>
+
+    <div class="table-responsive">
+        <h1 class="text-center mb-4">Admin Dashboard</h1>
         <!-- Filter Options -->
-        <div class="filters row mb-4">
-            <div class="col-md-6">
+        <div class="filters row mb-4" id="filters">
+            <div class="col-md-6" id="catFilter">
                 <label for="category-filter">Category:</label>
                 <select id="category-filter" class="form-control">
                     <option value="all">All</option>
@@ -42,6 +86,7 @@
                 <select id="supplier-filter" class="form-control">
                     <option value="all">All</option>
                     <option value="Schnider">Schnider</option>
+                    <option value="Supplier A">Supplier A</option>
                     <option value="ABB">ABB</option>
                     <option value="Meco">Meco</option>
                     <option value="AECOM">AECOM</option>
@@ -56,11 +101,14 @@
         <table class="table table-bordered equipment-list">
             <thead class="thead-dark">
                 <tr>
+                    <th>Preview</th>
                     <th>Name</th>
+                    <th>ID</th>
                     <th>Category</th>
                     <th>Supplier</th>
                     <th>Quantity</th>
                     <th>Status</th>
+                    <th>Purchase date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -89,11 +137,11 @@
                 <p><strong>Name:</strong> <span id="modal-equipment-name"></span></p>
                 <p><strong>Category:</strong> <span id="modal-category-name"></span></p>
                 <p><strong>Supplier:</strong> <span id="modal-supplier-name"></span></p>
+                <p><strong>Supplier Id:</strong> <span id="modal-supplier-id"></span></p>
                 <p><strong>Quantity:</strong> <span id="modal-quantity"></span></p>
                 <p><strong>Status:</strong> <span id="modal-status"></span></p>
                 <p><strong>purchase Date:</strong> <span id="modal-purchase-date"></span></p>
                 <p><strong>Location:</strong> <span id="modal-location"></span></p>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -114,29 +162,23 @@
                 data.forEach(function(item) {
                     $('.equipment-list tbody').append(`
                         <tr>
+                            <td>${item.equipment_img}</td>
                             <td>${item.equipment_name}</td>
+                            <td>${item.equipment_id}</td>
                             <td>${item.category_name}</td>
                             <td>${item.supplier_name}</td>
                             <td>${item.quantity}</td>
                             <td>${item.status}</td>
-                            <td><button class="btn btn-sm btn-info edit-btn">Edit</button>
-                            <button class="btn btn-sm btn-primary view-details-btn" data-item='${JSON.stringify(item)}'>View Details</button></td>
+                            <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
+                            <td><button class="btn btn-outline-primary">Edit</button>
+                            <button id = "details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
+                            <button type="button" class="btn btn-outline-danger ">Delete</button>
+                            </td>
                         </tr>
                     `);
                 });
 
-                // Attach click event to view details buttons
-                $('.view-details-btn').click(function() {
-                    var item = $(this).data('item');
-                    $('#modal-equipment-name').text(item.equipment_name);
-                    $('#modal-category-name').text(item.category_name);
-                    $('#modal-supplier-name').text(item.supplier_name);
-                    $('#modal-quantity').text(item.quantity);
-                    $('#modal-status').text(item.status);
-                    $('#modal-purchase-date').text(item.purchase_date);
-                    $('#modal-location').text(item.location);
-                    $('#detailsModal').modal('show');
-                });
+
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching data:', error);
@@ -159,33 +201,29 @@
                         (supplierFilter === 'all' || item.supplier_name === supplierFilter)) {
                         $('.equipment-list tbody').append(`
                             <tr>
+                                <td>${item.equipment_img}</td>
                                 <td>${item.equipment_name}</td>
+                                <td>${item.equipment_id}</td>
                                 <td>${item.category_name}</td>
                                 <td>${item.supplier_name}</td>
                                 <td>${item.quantity}</td>
                                 <td>${item.status}</td>
-                                <td><button class="btn btn-sm btn-info edit-btn">Edit</button>
-                                <button class="btn btn-sm btn-primary view-details-btn" data-item='${JSON.stringify(item)}'>View Details</button></td>
+                                <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
+                                <td><button class="btn btn-outline-primary">Edit</button>
+                            <button id = "details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
+                            <button type="button" class="btn btn-outline-danger ">Delete</button>
+                            </td>
                             </tr>
                         `);
                     }
                 });
-
-                // Attach click event to view details buttons
-                $('.view-details-btn').click(function() {
-                    var item = $(this).data('item');
-                    $('#modal-equipment-name').text(item.equipment_name);
-                    $('#modal-category-name').text(item.category_name);
-                    $('#modal-supplier-name').text(item.supplier_name);
-                    $('#modal-quantity').text(item.quantity);
-                    $('#modal-status').text(item.status);
-                    $('#detailsModal').modal('show');
-                });
+               
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching data:', error);
             }
         });
+
     }
 
     $('#category-filter, #supplier-filter').change(function() {
@@ -198,6 +236,19 @@
 
     fetchAndDisplayEquipment();
 });
+// Event delegation for dynamically generated elements
+$(document).on('click', '.details', function () {
+    var item = $(this).data('item'); // Fetch data-item from the button
+    $('#modal-equipment-name').text(item.equipment_name);
+    $('#modal-category-name').text(item.category_name);
+    $('#modal-supplier-name').text(item.supplier_name);
+    $('#modal-quantity').text(item.quantity);
+    $('#modal-status').text(item.status);
+    $('#modal-purchase-date').text(new Date(item.purchase_date).toLocaleDateString());
+    $('#modal-location').text(item.location);
+    $('#detailsModal').modal('show'); // Show the modal
+});
+
     </script>
 </body>
 </html>
