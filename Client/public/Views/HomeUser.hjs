@@ -32,19 +32,21 @@
 
   <!-- Navbar -->  
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">  
-    <a class="navbar-brand" href="#">Superior Bros</a>  
+    <a class="navbar-brand" href="/HomeUser">Superior Bros</a>  
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">  
       <span class="navbar-toggler-icon"></span>  
     </button>  
 
     <div class="collapse navbar-collapse" id="navbarContent">  
       <ul class="navbar-nav mr-auto">  
-        <li class="nav-item">  
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#cartModal">  
-            <span class="mr-2">Cart</span>  
-            <i class="fas fa-shopping-cart"></i>  
-          </a>  
-        </li>  
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#cartModal">
+            <span class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+  <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+</svg></span>
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+        </li>
         <li class="nav-item">  
           <a class="nav-link" href="#">Orders</a>  
         </li>  
@@ -66,15 +68,15 @@
   <div class="container mt-4">  
     <h2 class="text-center mb-4">Available Equipment</h2>  
 
-    <div class="filters-container">  
-      <div>  
+    <div class="filters row mb-4">  
+      <div class = "col-md-6">  
         <label for="category-filter" class="mr-2">Category:</label>  
         <select class="form-control filter-select" id="category-filter">  
           <option value="all">All</option>  
           <!-- Categories populated dynamically here -->  
         </select>  
       </div>  
-      <div>  
+      <div class = "col-md-6">  
         <label for="supplier-filter" class="mr-2">Supplier:</label>  
         <select class="form-control filter-select" id="supplier-filter">  
           <option value="all">All</option>  
