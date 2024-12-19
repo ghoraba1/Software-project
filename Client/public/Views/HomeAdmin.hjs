@@ -45,14 +45,14 @@
         <ul class="navbar-nav mr-auto">
             <!-- Cart Icon -->
             <li class="nav-item">
-            <a class="nav-link" href="/">
+            <a class="nav-link" href="/UserMangement">
                 <span class="mr-2">User Management Page</span>
                 <i class="fas fa-shopping-cart"></i>
             </a>
             </li>
             <!-- Order Section -->
             <li class="nav-item">
-            <a class="nav-link" href="#">Orders</a>
+            <a class="nav-link" href="/Orders">Orders</a>
             </li>
 
             <!-- Search -->
