@@ -123,6 +123,68 @@
             </div>
 
         </div>
+
+    {{!-- Edit Modal --}}
+    <!-- Edit Equipment Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Equipment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editEquipmentForm">
+          <div class="form-group">
+            <label for="edit-equipment-name">Name</label>
+            <input type="text" class="form-control" id="edit-equipment-name" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-equipment-img">Image URL</label>
+            <input type="text" class="form-control" id="edit-equipment-img" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-rating">Rating</label>
+            <input type="number" class="form-control" id="edit-rating" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-model-number">Model Number</label>
+            <input type="text" class="form-control" id="edit-model-number" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-purchase-date">Purchase Date</label>
+            <input type="date" class="form-control" id="edit-purchase-date" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-quantity">Quantity</label>
+            <input type="number" class="form-control" id="edit-quantity" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-status">Status</label>
+            <input type="text" class="form-control" id="edit-status" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-location">Location</label>
+            <input type="text" class="form-control" id="edit-location" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-category-id">Category ID</label>
+            <input type="text" class="form-control" id="edit-category-id" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-supplier-id">Supplier ID</label>
+            <input type="text" class="form-control" id="edit-supplier-id" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <!-- Modal -->
     <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -167,7 +229,7 @@
                                 <td>${item.quantity}</td>
                                 <td>${item.status}</td>
                                 <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
-                                <td><button class="btn btn-outline-primary">Edit</button>
+                                <td><button class="btn btn-outline-primary editBtn" data-item='${JSON.stringify(item)}'>Edit</button>
                                 <button id="details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
                                 <button type="button" class="btn btn-outline-danger delete" data-id="${item.equipment_id}">Delete</button>
                                 </td>
@@ -195,7 +257,7 @@
                                     <td>${item.quantity}</td>
                                     <td>${item.status}</td>
                                     <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
-                                    <td><button class="btn btn-outline-primary">Edit</button>
+                                    <td><button class="btn btn-outline-primary editBtn" data-item='${JSON.stringify(item)}'>Edit</button>
                                     <button id = "details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
                                     <button type="button" class="btn btn-outline-danger delete " data-id="${item.equipment_id}">Delete</button>
                                     </td>
@@ -258,7 +320,7 @@
                                     <td>${item.quantity}</td>
                                     <td>${item.status}</td>
                                     <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
-                                    <td><button class="btn btn-outline-primary">Edit</button>
+                                    <td><button class="btn btn-outline-primary editBtn" data-item='${JSON.stringify(item)}'>Edit</button>
                                     <button id = "details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
                                     <button type="button" class="btn btn-outline-danger delete " data-id="${item.equipment_id}">Delete</button>
                                     </td>
@@ -321,7 +383,7 @@ function applyFilters() {
                                 <td>${item.quantity}</td>
                                 <td>${item.status}</td>
                                 <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
-                                <td><button class="btn btn-outline-primary">Edit</button>
+                                <td><button class="btn btn-outline-primary editBtn" data-item='${JSON.stringify(item)}'>Edit</button>
                                 <button id="details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
                                 <button type="button" class="btn btn-outline-danger delete" data-id="${item.equipment_id}">Delete</button>
                                 </td>
@@ -388,8 +450,66 @@ $(document).on('click', '.details', function () {
     
     // Show the modal
     $('#detailsModal').modal('show');
+
+});
+//-----------EDIT MODAL-----------
+$(document).on('click', '.editBtn', function () {
+  // Fetch the current equipment data
+  var equipment = $(this).data('item');
+  console.log(`dataaa: ${JSON.stringify(equipment)}`)
+  // Populate the modal with existing equipment details
+  $('#edit-equipment-name').val(equipment.equipment_name);
+  $('#edit-equipment-img').val(equipment.equipment_img);
+  $('#edit-rating').val(equipment.rating);
+  $('#edit-model-number').val(equipment.model_number);
+  $('#edit-purchase-date').val(new Date(equipment.purchase_date).toISOString().split('T')[0]);
+  $('#edit-quantity').val(equipment.quantity);
+  $('#edit-status').val(equipment.status);
+  $('#edit-location').val(equipment.location);
+  $('#edit-category-id').val(equipment.category_id);
+  $('#edit-supplier-id').val(equipment.supplier_id);
+  
+  // Store the equipment ID for submitting the update
+  $('#editEquipmentForm').data('equipment-id', equipment.equipment_id);
+  
+  // Show the modal
+  $('#editModal').modal('show');
 });
 
+$('#editEquipmentForm').submit(function (e) {
+  e.preventDefault();
+  
+  // Get the updated values from the form
+  var updatedData = {
+    equipment_name: $('#edit-equipment-name').val(),
+    equipment_img: $('#edit-equipment-img').val(),
+    rating: $('#edit-rating').val(),
+    model_number: $('#edit-model-number').val(),
+    purchase_date: $('#edit-purchase-date').val(),
+    quantity: $('#edit-quantity').val(),
+    status: $('#edit-status').val(),
+    location: $('#edit-location').val(),
+    category_id: $('#edit-category-id').val(),
+    supplier_id: $('#edit-supplier-id').val()
+  };
+  
+  // Send the PUT request to update the equipment
+  $.ajax({
+    type: 'PUT',
+    url: `http://localhost:3000/api/v1/equipment/${$('#editEquipmentForm').data('equipment-id')}`,
+    data:  JSON.stringify(updatedData),
+    contentType: 'application/json',
+    success: function (response) {
+      console.log("Equipment updated successfully.");
+      $('#editModal').modal('hide');
+      applyFilters(); // Refresh the list after updating
+    },
+    error: function (error) {
+      console.error('Error updating equipment:', error);
+      alert('Error updating equipment');
+    }
+  });
+});
 
         </script>
     </body>
