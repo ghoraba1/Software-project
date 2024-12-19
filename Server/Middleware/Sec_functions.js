@@ -45,7 +45,7 @@ async function  get_user(req,res){
     res.status(301).redirect('/');
     return null;
   }
-  console.log('user =>', user)
+  console.log('user =>', user.username)
   return user;  
 
 }
