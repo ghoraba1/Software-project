@@ -45,7 +45,7 @@
         <ul class="navbar-nav mr-auto">
             <!-- Cart Icon -->
             <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/">
                 <span class="mr-2">User Management Page</span>
                 <i class="fas fa-shopping-cart"></i>
             </a>
@@ -215,6 +215,13 @@
             </div>
         </div>
     </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-4">
+    <p>&copy; 2024 The Superior Bros. All rights reserved.</p>
+    <p>Designed by Superior Bros Team</p>
+  </footer>
+
         <script>
             function displayEquipment(data) {
                     $('.equipment-list tbody').empty();
