@@ -49,7 +49,7 @@ quantity integer not null ,
 user_ID  integer not null,
 equipment_ID integer not null ,
 foreign key(user_ID) references Users(user_ID),
-foreign key(equipment_ID) references equipment(equipment_ID)
+foreign key(equipment_ID) references equipment(equipment_ID) ON DELETE CASCADE;
 );
 
 create table Rating ( 
@@ -59,7 +59,7 @@ score integer not null ,
 user_ID  integer not null,
 equipment_ID integer not null ,
 foreign key(user_ID) references users(user_id),
-foreign key(equipment_ID) references equipment(equipment_ID)
+foreign key(equipment_ID) references equipment(equipment_ID) ON DELETE CASCADE
 
 );
 
@@ -75,5 +75,5 @@ create table EquipmentOrder(
     "order_ID" serial primary key,
     "equipment_ID" integer not null,
     "quantity" integer not null,
-    foreign key(equipment_ID) references equipment(equipment_ID)
+    foreign key(equipment_ID) references equipment(equipment_ID) ON DELETE CASCADE
 );
