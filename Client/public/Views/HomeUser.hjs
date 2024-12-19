@@ -14,20 +14,16 @@
     .filters-container {  
       margin: 20px 0;  
       display: flex;  
-      justify-content: center;  
+      justify-content: flex-start;   
       align-items: center;  
     }  
     .filter-select {  
-      width: 200px;  
+      width: 300px; /* Wider dropdowns for categories and suppliers */  
       margin: 0 10px;  
     }  
-    .search-container {  
-      display: flex;  
-      align-items: center;  
-      margin-left: auto;  
-    }  
     #searchInput {  
-      margin-right: 10px;  
+      width: 250px; /* Width for search input */  
+      margin-left: 10px; /* Space between search and profile */  
     }  
   </style>  
 </head>  
@@ -58,12 +54,10 @@
             <i class="fas fa-user"></i>  
           </a>  
         </li>  
+        <li class="nav-item">  
+          <input type="text" id="searchInput" class="form-control" placeholder="Search for equipment">  
+        </li>  
       </ul>  
-
-      <div class="search-container">  
-        <input type="text" id="searchInput" class="form-control" placeholder="Search for equipment">  
-        <button class="btn btn-primary">Search</button>  
-      </div>  
       <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>  
     </div>  
   </nav>  
@@ -87,7 +81,6 @@
           <!-- Suppliers populated dynamically here -->  
         </select>  
       </div>  
-      <button class="btn btn-secondary" id="filterBtn">Apply Filters</button>  
     </div>  
 
     <div class="row" id="equipmentList">  
@@ -116,17 +109,17 @@
     </div>  
   </div>  
 
-  <!-- Footer -->  
   <footer class="bg-dark text-white text-center py-3 mt-4">  
     <p>&copy; 2024 The Superior Bros. All rights reserved.</p>  
     <p>Designed by Superior Bros Team</p>  
   </footer>  
 
   <script>  
+    // Your existing JavaScript remains unchanged  
     $(document).ready(function () {  
       let categories = [];  
       let suppliers = [];  
-
+  
       // Load equipment, categories, and suppliers  
       function loadEquipment() {  
         $.ajax({  
@@ -137,7 +130,7 @@
             equipmentList.empty();  
             categories = [];  
             suppliers = [];  
-
+  
             data.forEach(equipment => {  
               // Populate categories and suppliers  
               if (!categories.includes(equipment.category_name)) {  
@@ -146,7 +139,7 @@
               if (!suppliers.includes(equipment.supplier_name)) {  
                 suppliers.push(equipment.supplier_name);  
               }  
-
+  
               const equipmentItem = `  
                 <div class="col-md-4 mb-4">  
                   <div class="card h-100 shadow-sm">  
@@ -177,7 +170,7 @@
           }  
         });  
       }  
-
+  
       // Populate dropdown filters for categories and suppliers  
       function populateFilters() {  
         const categoryFilter = $('#category-filter');  
@@ -185,22 +178,22 @@
         
         categoryFilter.empty().append('<option value="all">All</option>');  
         supplierFilter.empty().append('<option value="all">All</option>');  
-
+  
         categories.forEach(category => {  
           categoryFilter.append(`<option value="${category}">${category}</option>`);  
         });  
-
+  
         suppliers.forEach(supplier => {  
           supplierFilter.append(`<option value="${supplier}">${supplier}</option>`);  
         });  
       }  
-
+  
       // Apply filters and search  
       function applyFilters() {  
         const categoryFilter = $('#category-filter').val();  
         const supplierFilter = $('#supplier-filter').val();  
         const searchKeyword = $('#searchInput').val().toLowerCase();  
-
+  
         $.ajax({  
           url: 'http://localhost:3000/api/v1/equipment/view',  
           method: 'GET',  
@@ -208,7 +201,7 @@
           success: function (data) {  
             const equipmentList = $('#equipmentList');  
             equipmentList.empty();  
-
+  
             data.forEach(function (item) {  
               if ((categoryFilter === 'all' || item.category_name === categoryFilter) &&  
                   (supplierFilter === 'all' || item.supplier_name === supplierFilter) &&  
@@ -236,7 +229,7 @@
                 equipmentList.append(equipmentItem);  
               }  
             });  
-
+  
             attachAddToCartEvent();  
           },  
           error: function (error) {  
@@ -244,7 +237,16 @@
           }  
         });  
       }  
-
+  
+      // Event handlers for filters and search input  
+      $('#category-filter, #supplier-filter').on('change', function () {  
+        applyFilters();  
+      });  
+      
+      $('#searchInput').on('keyup', function () {  
+        applyFilters();  
+      });  
+  
       // Attach event handler for "Add to Cart" button  
       function attachAddToCartEvent() {  
         $('.addToCartBtn').off('click').on('click', function () {  
@@ -253,7 +255,7 @@
           const availableSpan = button.siblings('.available-quantity');  
           let currentQuantity = parseInt(availableSpan.data('quantity'));  
           const addQuantity = 1; // Quantity to add to cart  
-
+  
           if (currentQuantity >= addQuantity) {  
             $.ajax({  
               type: 'POST',  
@@ -276,19 +278,9 @@
           }  
         });  
       }  
-
+  
       // Initial load  
       loadEquipment();  
-
-      // Filter button click logic  
-      $('#filterBtn').click(function () {  
-        applyFilters();  
-      });  
-
-      // Search input keyup event  
-      $('#searchInput').on('keyup', function () {  
-        applyFilters();  
-      });  
     });  
   </script>  
 </body>  
