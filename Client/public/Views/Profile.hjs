@@ -70,20 +70,10 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Orders</a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="/profile">Your Profile</a>
         </li>
 
-        <!-- Search -->
-        <li class="nav-item d-flex align-items-center">
-         <div class="container-fluid">
-    <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-  </div>
-        </li>
       </ul>
 
       <!-- Logout Button -->
@@ -92,10 +82,21 @@
   </nav>
   </header>
 <br>
- <div class="form-container">
+
+
+<div class="container mt-5 content">
+    <div class="container">
+      <div class="card-body">
+         
 <h1>Your Profile:-</h1>
 <div id="profile">
-</div></div>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+
 
 <footer class="text-center mt-auto py-1 bg-dark text-white">
     <div class="container">
