@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="../Src/EquipmentMangment.js"></script>
     <title>Home</title>
     <style>
         .filters {
@@ -20,21 +19,18 @@
             margin-top: 20px;
         } 
         .wider-search {
-    width: 13px; /* Adjust the width as needed */
+    width: 600px; /* Adjust the width as needed */
   }
     </style>
 </head>
 <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Superior Bros</a>
+        <a class="navbar-brand" href="/Home">Superior Bros</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Cart</a>
                 </li>
@@ -45,37 +41,14 @@
                     <a class="nav-link" href="/Register">Register</a>
                 </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0 ml-auto">
-                <div class="form-row">
-                    <div class="col-auto">
-<input class="form-control mr-sm-2 w-100" type="search" placeholder="Search" aria-label="Search">
-                    </div>
-                    <div class="col-auto">
-                        <select class="form-control mr-sm-2" id="category-filter-navbar">
-                            <option value="all">All Categories</option>
-                            <option value="Mechanical">Mechanical</option>
-                            <option value="Electrical">Electrical</option>
-                            <option value="Civil">Civil</option>
-                            <!-- Add more categories here -->
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <select class="form-control mr-sm-2" id="supplier-filter-navbar">
-                            <option value="all">All Suppliers</option>
-                            <option value="Schnider">Schnider</option>
-                            <option value="ABB">ABB</option>
-                            <option value="Meco">Meco</option>
-                            <option value="AECOM">AECOM</option>
-                            <option value="Hitachi">Hitachi</option>
-                            <option value="Adyen">Adyen</option>
-                            <!-- Add more suppliers here -->
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
+            <form class="form-inline my-2 my-lg-0 mx-auto w-50">
+    <div class="input-group w-100">
+        <input class="form-control wider-search" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </div>
+    </div>
+</form>
         </div>
     </nav>
     <div class="container mt-5">
