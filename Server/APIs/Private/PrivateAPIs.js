@@ -1,6 +1,8 @@
 const DB = require('../../DB/Index.js');
 const {get_user}=require('../../Middleware/Sec_functions.js');
 const {get_session_token} = require('../../Middleware/Sec_functions.js');
+const multer = require('multer');
+
 function HandlePrivateAPIs(app){
     // const AdminCheck = async (req, res, next) => {
     //     try {
@@ -165,6 +167,54 @@ function HandlePrivateAPIs(app){
         
      
     });
+
+//Image things
+//for file editing and writing
+const fs = require('fs');
+const db = require('../../DB/Index.js'); //called again idk but it works
+
+// Multer for file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads'); //PLEASE MAKE SURE THIS FOLDER IS THERE WHEN PUSHING, SYSTEM GO BOOM IF NOT
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+//image thingy
+app.put('/api/v1/equipment/update-image/:id', upload.single('equipment_img'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+    console.log('Received ID:', id);
+    console.log('Image Path:', imagePath);
+
+    if (!id) {
+      return res.status(400).send('Equipment ID is required.');
+    }
+
+    //if (!imagePath) {return res.status(400).send('No image file provided.');}
+
+    const updatedRows = await DB('equipment')
+      .where('equipment_id', id)
+      .update({ equipment_img: imagePath });
+
+    if (updatedRows === 0) {
+      return res.status(404).send('Equipment not found.');
+    }
+
+    res.status(200).send('Image uploaded and updated successfully.');
+  } catch (err) {
+    console.error('Error:', err.message);
+    res.status(500).send('Failed to update image.');
+  }
+});
+//end of image things
 
 //RatingCartOrder APIs----------------------------------------------------
     app.post('/api/v1/rating/new', async (req, res) => {
