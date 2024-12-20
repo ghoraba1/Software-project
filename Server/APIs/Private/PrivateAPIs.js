@@ -476,6 +476,30 @@ app.post('/api/v1/user/logout', async function(req, res) {
   }  
 });  
 
+// Get all orders with user and equipment details
+app.get('/api/v1/orders', async (req, res) => {
+  try {
+    const orders = await DB('orders')
+      .join('users', 'orders.user_id', '=', 'users.user_id')
+      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.order_id')
+      .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
+      .select(
+        'orders.order_id',
+        'orders.date',
+        'users.username',
+        'equipment.equipment_name',
+        'equipmentorder.quantity',
+        'equipment.equipment_img',
+        'equipment.model_number'
+      );
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching orders:', error.message);
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
 // Start
 }
 
