@@ -340,7 +340,7 @@ return res.status(400).send("You are not an admin")
         const user = await get_user(req, res);
     
         if (!user) {
-          return; // get_user function handles the response
+          returnres.status(403).json({ message: 'Unauthorized access' }); // get_user function handles the response
         }
     
         // Fetch the cart items for the user
@@ -381,7 +381,7 @@ return res.status(400).send("You are not an admin")
           const [order] = await trx('orders').insert(
             {
               user_id: user.user_id,
-              date: DB.fn.now(),
+              order_date: DB.fn.now(),
             },
             ['order_id'] // Return the order_id from the inserted row
           );
@@ -390,8 +390,8 @@ return res.status(400).send("You are not an admin")
     
           // Add the cart items to the equipmentorder table
           const equipmentOrderEntries = cartItems.map((item) => ({
-            order_id: orderId,
-            equipment_id: item.equipment_id,
+            order_ID: orderId,
+            equipment_ID: item.equipment_id,
             quantity: item.quantity,
           }));
     
