@@ -11,12 +11,13 @@ const{Middleware} =require('./Middleware/Admin.js');
 const {HandlePrivateAPIs} = require("./APIs/Private/PrivateAPIs.js");
 const {HandlePublicFrontEndView} = require("./APIs/Public/View.js")
 
-app.set('views', '../Client/public/Views');
+const path = require('path');
+app.set('views', path.join(__dirname, '../Client/public/Views'));
 app.set('view engine', 'hjs');
 app.use(express.static('./public'));
 
-//image upload
 app.use('/uploads', express.static('uploads'));
+
 
 HandlePublicFrontEndView(app);
 HandlePublicAPIs(app);
@@ -25,7 +26,7 @@ HandlePrivateAPIs(app);
 HandlePrivateFrontEndView(app) ;
 
 
-const PORT = process.env.PORT;
+const PORT = 3000;
 app.listen(PORT,()=>{
     console.log(`Server is listening to port ${PORT}`) 
 });
