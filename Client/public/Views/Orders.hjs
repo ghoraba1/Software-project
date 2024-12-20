@@ -35,7 +35,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id = "navbarId">
-        <a class="navbar-brand" href="#">Superior Bros</a>
+        <a class="navbar-brand" href="/HomeAdmin">Superior Bros</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
