@@ -41,7 +41,7 @@
     
     <div class="container mt-5">
         <h1 class="text-center">User Management</h1>
-        <table class="table table-striped mt-4" id="userTable">
+        <table class="table table-striped mt-4 Users" id="userTable">
             <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
@@ -57,62 +57,94 @@
         </table>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            const users = [
-                { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-                { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-                { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Moderator' }
-            ];
+<script>
+    $(document).ready(function() {
+        let users = [];
 
-            function renderUsers() {
-                const userTableBody = $('#userTable tbody');
-                userTableBody.empty();
-                users.forEach(user => {
-                    const row = `
-                        <tr>
-                            <td>${user.id}</td>
-                            <td>${user.name}</td>
-                            <td>${user.email}</td>
-                            <td>${user.role}</td>
-                            <td>
-                                <button class="btn btn-primary update" data-id="${user.id}">Update</button>
-                                <button class="btn btn-danger delete" data-id="${user.id}">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                    userTableBody.append(row);
-                });
-            }
-
-            renderUsers();
-
-            // Event delegation for dynamically added buttons
-            $('#userTable').on('click', '.update', function() {
-                const userId = $(this).data('id');
-                const user = users.find(user => user.id === userId);
-                if (user) {
-                    const newName = prompt('Enter new name:', user.name);
-                    const newEmail = prompt('Enter new email:', user.email);
-                    const newRole = prompt('Enter new role:', user.role);
-                    if (newName && newEmail && newRole) {
-                        user.name = newName;
-                        user.email = newEmail;
-                        user.role = newRole;
-                        renderUsers();
-                    }
+        function fetchUsers() {
+            $.ajax({
+                url: "http://localhost:3000/api/v1/user/view",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    users = data;
+                    renderUsers();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
                 }
             });
+        }
 
-            $('#userTable').on('click', '.delete', function() {
-                const userId = $(this).data('id');
-                const userIndex = users.findIndex(user => user.id === userId);
-                if (userIndex !== -1) {
-                    users.splice(userIndex, 1);
-                    renderUsers();
+        function renderUsers() {
+            const userTableBody = $('#userTable tbody');
+            userTableBody.empty();
+            users.forEach(user => {
+                const row = `
+                    <tr>
+                        <td>${user.user_id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <button class="btn btn-primary update" data-id="${user.user_id}">Edit</button>
+                            <button class="btn btn-danger delete" data-id="${user.user_id}">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                userTableBody.append(row);
+            });
+        }
+
+        // Event delegation for dynamically added buttons
+        $('#userTable').on('click', '.update', function() {
+            const userId = $(this).data('id');
+            const user = users.find(user => user.user_id === userId);
+            if (user) {
+                const newName = prompt('Enter new name:', user.username);
+                const newEmail = prompt('Enter new email:', user.email);
+                const newRole = prompt('Enter new role:', user.role);
+                const newPassword = prompt('Enter new password:');
+                if (newName && newEmail && newRole && newPassword) {
+                    $.ajax({
+                        url: `http://localhost:3000/api/v1/user/${userId}`,
+                        method: "PUT",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            username: newName,
+                            email: newEmail,
+                            password: newPassword,
+                            role: newRole
+                        }),
+                        success: function(response) {
+                            alert(response);
+                            fetchUsers(); // Refresh the user list
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error updating user:', error);
+                        }
+                    });
+                }
+            }
+        });
+
+        $('#userTable').on('click', '.delete', function() {
+            const userId = $(this).data('id');
+            $.ajax({
+                url: `http://localhost:3000/api/v1/user/${userId}`,
+                method: "DELETE",
+                success: function(response) {
+                    alert(response);
+                    fetchUsers(); // Refresh the user list
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting user:', error);
                 }
             });
         });
-    </script>
+
+        fetchUsers(); // Initial fetch of users
+    });
+</script>
 </body>
 </html>
