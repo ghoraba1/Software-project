@@ -1,6 +1,8 @@
 const DB = require('../../DB/Index.js');
 const {get_user}=require('../../Middleware/Sec_functions.js');
 const {get_session_token} = require('../../Middleware/Sec_functions.js');
+const multer = require('multer');
+
 function HandlePrivateAPIs(app){
     // const AdminCheck = async (req, res, next) => {
     //     try {
@@ -165,6 +167,85 @@ function HandlePrivateAPIs(app){
         
      
     });
+
+//Image things
+//for file editing and writing
+const fs = require('fs');
+const db = require('../../DB/Index.js'); //called again idk but it works
+
+// Multer for file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads'); //PLEASE MAKE SURE THIS FOLDER IS THERE WHEN PUSHING, SYSTEM GO BOOM IF NOT
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+//image thingy
+app.put('/api/v1/equipment/update-image/:id', upload.single('equipment_img'), async (req, res) => {
+  if (!user) {
+    return; // Stops execution after redirection or error
+}
+if(user.role == "admin"){
+  try{
+    const { id } = req.params;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+    console.log('Received ID:', id);
+    console.log('Image Path:', imagePath);
+
+    if (!id) {
+      return res.status(402).send('Equipment ID is required.');
+    }
+
+    //if (!imagePath) {return res.status(400).send('No image file provided.');}
+
+    const updatedRows = await DB('equipment')
+      .where('equipment_id', id)
+      .update({ equipment_img: imagePath });
+
+    if (updatedRows === 0) {
+      return res.status(404).send('Equipment not found.');
+    }
+
+    res.status(200).send('Image uploaded and updated successfully.');
+  } catch (err) {
+    console.error('Error:', err.message);
+    res.status(500).send('Failed to update image.');
+  }
+}
+else{
+ return res.status(400).send("You are not an admin")
+}
+  
+});
+
+//get image
+
+app.get('/get-image', (req, res) => {
+  if (!user) {
+    return; // Stops execution after redirection or error
+}
+if(user.role == "admin"){
+  try{
+  const imagePath = '/uploads/1734692543527-image2s.jpg'; // Replace with your database query result
+  res.json({ imagePath });
+}
+catch(err){
+  console.log("Error:", err.message);
+  return res.status(402).send("Unable to GET image.");
+}   
+}
+else{
+return res.status(400).send("You are not an admin")
+}
+});
+
+//end of image things
 
 //RatingCartOrder APIs----------------------------------------------------
     app.post('/api/v1/rating/new', async (req, res) => {
@@ -486,6 +567,30 @@ app.post('/api/v1/user/logout', async function(req, res) {
       return res.status(500).json({ message: 'An error occurred while logging out' });  
   }  
 });  
+
+// Get all orders with user and equipment details
+app.get('/api/v1/orders', async (req, res) => {
+  try {
+    const orders = await DB('orders')
+      .join('users', 'orders.user_id', '=', 'users.user_id')
+      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.order_id')
+      .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
+      .select(
+        'orders.order_id',
+        'orders.date',
+        'users.username',
+        'equipment.equipment_name',
+        'equipmentorder.quantity',
+        'equipment.equipment_img',
+        'equipment.model_number'
+      );
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error('Error fetching orders:', error.message);
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
 
 // Start
 }

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="../Src/EquipmentMangment.js"></script>
+        <title>Admin Dashboard</title>
+        <style>
+            .equipment-list th, .equipment-list td {
+                text-align: center;
+                vertical-align: middle;
+            }
+            .equipment-list {
+                margin-top: 20px;
+            }
+            #navbarId {
+                margin-bottom: 20px;
+            }
+            .equipment-list tbody td {
+                white-space: nowrap; /* Prevents buttons from stacking vertically */
+            }
+
+            .equipment-list tbody td .btn {
+                margin-right: 5px; /* Adds spacing between buttons */
+            }
+            .table-responsive{
+                width: 90%;
+                margin: auto;
+                padding-left: ;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id = "navbarId">
+        <a class="navbar-brand" href="/HomeAdmin">Superior Bros</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mr-auto">
+            <!-- Cart Icon -->
+            <li class="nav-item">
+            <a class="nav-link" href="/UserMangement">
+                <span class="mr-2">User Management Page</span>
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            </li>
+            <!-- Order Section -->
+            <li class="nav-item">
+            <a class="nav-link" href="/Orders">Orders</a>
+            </li>
+
+            <!-- Search -->
+            <li class="nav-item d-flex align-items-center">
+            <input type="text" class="form-control col-9       ml-2" id="search" placeholder="Search for equipment">
+            <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
+            </li>
+        </ul>
+
+        <!-- Logout Button -->
+        <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+
+        <div class="table-responsive">
+            <h1 class="text-center mb-4">ORDERS</h1>
+            <table class="table table-bordered equipment-list">
+                <thead class="thead-dark">
+                    <tr>
+                        {{!-- ORDERS DETAILS HERE --}}
+                        <th>Order ID</th>
+    <th>Date</th>
+    <th>User</th>
+    <th>Equipment Name</th>
+    <th>Quantity</th>
+    <th>Model Number</th>
+    <th>Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Equipment items will be listed here -->
+                </tbody>
+            </table>
+
+        </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-4">
+    <p>&copy; 2024 The Superior Bros. All rights reserved.</p>
+    <p>Designed by Superior Bros Team</p>
+  </footer>
+  <script> $(document).ready(function () {
+  // Fetch and display orders
+  function fetchOrders() {
+    $.ajax({
+      url: 'http://localhost:3000/api/v1/orders',
+      method: 'GET',
+      success: function (response) {
+        console.log(response)
+        if (response.orders && response.orders.length > 0) {
+          const orders = response.orders;
+          let rows = '';
+
+          // Loop through each order and create table rows
+          orders.forEach(order => {
+            rows += `
+              <tr>
+                <td>${order.order_id}</td>
+                <td>${new Date(order.date).toISOString().split('T')[0]}</td>
+                <td>${order.username}</td>
+                <td>${order.equipment_name}</td>
+                <td>${order.quantity}</td>
+                <td>${order.model_number}</td>
+                <td>
+                  <img src="${order.equipment_img
+                    ? `http://localhost:3000${order.equipment_img}`
+                    : 'default-image-path.jpg'}" alt="${order.equipment_name}" width="50">
+                </td>
+              </tr>
+            `;
+          });
+
+          $('.equipment-list tbody').html(rows); // Populate the table body
+        } else {
+          $('.equipment-list tbody').html('<tr><td colspan="7">No orders found</td></tr>');
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error('Error fetching orders:', error);
+        $('.equipment-list tbody').html('<tr><td colspan="7">Failed to fetch orders</td></tr>');
+      },
+    });
+  }
+
+  fetchOrders(); // Call the function on page load
+});
+</script>
+    </body>
+    </html>

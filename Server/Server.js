@@ -15,6 +15,9 @@ app.set('views', '../Client/public/Views');
 app.set('view engine', 'hjs');
 app.use(express.static('./public'));
 
+//image upload
+app.use('/uploads', express.static('uploads'));
+
 HandlePublicFrontEndView(app);
 HandlePublicAPIs(app);
 app.use(Middleware);
