@@ -100,7 +100,8 @@
   <script>
     $(document).ready(function () {
       // Fetch and display equipment
-      function loadEquipment(query = '', filter = 'all') { 
+////////////////////////////////////////////////////////////////////////////////from here////////////////////////////////////////////////////////
+     function loadEquipment(query = '', filter = 'all') { 
   $.ajax({ 
     type: 'GET',
     url: 'http://localhost:3000/api/v1/equipment/view', 
@@ -131,7 +132,7 @@
                 <p class="card-text">Location: ${equipment.location}</p> 
                 <p class="card-text">Status: ${equipment.status}</p> 
                 <div class="d-flex flex-wrap justify-content-center rating-container" data-equipment-id="${equipment.equipment_id}">
-                  ${[1, 2, 3, 4, 5].map(i => `<span class="star ${i <= equipment.rating ? 'checked' : ''}" data-value="${i}">&#9733;</span>`).join('')}
+                  ${[1, 2, 3, 4, 5].map(i => `<span class="star " data-value="${i}">&#9733;</span>`).join('')}
                 </div> 
               </div> 
               <div class="card-footer d-flex justify-content-between"> 
@@ -143,27 +144,17 @@
         equipmentList.append(equipmentItem); 
       });
 
-     
+      // Attach click event handlers for stars 
       $('.star').on('click', function () { 
         var rating = $(this).data('value'); 
         var equipmentId = $(this).closest('.rating-container').data('equipment-id'); 
         $(this).siblings().removeClass('checked'); 
         $(this).prevAll().addBack().addClass('checked'); 
-
-       
-        $.ajax({
-          url: 'http://localhost:3000/api/v1/user/profile',
-          method: 'GET',
-          success: function(res) {
-            var userid = res.user_id;
-
-           
             $.ajax({ 
               url: 'http://localhost:3000/api/v1/rating/new', 
               method: 'POST', 
               contentType: 'application/json', 
               data: JSON.stringify({
-                user_id: userid,
                 equipment_id: equipmentId, 
                 score: rating
               }), 
@@ -174,13 +165,9 @@
                 alert('Error submitting rating.'); 
               } 
             });
-          },
-          error: function() {
-            alert("Couldn't retrieve your info");
-          }
-        });
+        
       });
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////till here////////////////////////////////
             // Add to Cart button click handler
             $('.addToCartBtn').click(function () {
               const equipmentId = $(this).data('id');
