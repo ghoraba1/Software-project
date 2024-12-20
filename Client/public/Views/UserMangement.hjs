@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbarId">
+        <a class="navbar-brand" href="/HomeAdmin">Superior Bros</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/UserMangement">
+                        <span class="mr-2">User Management Page</span>
+                        <i class="fas fa-users"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Orders">Orders</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <input type="text" class="form-control col-9 ml-2" id="search" placeholder="Search for equipment">
+                    <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
+                </li>
+            </ul>
+            <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <h1 class="text-center">User Management</h1>
+        <table class="table table-striped mt-4 Users" id="userTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- User rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+<script>
+    $(document).ready(function() {
+        let users = [];
+
+        function fetchUsers() {
+            $.ajax({
+                url: "http://localhost:3000/api/v1/user/view",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    users = data;
+                    renderUsers();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        }
+
+        function renderUsers() {
+            const userTableBody = $('#userTable tbody');
+            userTableBody.empty();
+            users.forEach(user => {
+                const row = `
+                    <tr>
+                        <td>${user.user_id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <button class="btn btn-primary update" data-id="${user.user_id}">Edit</button>
+                            <button class="btn btn-danger delete" data-id="${user.user_id}">Delete</button>
+                        </td>
+                    </tr>
+                `;
+                userTableBody.append(row);
+            });
+        }
+
+        // Event delegation for dynamically added buttons
+        $('#userTable').on('click', '.update', function() {
+            const userId = $(this).data('id');
+            const user = users.find(user => user.user_id === userId);
+            if (user) {
+                const newName = prompt('Enter new name:', user.username);
+                const newEmail = prompt('Enter new email:', user.email);
+                const newRole = prompt('Enter new role:', user.role);
+                const newPassword = prompt('Enter new password:');
+                if (newName && newEmail && newRole && newPassword) {
+                    $.ajax({
+                        url: `http://localhost:3000/api/v1/user/${userId}`,
+                        method: "PUT",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            username: newName,
+                            email: newEmail,
+                            password: newPassword,
+                            role: newRole
+                        }),
+                        success: function(response) {
+                            alert(response);
+                            fetchUsers(); // Refresh the user list
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error updating user:', error);
+                        }
+                    });
+                }
+            }
+        });
+
+        $('#userTable').on('click', '.delete', function() {
+            const userId = $(this).data('id');
+            $.ajax({
+                url: `http://localhost:3000/api/v1/user/${userId}`,
+                method: "DELETE",
+                success: function(response) {
+                    alert(response);
+                    fetchUsers(); // Refresh the user list
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting user:', error);
+                }
+            });
+        });
+
+        fetchUsers(); // Initial fetch of users
+    });
+</script>
+</body>
+</html>
