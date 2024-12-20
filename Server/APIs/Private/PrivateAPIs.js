@@ -58,7 +58,7 @@ function HandlePrivateAPIs(app){
    }
     } )
 
-    app.delete('/api/v1/users/:id',async(req,res)=>
+    app.delete('/api/v1/user/:id',async(req,res)=>
         {
           try{
              const query=`DELETE from users WHERE user_id=${req.params.id}`
@@ -73,6 +73,30 @@ function HandlePrivateAPIs(app){
           }
         
                })
+
+    app.put('/api/V1/user/:id',async(req,res)=>{
+                try{
+                   const{username,email,password,role}=req.body ;
+                   const hashedPassword = await bcrypt.hash(password, saltRounds); 
+                   const query=`UPDATE users
+                   SET username='${username}',
+                   email='${email}',
+                   password='${hashedPassword}',
+                   role='${role}'
+                   WHERE user_id=${req.params.id}`
+                   
+                   const result =await DB.raw(query) ;
+                   return res.status(200).send("Your account is updated") ;
+              
+                }
+                catch(err){
+                   console.log("error",err.message)
+                   return res.status(400).send("Failed to update") ;
+              
+                }
+                
+              
+              })   
 
 //equipment APIs----------------------------------------------------
     app.post('/api/v1/equipment/new', async (req, res) => {
