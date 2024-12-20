@@ -30,8 +30,24 @@
       margin-left: 10px;
     }
     .cart-item {
-      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .cart-item .btn {
+      margin: 0 5px;
+    }
+    .cart-item input.qtyInput {
+      text-align: center;
+      width: 50px;
+    }
+    .cart-item .removeFromCartBtn {
+      margin-left: 15px;
+    }
+    .cart-item p {
+      margin-bottom: 5px;
     }
     .cart-header {
       background-color: #f8f9fa;
@@ -127,9 +143,9 @@
           <!-- Cart items will be dynamically inserted here -->
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <!-- "Make Order" button -->
           <button type="button" class="btn btn-primary" id="makeOrderBtn">Make Order</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -347,18 +363,105 @@
             } else {
               $('#makeOrderBtn').prop('disabled', false);
               data.cart.forEach(item => {
+                const decreaseDisabled = item.quantity <= 1 ? 'disabled' : '';
                 const cartItem = `
-                  <div class="cart-item">
-                    <p>${item.equipment_name} - Quantity: ${item.quantity}</p>
+                  <div class="cart-item d-flex align-items-center">
+                    <div class="mr-auto">
+                      <p>${item.equipment_name}</p>
+                      <div class="d-flex align-items-center">
+                        <button class="btn btn-sm btn-secondary decreaseQtyBtn" data-id="${item.cart_id}" ${decreaseDisabled}>-</button>
+                        <input type="text" class="form-control qtyInput mx-2" data-id="${item.cart_id}" value="${item.quantity}" style="width: 50px; text-align: center;" readonly>
+                        <button class="btn btn-sm btn-secondary increaseQtyBtn" data-id="${item.cart_id}">+</button>
+                      </div>
+                    </div>
+                    <button class="btn btn-sm btn-danger removeFromCartBtn ml-3" data-id="${item.cart_id}">Remove</button>
                   </div>`;
                 cartItemsContainer.append(cartItem);
               });
+              attachCartItemEventHandlers();
             }
           },
           error: function (xhr, status, error) {
             console.error('Error loading cart items:', error);
             console.log('Response:', xhr.responseText);
             alert('Failed to load cart items.');
+          }
+        });
+      }
+
+      // Attach event handlers for cart item buttons
+      function attachCartItemEventHandlers() {
+        // Increase quantity
+        $('.increaseQtyBtn').off('click').on('click', function () {
+          const cartId = $(this).data('id');
+          updateCartQuantity(cartId, 1); // Increase by 1
+        });
+
+        // Decrease quantity
+        $('.decreaseQtyBtn').off('click').on('click', function () {
+          const cartId = $(this).data('id');
+          updateCartQuantity(cartId, -1); // Decrease by 1
+        });
+
+        // Remove item from cart
+        $('.removeFromCartBtn').off('click').on('click', function () {
+          const cartId = $(this).data('id');
+          removeFromCart(cartId);
+        });
+      }
+
+      // Update cart quantity
+      function updateCartQuantity(cartId, adjustment) {
+        $.ajax({
+          type: 'PUT',
+          url: `http://localhost:3000/api/v1/cart/update/${cartId}`,
+          contentType: 'application/json',
+          data: JSON.stringify({ adjustment: adjustment }),
+          xhrFields: {
+            withCredentials: true // Include authentication credentials
+          },
+          success: function (response) {
+            if (response.newQuantity === 0) {
+              // Remove item if quantity is zero
+              removeFromCart(cartId);
+            } else {
+              // Reload cart items to reflect the updated quantity
+              loadCartItems();
+              // Reload equipment list to update available quantities
+              loadEquipment();
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('Error updating cart quantity:', error);
+            let errorMessage = 'Failed to update cart quantity.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+            }
+            alert(errorMessage);
+          }
+        });
+      }
+
+      // Remove item from cart
+      function removeFromCart(cartId) {
+        $.ajax({
+          type: 'DELETE',
+          url: `http://localhost:3000/api/v1/cart/delete/${cartId}`,
+          xhrFields: {
+            withCredentials: true
+          },
+          success: function (response) {
+            alert('Item removed from cart.');
+            loadCartItems(); // Reload cart items
+            loadEquipment(); // Reload equipment list
+          },
+          error: function (xhr, status, error) {
+            console.error('Error removing item from cart:', error);
+            let errorMessage = 'Failed to remove item from cart.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+            }
+            alert(errorMessage);
           }
         });
       }
