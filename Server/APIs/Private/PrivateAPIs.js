@@ -477,8 +477,10 @@ app.post('/api/v1/user/logout', async function(req, res) {
 });  
 
 // Get all orders with user and equipment details
+
 app.get('/api/v1/orders', async (req, res) => {
   try {
+    // Group orders with their respective equipment details
     const orders = await DB('orders')
       .join('users', 'orders.user_id', '=', 'users.user_id')
       .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.order_id')
@@ -493,12 +495,65 @@ app.get('/api/v1/orders', async (req, res) => {
         'equipment.model_number'
       );
 
-    res.status(200).json({ orders });
+    const groupedOrders = orders.reduce((acc, curr) => {
+      const { order_id, date, username, equipment_name, quantity, equipment_img, model_number } = curr;
+
+      if (!acc[order_id]) {
+        acc[order_id] = {
+          order_id,
+          date,
+          username,
+          equipment: []
+        };
+      }
+
+      acc[order_id].equipment.push({ equipment_name, quantity, equipment_img, model_number });
+      return acc;
+    }, {});
+
+    res.status(200).json({ orders: Object.values(groupedOrders) });
   } catch (error) {
     console.error('Error fetching orders:', error.message);
     res.status(500).json({ error: 'Failed to fetch orders' });
   }
 });
+app.get('/api/v1/orders/:orderId', async (req, res) => {
+  try {
+      const { orderId } = req.params;
+      const orderDetails = await DB('orders')
+          .where('orders.order_id', orderId)
+          .join('users', 'orders.user_id', '=', 'users.user_id')
+          .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.order_id')
+          .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
+          .select(
+              'orders.order_id',
+              'orders.date',
+              'users.username',
+              'equipment.equipment_name',
+              'equipmentorder.quantity',
+              'equipment.equipment_img',
+              'equipment.model_number'
+          );
+
+      const formattedOrder = {
+          order_id: orderId,
+          date: orderDetails[0]?.date,
+          username: orderDetails[0]?.username,
+          equipment: orderDetails.map(item => ({
+              equipment_name: item.equipment_name,
+              quantity: item.quantity,
+              model_number: item.model_number,
+              equipment_img: item.equipment_img,
+          })),
+      };
+
+      res.status(200).json({ order: formattedOrder });
+  } catch (error) {
+      console.error('Error fetching order details:', error.message);
+      res.status(500).json({ error: 'Failed to fetch order details' });
+  }
+});
+
 
 // Start
 }
