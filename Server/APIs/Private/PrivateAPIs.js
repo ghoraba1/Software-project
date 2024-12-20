@@ -192,27 +192,43 @@ function HandlePrivateAPIs(app){
         }
       });
     
-    app.post('/api/v1/cart/new', async (req, res) => {
-      try {
-        const user = await get_user(req);
-  
-        if (!user) {
-          return res.status(403).json({ message: 'Unauthorized access' });
+      app.post('/api/v1/cart/new', async (req, res) => {
+        try {
+          const user = await get_user(req);
+      
+          if (!user) {
+            return res.status(403).json({ message: 'Unauthorized access' });
+          }
+      
+          const { equipment_id, quantity } = req.body;
+      
+          // Check if the equipment already exists in the user's cart
+          const existingCartItem = await DB('cart')
+            .where({ user_id: user.user_id, equipment_id })
+            .first();
+      
+          if (existingCartItem) {
+            // If it exists, update the quantity
+            await DB('cart')
+              .where({ user_id: user.user_id, equipment_id })
+              .update({
+                quantity: existingCartItem.quantity + quantity,
+              });
+          } else {
+            // If it doesn't exist, insert a new cart item
+            await DB('cart').insert({
+              user_id: user.user_id,
+              equipment_id,
+              quantity,
+            });
+          }
+      
+          res.status(201).json({ message: 'Successfully added to cart' });
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+          res.status(500).json({ error: 'Internal server error' });
         }
-  
-        const { equipment_id, quantity } = req.body;
-        await DB('cart').insert({
-          user_id: user.user_id,
-          equipment_id,
-          quantity,
-        });
-  
-        res.status(201).json({ message: 'Successfully added to cart' });
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-        res.status(500).json({ error: 'Internal server error' });
-      }
-    });
+      });
     app.delete('/api/v1/cart/delete/:cartId', async (req, res) => {
       try {
         const user = await get_user(req);
