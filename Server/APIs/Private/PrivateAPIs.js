@@ -58,7 +58,7 @@ function HandlePrivateAPIs(app){
    }
     } )
 
-    app.delete('/api/v1/user/:id',async(req,res)=>
+    app.delete('/api/v1/users/:id',async(req,res)=>
         {
           try{
              const query=`DELETE from users WHERE user_id=${req.params.id}`
@@ -73,30 +73,6 @@ function HandlePrivateAPIs(app){
           }
         
                })
-
-    app.put('/api/V1/user/:id',async(req,res)=>{
-                try{
-                   const{username,email,password,role}=req.body ;
-                   const hashedPassword = await bcrypt.hash(password, saltRounds); 
-                   const query=`UPDATE users
-                   SET username='${username}',
-                   email='${email}',
-                   password='${hashedPassword}',
-                   role='${role}'
-                   WHERE user_id=${req.params.id}`
-                   
-                   const result =await DB.raw(query) ;
-                   return res.status(200).send("Your account is updated") ;
-              
-                }
-                catch(err){
-                   console.log("error",err.message)
-                   return res.status(400).send("Failed to update") ;
-              
-                }
-                
-              
-              })   
 
 //equipment APIs----------------------------------------------------
     app.post('/api/v1/equipment/new', async (req, res) => {
@@ -277,8 +253,89 @@ function HandlePrivateAPIs(app){
         res.status(500).json({ error: 'Internal server error' });
       }
     });
-    
     app.post('/api/v1/order/new', async (req, res) => {
+      try {
+        // Get the authenticated user
+        const user = await get_user(req, res);
+    
+        if (!user) {
+          return; // get_user function handles the response
+        }
+    
+        // Fetch the cart items for the user
+        const cartItems = await DB('cart')
+          .select('equipment_id', 'quantity')
+          .where({ user_id: user.user_id });
+    
+        if (!cartItems || cartItems.length === 0) {
+          return res.status(400).json({ message: 'Cart is empty. Cannot place an order.' });
+        }
+    
+        // Begin transaction
+        await DB.transaction(async (trx) => {
+          // Check equipment availability and update quantities
+          for (const item of cartItems) {
+            // Get the current quantity of the equipment
+            const [equipment] = await trx('equipment')
+              .select('quantity')
+              .where({ equipment_id: item.equipment_id });
+    
+            if (!equipment) {
+              throw new Error(`Equipment with ID ${item.equipment_id} not found`);
+            }
+    
+            if (equipment.quantity < item.quantity) {
+              throw new Error(`Insufficient quantity for equipment ID ${item.equipment_id}`);
+            }
+    
+            // Update the equipment quantity
+            await trx('equipment')
+              .where({ equipment_id: item.equipment_id })
+              .update({
+                quantity: equipment.quantity - item.quantity,
+              });
+          }
+    
+          // Create a new order and get the inserted order's ID
+          const [order] = await trx('orders').insert(
+            {
+              user_id: user.user_id,
+              date: DB.fn.now(),
+            },
+            ['order_id'] // Return the order_id from the inserted row
+          );
+    
+          const orderId = order.order_id;
+    
+          // Add the cart items to the equipmentorder table
+          const equipmentOrderEntries = cartItems.map((item) => ({
+            order_id: orderId,
+            equipment_id: item.equipment_id,
+            quantity: item.quantity,
+          }));
+    
+          await trx('equipmentorder').insert(equipmentOrderEntries);
+    
+          // Clear the user's cart after the order is placed
+          await trx('cart').where({ user_id: user.user_id }).del();
+    
+          // Commit the transaction
+          // Note: No need to manually commit when using `trx` in this way
+        });
+    
+        // Respond with success and the order ID
+        return res.status(201).json({
+          message: 'Successfully placed order',
+        });
+      } catch (error) {
+        // Log the error for debugging
+        console.error('Error placing order:', error.message);
+    
+        // Respond with an error message
+        return res.status(500).json({ error: error.message });
+      }
+    });
+   /* app.post('/api/v1/order/new', async (req, res) => {
       try {
         // Get the authenticated user
         const user = await get_user(req);
@@ -331,7 +388,7 @@ function HandlePrivateAPIs(app){
         // Respond with a generic error message
         return res.status(500).json({ error: 'Internal server error' });
       }
-    });
+    });*/
 app.put('/api/v1/cart/update/:cartId', async (req, res) => {
   try {
     const user = await get_user(req);
@@ -376,9 +433,10 @@ app.put('/api/v1/cart/update/:cartId', async (req, res) => {
 app.get('/api/v1/cart/view', async (req, res) => {
   try {
     // Authenticate the user
-    const user = await get_user(req);
+    const user = await get_user(req, res);
     if (!user) {
-      return res.status(403).json({ message: 'Unauthorized access' });
+      // Return a 401 Unauthorized response
+      return res.status(401).json({ success: false, message: 'Unauthorized access' });
     }
 
     // Query the cart for the authenticated user
@@ -389,23 +447,18 @@ app.get('/api/v1/cart/view', async (req, res) => {
         'cart.quantity',
         'equipment.equipment_name',
         'equipment.equipment_img',
-        'equipment.model_number',
+        'equipment.model_number'
       )
       .where({ 'cart.user_id': user.user_id });
 
-    // If the cart is empty
-    if (cartItems.length === 0) {
-      return res.status(200).json({ message: 'Cart is empty', cart: [] });
-    }
-
     // Return the cart items
     return res.status(200).json({
+      success: true,
       cart: cartItems,
     });
-  
-  }catch (error) {
+  } catch (error) {
     console.error('Error fetching cart:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
 app.post('/api/v1/user/logout', async function(req, res) {  
