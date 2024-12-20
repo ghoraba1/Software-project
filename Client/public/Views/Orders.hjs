@@ -111,7 +111,7 @@
             rows += `
               <tr>
                 <td>${order.order_id}</td>
-                <td>${new Date(order.date).toISOString().split('T')[0])}</td>
+                <td>${new Date(order.date).toISOString().split('T')[0]}</td>
                 <td>${order.username}</td>
                 <td>${order.equipment_name}</td>
                 <td>${order.quantity}</td>
