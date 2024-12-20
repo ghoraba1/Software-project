@@ -86,7 +86,7 @@
                     <select id="supplier-filter" class="form-control">
                         <option value="all">All</option>
                         <option value="Schnider">Schnider</option>
-                        <option value="Supplier A">Supplier A</option>
+                        <option value="Supplier D">Supplier D</option>
                         <option value="ABB">ABB</option>
                         <option value="Meco">Meco</option>
                         <option value="AECOM">AECOM</option>
@@ -134,7 +134,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Preview</strong> <span id="modal-equipment-img"></span></p>
+                    <p><strong>Preview</strong> 
+   <img id="modal-equipment-img" src="/uploads/1734692543527-image2s.jpg" alt="Preview Image" style="max-width: 300px; max-height: 300px;">
+</p>
+
                     <p><strong>Name:</strong> <span id="modal-equipment-name"></span></p>
                     <p><strong>ID:</strong> <span id="modal-equipment-id"></span></p>
                     <!-- needed for id selection -->
@@ -172,24 +175,31 @@
         let selectedImageFile = null; //at the start to make sure no image selected
             function displayEquipment(data) {
                     $('.equipment-list tbody').empty();
-                    data.forEach(function(item) {
-                        $('.equipment-list tbody').append(`
-                            <tr>
-                                <td>${item.equipment_img}</td>
-                                <td>${item.equipment_name}</td>
-                                <td>${item.equipment_id}</td>
-                                <td>${item.category_name}</td>
-                                <td>${item.supplier_name}</td>
-                                <td>${item.quantity}</td>
-                                <td>${item.status}</td>
-                                <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
-                                <td><button class="btn btn-outline-primary">Edit</button>
-                                <button id="details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
-                                <button type="button" class="btn btn-outline-danger delete" data-id="${item.equipment_id}">Delete</button>
-                                </td>
-                            </tr>
-                        `);
-                    });
+                    // Assuming 'data' is an array of items
+data.forEach(function(tem) {
+    // Construct the image source
+    const imgSrc = `uploads/${item.equipment_img}`;
+
+    // Append the table row to the tbody
+    $('.equipment-list tbody').append(`
+        <tr>
+            
+            <td>${item.equipment_name}</td>
+            <td>${item.equipment_id}</td>
+            <td>${item.category_name}</td>
+            <td>${item.supplier_name}</td>
+            <td>${item.quantity}</td>
+            <td>${item.status}</td>
+            <td>${new Date(item.purchase_date).toLocaleDateString()}</td>
+            <td>
+                <button class="btn btn-outline-primary">Edit</button>
+                <button id="details" class="btn btn-outline-info details" data-item='${JSON.stringify(item)}'>View Details</button>
+                <button type="button" class="btn btn-outline-danger delete" data-id="${item.equipment_id}">Delete</button>
+            </td>
+        </tr>
+    `);
+});
+
                 }
 
             function fetchAndDisplayEquipment() {
@@ -203,7 +213,7 @@
                         data.forEach(function(item) {
                             $('.equipment-list tbody').append(`
                                 <tr>
-                                    <td>${item.equipment_img}</td>
+                                    <td><img src="${item.equipment_img}" alt="Equipment Image" style="max-width: 100px; max-height: 100px;"></td>
                                     <td>${item.equipment_name}</td>
                                     <td>${item.equipment_id}</td>
                                     <td>${item.category_name}</td>
@@ -266,7 +276,7 @@
                         data.forEach(function(item) {
                             $('.equipment-list tbody').append(`
                                 <tr>
-                                    <td>${item.equipment_img}</td>
+<td><img src="${item.equipment_img}" alt="Equipment Image" style="max-width: 100px; max-height: 100px;"></td>
                                     <td>${item.equipment_name}</td>
                                     <td>${item.equipment_id}</td>
                                     <td>${item.category_name}</td>
@@ -329,7 +339,7 @@ function applyFilters() {
                     data.forEach(function(item) {
                         $('.equipment-list tbody').append(`
                             <tr>
-                                <td>${item.equipment_img}</td>
+                                <td><img src="${item.equipment_img}" alt="Equipment Image" style="max-width: 100px; max-height: 100px;"></td>
                                 <td>${item.equipment_name}</td>
                                 <td>${item.equipment_id}</td>
                                 <td>${item.category_name}</td>

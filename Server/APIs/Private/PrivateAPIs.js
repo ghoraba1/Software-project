@@ -187,7 +187,11 @@ const upload = multer({ storage });
 
 //image thingy
 app.put('/api/v1/equipment/update-image/:id', upload.single('equipment_img'), async (req, res) => {
-  try {
+  if (!user) {
+    return; // Stops execution after redirection or error
+}
+if(user.role == "admin"){
+  try{
     const { id } = req.params;
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -195,7 +199,7 @@ app.put('/api/v1/equipment/update-image/:id', upload.single('equipment_img'), as
     console.log('Image Path:', imagePath);
 
     if (!id) {
-      return res.status(400).send('Equipment ID is required.');
+      return res.status(402).send('Equipment ID is required.');
     }
 
     //if (!imagePath) {return res.status(400).send('No image file provided.');}
@@ -213,7 +217,34 @@ app.put('/api/v1/equipment/update-image/:id', upload.single('equipment_img'), as
     console.error('Error:', err.message);
     res.status(500).send('Failed to update image.');
   }
+}
+else{
+ return res.status(400).send("You are not an admin")
+}
+  
 });
+
+//get image
+
+app.get('/get-image', (req, res) => {
+  if (!user) {
+    return; // Stops execution after redirection or error
+}
+if(user.role == "admin"){
+  try{
+  const imagePath = '/uploads/1734692543527-image2s.jpg'; // Replace with your database query result
+  res.json({ imagePath });
+}
+catch(err){
+  console.log("Error:", err.message);
+  return res.status(402).send("Unable to GET image.");
+}   
+}
+else{
+return res.status(400).send("You are not an admin")
+}
+});
+
 //end of image things
 
 //RatingCartOrder APIs----------------------------------------------------
