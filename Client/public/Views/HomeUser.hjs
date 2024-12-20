@@ -280,6 +280,18 @@
           }  
         });  
       }  
+                          $('#logoutBtn').click(function () {
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/api/v1/user/logout',
+        success: function () {
+          window.location.href = '/login'; // Redirect to login page
+        },
+        error: function (error) {
+          console.error('Error logging out:', error);
+        }
+      });
+    });
   
       // Initial load  
       loadEquipment();  
