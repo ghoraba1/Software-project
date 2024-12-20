@@ -127,7 +127,7 @@
                 <h5 class="card-title">${equipment.equipment_name}</h5> 
                 <p class="card-text">Category: ${equipment.category_name}</p> 
                 <p class="card-text">Supplier: ${equipment.supplier_name}</p> 
-                <p class="card-text">Rating: <span class="current-rating">${equipment.rating}</span></p> 
+                <p class="card-text">Rating: ${equipment.rating}</p> 
                 <p class="card-text">Location: ${equipment.location}</p> 
                 <p class="card-text">Status: ${equipment.status}</p> 
                 <div class="d-flex flex-wrap justify-content-center rating-container" data-equipment-id="${equipment.equipment_id}">
@@ -143,22 +143,21 @@
         equipmentList.append(equipmentItem); 
       });
 
-      // Attach click event handlers for stars 
+     
       $('.star').on('click', function () { 
         var rating = $(this).data('value'); 
         var equipmentId = $(this).closest('.rating-container').data('equipment-id'); 
         $(this).siblings().removeClass('checked'); 
         $(this).prevAll().addBack().addClass('checked'); 
-        $(this).closest('.card-body').find('.current-rating').text(rating);
 
-        // Make an AJAX call to retrieve user information
+       
         $.ajax({
           url: 'http://localhost:3000/api/v1/user/profile',
           method: 'GET',
           success: function(res) {
             var userid = res.user_id;
 
-            // Make an AJAX call to the server to submit the rating
+           
             $.ajax({ 
               url: 'http://localhost:3000/api/v1/rating/new', 
               method: 'POST', 
