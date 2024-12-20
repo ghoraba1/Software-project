@@ -100,273 +100,87 @@
   <script>
     $(document).ready(function () {
       // Fetch and display equipment
-      function loadEquipment(query = '', filter = 'all') {
+      function loadEquipment(query = '', filter = 'all') { 
+  $.ajax({ 
+    type: 'GET',
+    url: 'http://localhost:3000/api/v1/equipment/view', 
+    success: function (data) { 
+      const equipmentList = $('#equipmentList'); 
+      equipmentList.empty(); 
+      const filteredData = data.filter(equipment => { 
+        const matchesQuery = equipment.equipment_name.toLowerCase().includes(query.toLowerCase()); 
+        if (filter === 'category') { 
+          return matchesQuery && equipment.category_name.toLowerCase().includes(query.toLowerCase()); 
+        } else if (filter === 'supplier') { 
+          return matchesQuery && equipment.supplier_name.toLowerCase().includes(query.toLowerCase()); 
+        } else if (filter === 'availability') { 
+          return matchesQuery && equipment.status.toLowerCase().includes(query.toLowerCase()); 
+        }
+        return matchesQuery; 
+      });
+      filteredData.forEach(equipment => { 
+        const equipmentItem = ` 
+          <div class="col-md-4 mb-4"> 
+            <div class="card h-100 shadow-sm"> 
+              <img src="${equipment.equipment_img || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Equipment Image"> 
+              <div class="card-body"> 
+                <h5 class="card-title">${equipment.equipment_name}</h5> 
+                <p class="card-text">Category: ${equipment.category_name}</p> 
+                <p class="card-text">Supplier: ${equipment.supplier_name}</p> 
+                <p class="card-text">Rating: <span class="current-rating">${equipment.rating}</span></p> 
+                <p class="card-text">Location: ${equipment.location}</p> 
+                <p class="card-text">Status: ${equipment.status}</p> 
+                <div class="d-flex flex-wrap justify-content-center rating-container" data-equipment-id="${equipment.equipment_id}">
+                  ${[1, 2, 3, 4, 5].map(i => `<span class="star ${i <= equipment.rating ? 'checked' : ''}" data-value="${i}">&#9733;</span>`).join('')}
+                </div> 
+              </div> 
+              <div class="card-footer d-flex justify-content-between"> 
+                <span class="text-primary font-weight-bold">${equipment.quantity} Available</span> 
+                <button class="btn btn-sm btn-success addToCartBtn" data-id="${equipment.equipment_id}">Add to Cart</button>
+              </div> 
+            </div> 
+          </div>`;
+        equipmentList.append(equipmentItem); 
+      });
+
+      // Attach click event handlers for stars 
+      $('.star').on('click', function () { 
+        var rating = $(this).data('value'); 
+        var equipmentId = $(this).closest('.rating-container').data('equipment-id'); 
+        $(this).siblings().removeClass('checked'); 
+        $(this).prevAll().addBack().addClass('checked'); 
+        $(this).closest('.card-body').find('.current-rating').text(rating);
+
+        // Make an AJAX call to retrieve user information
         $.ajax({
-          type: 'GET',
-          url: 'http://localhost:3000/api/v1/equipment/view',
-          success: function (data) {
-            const equipmentList = $('#equipmentList');
-            equipmentList.empty();
+          url: 'http://localhost:3000/api/v1/user/profile',
+          method: 'GET',
+          success: function(res) {
+            var userid = res.user_id;
 
-            const filteredData = data.filter(equipment => {
-              const matchesQuery = equipment.equipment_name.toLowerCase().includes(query.toLowerCase());
-              if (filter === 'category') {
-                return matchesQuery && equipment.category_name.toLowerCase().includes(query.toLowerCase());
-              } else if (filter === 'supplier') {
-                return matchesQuery && equipment.supplier_name.toLowerCase().includes(query.toLowerCase());
-              } else if (filter === 'availability') {
-                return matchesQuery && equipment.status.toLowerCase().includes(query.toLowerCase());
-              }
-              return matchesQuery;
+            // Make an AJAX call to the server to submit the rating
+            $.ajax({ 
+              url: 'http://localhost:3000/api/v1/rating/new', 
+              method: 'POST', 
+              contentType: 'application/json', 
+              data: JSON.stringify({
+                user_id: userid,
+                equipment_id: equipmentId, 
+                score: rating
+              }), 
+              success: function (response) { 
+                alert('Thank you for rating!'); 
+              }, 
+              error: function (error) { 
+                alert('Error submitting rating.'); 
+              } 
             });
-          
-            filteredData.forEach(equipment => {
-              const equipmentItem = `
-                <div class="col-md-4 mb-4">
-                  <div class="card h-100 shadow-sm">
-                    <img src="${equipment.equipment_img || 'https://via.placeholder.com/150'}" class="card-img-top" alt="Equipment Image">
-                    <div class="card-body">
-                      <h5 class="card-title">${equipment.equipment_name}</h5>
-                      <p class="card-text">Category: ${equipment.category_name}</p>
-                      <p class="card-text">Supplier: ${equipment.supplier_name}</p>
-                      <p class="card-text">Rating: ${equipment.rating}</p>
-                      <p class="card-text">Location: ${equipment.location}</p>
-                      <p class="card-text">Status: ${equipment.status}</p>
-                      <div class="d-flex flex-wrap justify-content-center" id="${equipment.equipment_id}"> 
-                      <div id="stars1"></div>
-                      <div id="stars2"></div>
-                      <div id="stars3"></div>
-                      <div id="stars4"></div>
-                      <div id="stars5"></div>
-                      </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between">
-                      <span class="text-primary font-weight-bold">${equipment.quantity} Available</span>
-                      <button class="btn btn-sm btn-success addToCartBtn" data-id="${equipment.equipment_id}">Add to Cart</button>
-                    </div>
-                  </div>
-                </div>`;
-              equipmentList.append(equipmentItem);
-                  if(equipment.rating==1){
-              $(`#${equipment.equipment_id}`).html(` <div id="stars1">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars2">
-                      <span class="fa fa-star"></span>
-                      </div>
-                      <div id="stars3">
-                      <span class="fa fa-star"></span>
-                      </div>
-                      <div id="stars4">
-                      <span class="fa fa-star"></span>
-                      </div>
-                      <div id="stars5">
-                      <span class="fa fa-star"></span>
-                      </div>`)
-                }
-                 if(equipment.rating==2){
-              $(`#${equipment.equipment_id}`).html(` <div id="stars1">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars2">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars3">
-                      <span class="fa fa-star"></span>
-                      </div>
-                      <div id="stars4">
-                      <span class="fa fa-star"></span>
-                      </div>
-                      <div id="stars5">
-                      <span class="fa fa-star"></span>
-                      </div>`)
-                }
-                 if(equipment.rating==3){
-              $(`#${equipment.equipment_id}`).html(` <div id="stars1">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars2">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars3">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars4">
-                      <span class="fa fa-star"></span>
-                      </div>
-                      <div id="stars5">
-                      <span class="fa fa-star"></span>
-                      </div>`)
-                }
-                 if(equipment.rating==4){
-              $(`#${equipment.equipment_id}`).html(` <div id="stars1">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars2">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars3">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars4">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars5">
-                      <span class="fa fa-star"></span>
-                      </div>`)
-                }
-                 if(equipment.rating==5){
-              $(`#${equipment.equipment_id}`).html(` <div id="stars1">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars2">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars3">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars4">
-                      <span class="fa fa-star checked"></span>
-                      </div>
-                      <div id="stars5">
-                      <span class="fa fa-star checked"></span>
-                      </div>`)
-                }
-            });
-         /*  $.ajax({
-       url: '/api/v1/user/profile' ,
-       method:"GET",
-       success:function(res){
-       var userid=res.user_id;
-       },
-       error:function(){
-       }
-      });*/
-            //Rating
-     $('#stars1').click(function(){
-     var inputdata={
-           user_id:7,
-            equipment_id: 39,
-            score:1
-        };
-             $.ajax({
-              url:'http://localhost:3000/api/v1/rating/new',
-              method:"PUT",
-              data: JSON.stringify({inputdata}),
-              
-              success:function(res){
-                alert("rating added!")
-              $('#stars1').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars2').html(`<span class="fa fa-star"></span>`);
-              $('#stars3').html(`<span class="fa fa-star"></span>`);
-              $('#stars4').html(`<span class="fa fa-star"></span>`);
-              $('#stars5').html(`<span class="fa fa-star"></span>`);
-              },error:function(error){
-                alert("Try again :(")
-              }
-             })
-
-            });
-      $('#stars2').click(function(){
-        inputdata={
-            user_id: $('#user_id').val(),
-            equipmentid: $('#equipment_id').val(),
-            comment:$('#comment').val(),
-            score:$('#rating').val(),
-        };
-             $.ajax({
-              url:'/api/v1/rating/new',
-              method:"PUT",
-              data: JSON.stringify({inputdata}),
-              contentType:"application/json",
-              success:function(res){
-                alert("rating added!")
-              $('#stars1').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars2').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars3').html(`<span class="fa fa-star"></span>`);
-              $('#stars4').html(`<span class="fa fa-star"></span>`);
-              $('#stars5').html(`<span class="fa fa-star"></span>`);
-              },error:function(error){
-                alert("Try again :(")
-              }
-             })
-
-            });
-    $('#stars3').click(function(){
-      inputdata={
-            user_id: $('#user_id').val(),
-            equipmentid: $('#equipment_id').val(),
-            comment:$('#comment').val(),
-            score:$('#rating').val(),
-        };
-             $.ajax({
-              url:'/api/v1/rating/new',
-              method:"PUT",
-              data: JSON.stringify({inputdata}),
-              contentType:"application/json",
-              success:function(res){
-                alert("rating added!")
-              $('#stars1').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars2').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars3').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars4').html(`<span class="fa fa-star"></span>`);
-              $('#stars5').html(`<span class="fa fa-star"></span>`);
-              },error:function(error){
-                alert("Try again :(")
-              }
-             })
-
-            });
-      $('#stars4').click(function(){
-        inputdata={
-            user_id: $('#user_id').val(),
-            equipmentid: $('#equipment_id').val(),
-            comment:$('#comment').val(),
-            score:$('#rating').val(),
-        };
-             $.ajax({
-              url:'/api/v1/rating/new',
-              method:"PUT",
-              data: JSON.stringify({inputdata}),
-              contentType:"application/json",
-              success:function(res){
-                alert("rating added!")
-              $('#stars1').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars2').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars3').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars4').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars5').html(`<span class="fa fa-star"></span>`);
-              },error:function(error){
-                alert("Try again :(")
-              }
-             })
-
-            });
-      $('#stars5').click(function(){
-        inputdata={
-            user_id: $('#user_id').val(),
-            equipmentid: $('#equipment_id').val(),
-            comment:$('#comment').val(),
-            score:$('#rating').val(),
-        };
-             $.ajax({
-              url:'/api/v1/rating/new',
-              method:"PUT",
-              data: JSON.stringify({inputdata}),
-              contentType:"application/json",
-              success:function(res){
-                alert("rating added!")
-              $('#stars1').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars2').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars3').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars4').html(`<span class="fa fa-star checked"></span>`);
-              $('#stars5').html(`<span class="fa fa-star checked"></span>`);
-              },error:function(error){
-                alert("Try again :(")
-              }
-             })
-
-            });
+          },
+          error: function() {
+            alert("Couldn't retrieve your info");
+          }
+        });
+      });
 
             // Add to Cart button click handler
             $('.addToCartBtn').click(function () {
