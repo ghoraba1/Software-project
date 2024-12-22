@@ -74,6 +74,6 @@ CREATE TABLE equipment_order (
     mainorder_ID INTEGER NOT NULL,
     equipment_ID integer NOT NULL,
     quantity integer NOT NULL,
-     FOREIGN KEY (mainorder_ID) REFERENCES Orders(order_ID),
+     FOREIGN KEY (mainorder_ID) REFERENCES Orders(order_ID) ON DELETE CASCADE,
     FOREIGN KEY (equipment_ID) REFERENCES equipment(equipment_ID) ON DELETE CASCADE
 );
