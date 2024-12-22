@@ -36,7 +36,8 @@ function HandlePublicAPIs(app){
     app.put('/api/V1/user/:id',async(req,res)=>{
       try{
          const{username,email,password,role}=req.body ;
-         const hashedPassword = await bcrypt.hash(password, saltRounds); 
+          let newpassword=JSON.parse(password)
+         const hashedPassword = await bcrypt.hash(newpassword, saltRounds); 
          const query=`UPDATE users
          SET username='${username}',
          email='${email}',
