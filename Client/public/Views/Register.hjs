@@ -20,33 +20,38 @@
         const email = $('#email').val();
         const password = $('#password').val();
 
-        // Construct the data object
-        const data = {
-          username,
-          email,
-          password
-        };
+        if (username == "" || email == "" || password == "") {
+          alert("Can't register the user with an empty field");
+        } else {
+          // Construct the data object
+          const data = {
+            username,
+            email,
+            password
+          };
 
-        console.log("Data to be sent:", data);
+          console.log("Data to be sent:", data);
 
-        // Perform the AJAX POST request
-        $.ajax({
-          type: "POST",
-          url: '/api/v1/user/new',
-          data: JSON.stringify(data),  // Convert data to JSON string
-          contentType: "application/json",  // Set content type as JSON
-          success: function (serverResponse) {
-            // On success
-            alert("Registered successfully!");
-            console.log("Server Response:", serverResponse);
-            location.href = '/login';  // Redirect to login page
-          },
-          error: function (errorResponse) {
-            // On error
-            console.error("Error Response:", errorResponse);
-            alert(`Register error: ${errorResponse.responseText || "Unknown error"}`);
-          }
-        });
+          // Perform the AJAX POST request
+          $.ajax({
+            type: "POST",
+            url: '/api/v1/user/new',
+            data: JSON.stringify(data),  // Convert data to JSON string
+            contentType: "application/json",  // Set content type as JSON
+            success: function (serverResponse) {
+              // On success
+              $("#registerAlert").show().delay(2000).fadeOut(function() {
+                location.href = '/login';  // Redirect to login page
+              });
+              console.log("Server Response:", serverResponse);
+            },
+            error: function (errorResponse) {
+              // On error
+              console.error("Error Response:", errorResponse);
+              alert(`Register error: ${errorResponse.responseText || "Unknown error"}`);
+            }
+          });
+        }
       });
 
       // Redirect to login page
@@ -93,6 +98,13 @@
 </head>
 
 <body>
+  <!--Alert on register -->
+  <div class="alert alert-success alert-dismissible fade show" role="alert" id="registerAlert" style="display: none;">
+    Registered successfully!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#" id="homeLink">Superior Bros</a>
@@ -116,7 +128,7 @@
       </div>
       <div class="button-group">
         <button type="button" class="btn btn-outline-success btn-sm" id="registerBtn">Register</button>
-        <a href="/login" btn btn-outline-info btn-sm">Login</a>
+        <a href="/login" class="btn btn-outline-info btn-sm">Login</a>
       </div>
     </form>
     <p id="errorMessage"></p>

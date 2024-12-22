@@ -13,23 +13,88 @@
   <script src="../Src/profile.js" type="text/javascript"></script>
   <script>
     $(document).ready(function(){
+      //const bcrypt = require('bcrypt');
+      var oldname;
+var oldemail;
+var oldpass;
+var role;
       $.ajax({
        url: '/api/v1/user/profile' ,
        method:"GET",
        success:function(res){
-       $('#profile').html(`
-       <ul style="list-style-type: none;"><h3>
- <li>Name: ${res.username}</li>
- <li>Email: ${res.email}</li>
- <li>Role: ${res.role}</li>
- <li>Created at: ${res.created_at}</li>
-</h3></ul>`)
+ $('#username').html(`Name: ${res.username}`)
+ $('#email').html(`Email: ${res.email}`)
+ $('#role').html(`Role: ${res.role}`)
+ $('#createdat').html(`Created at: ${res.created_at}`)
+ oldname=res.username;
+ oldemail= res.email;
+ oldpass= res.password;
+ role=res.role
        },
        error:function(){
         $('#profile').html(`<p>error</p>`)
         alert("Couldnt retrieve your info")
        }
       });
+   
+    $(document).on('click','#edit',function(){
+$(this).replaceWith(` <button id="ok" class="btn btn-outline-success"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg></button> <button id="stop" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+</svg></button> `);
+        $('#username').html(`Name: <input type="search" id="newname" placeholder="New Name" required>`)
+        $('#email').html(`Email: <input type="search" id="newemail" placeholder="New Email" required>`)
+        $('#password').html(`Password: <input type="search" id="newpass" placeholder="New Password" required>`)
+    
+    })
+
+$(document).on('click', '#ok', async function() {
+  var name = $('#newname').val();
+  var email = $('#newemail').val();
+  var pass = $('#newpass').val();
+  var str ='"'+pass+'"'
+if(!name){}else{oldname=name;}
+if(!email){}else{oldemail=email;}
+if(!pass){}else{oldpass=str;}
+  var form = {
+    username: oldname,
+    email: oldemail,
+    password: oldpass,
+    role: role 
+  };
+
+  $.ajax({
+    url: 'http://localhost:3000/api/V1/user/:id', 
+    method: 'PUT',
+    contentType: 'application/json',
+    data: JSON.stringify(form),
+    success: function(res) {
+      $('#head').html(`<h1>Your Profile:- <button id="edit" class="btn btn-outline-warning"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/></svg></button></h1>`);
+      $('#username').html(`Name: ${oldname}`);
+      $('#email').html(`Email: ${oldemail}`);
+      $('#password').html(``);
+    },
+    error: function(error) {
+      alert('Could not update :(');
+    }
+  });
+});
+
+
+$(document).on('click','#stop',function(){
+$('#head').html(`<h1>Your Profile:-  <button id="edit"class="btn btn-outline-warning"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+</svg></button></h1>`)
+
+$('#username').html(`Name: ${oldname}`)
+ $('#email').html(`Email: ${oldemail}`)
+$('#password').html(``)
+
+})
+
+
     });
   </script>
   <style>
@@ -93,10 +158,26 @@
   <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
   <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
 </svg></div>
+  
+  
   <div>
-<h1>Your Profile:-</h1>
-<div id="profile">
-</div></div>
+    <div id="head">
+<h1>Your Profile:-  <button id="edit"class="btn btn-outline-warning"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+</svg></button></h1>
+</div>
+
+<div id="profile"><h3>
+  <div id="username"></div>
+  <div id="email"></div>
+  <div id="role"></div>
+  <div id="createdat"></div>
+  <div id="password"></div>
+  </h3>
+</div>
+
+
+</div>
 </div>
       </div>
     </div>
@@ -104,22 +185,10 @@
 
 
 
-<footer class="text-center mt-auto py-1 bg-dark text-white">
-    <div class="container">
-      <p>We are a group of software engineers designing a site to sell products from various companies.</p>
-      <p>Contributors include:</p>
-      <div class="d-flex flex-wrap justify-content-center">
-        <span class="mx-2">Abdelrahman Ghoraba</span>
-        <span class="mx-2">Abdelrahman Elkhouly</span>
-        <span class="mx-2">Mohamed Motawea</span>
-        <span class="mx-2">Ali Wael</span>
-        <span class="mx-2">Ahmad Alaa</span>
-        <span class="mx-2">Omar Atef</span>
-        <span class="mx-2">Ahmad Waleed</span>
-      </div>
-      <p>We hope you like it :)</p>
-      <p>&copy; 2024 The Superior Bros</p>
-    </div>
+
+<footer class="bg-dark text-white text-center py-3 mt-4">
+    <p>&copy; 2024 The Superior Bros. All rights reserved.</p>
+    <p>Designed by Superior Bros Team</p>
   </footer>
 
 </body>

@@ -1,79 +1,77 @@
-create table categories(
-category_ID serial primary key,
-category_name text NOT NULL
+CREATE TABLE categories (
+    category_ID serial PRIMARY KEY,
+    category_name text NOT NULL
 );
 
-
-create table suppliers(
-supplier_ID serial primary key, 
-supplier_name text NOT NULL,
-contact_info text NOT NULL,
-address text NOT NULL
+CREATE TABLE suppliers (
+    supplier_ID serial PRIMARY KEY, 
+    supplier_name text NOT NULL,
+    contact_info text NOT NULL,
+    address text NOT NULL
 );
 
-create table equipment(
-equipment_ID serial primary key,
-equipment_name text NOT NULL,
-equipment_img bytea ,       /*khalleha null 3ady*/  
-rating integer DEFAULT '5' NOT NULL,
-model_number integer NOT NULL,
-purchase_date date NOT NULL,
-quantity integer NOT NULL,
-status text NOT NULL,
-location text NOT NULL,
-category_ID integer NOT NULL,
-supplier_id integer NOT NULL,
-foreign key(category_ID) references categories(category_ID),
-foreign key(supplier_ID) references suppliers(supplier_ID)
+CREATE TABLE equipment (
+    equipment_ID serial PRIMARY KEY,
+    equipment_name text NOT NULL,
+    equipment_img bytea,  /*khalleha null 3ady*/  
+    rating integer DEFAULT '5' NOT NULL,
+    model_number integer NOT NULL,
+    purchase_date date NOT NULL,
+    quantity integer NOT NULL,
+    status text NOT NULL,
+    location text NOT NULL,
+    category_ID integer NOT NULL,
+    supplier_id integer NOT NULL,
+    FOREIGN KEY (category_ID) REFERENCES categories(category_ID) ON DELETE CASCADE,
+    FOREIGN KEY (supplier_ID) REFERENCES suppliers(supplier_ID) ON DELETE CASCADE
 );
 
-CREATE table users(
-user_id serial primary key ,
-username text NOT NULL ,
-email text not null,
-password text not null,
-role text DEFAULT 'standard_user' not null,
-created_at Date not null
+CREATE TABLE users (
+    user_id serial PRIMARY KEY,
+    username text NOT NULL,
+    email text NOT NULL,
+    password text NOT NULL,
+    role text DEFAULT 'standard_user' NOT NULL,
+    created_at date NOT NULL
 );
 
-create table Orders (
-order_ID serial primary key,
-date Date not null ,
-user_id  integer not null,
-foreign key(user_id) references Users(user_id)
+CREATE TABLE orders (
+    order_ID serial PRIMARY KEY,
+    date date NOT NULL,
+    user_id integer NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-create table Cart (
-cart_ID serial primary key ,
-quantity integer not null ,
-user_ID  integer not null,
-equipment_ID integer not null ,
-foreign key(user_ID) references Users(user_ID),
-foreign key(equipment_ID) references equipment(equipment_ID) ON DELETE CASCADE;
+CREATE TABLE cart (
+    cart_ID serial PRIMARY KEY,
+    quantity integer NOT NULL,
+    user_ID integer NOT NULL,
+    equipment_ID integer NOT NULL,
+    FOREIGN KEY (user_ID) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (equipment_ID) REFERENCES equipment(equipment_ID) ON DELETE CASCADE
 );
 
-create table Rating ( 
-rating_ID serial primary key ,
-comment text ,
-score integer not null ,
-user_ID  integer not null,
-equipment_ID integer not null ,
-foreign key(user_ID) references users(user_id),
-foreign key(equipment_ID) references equipment(equipment_ID) ON DELETE CASCADE
-
+CREATE TABLE rating (
+    rating_ID serial PRIMARY KEY,
+    comment text,
+    score integer NOT NULL,
+    user_ID integer NOT NULL,
+    equipment_ID integer NOT NULL,
+    FOREIGN KEY (user_ID) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (equipment_ID) REFERENCES equipment(equipment_ID) ON DELETE CASCADE
 );
 
-create table Session(
-    session_id  serial primary key,
-    user_id integer not null,
-    token  text not null,
-    expiresAt  timestamp not null ,
-    foreign key(user_id) references Users(user_id)
+CREATE TABLE session (
+    session_id serial PRIMARY KEY,
+    user_id integer NOT NULL,
+    token text NOT NULL,
+    expiresAt timestamp NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-create table EquipmentOrder(
-    "order_ID" serial primary key,
-    "equipment_ID" integer not null,
-    "quantity" integer not null,
-    foreign key(equipment_ID) references equipment(equipment_ID) ON DELETE CASCADE
+CREATE TABLE equipment_order (
+    order_ID serial PRIMARY KEY,
+    equipment_ID integer NOT NULL,
+    quantity integer NOT NULL,
+    FOREIGN KEY (equipment_ID) REFERENCES equipment(equipment_ID) ON DELETE CASCADE
 );
