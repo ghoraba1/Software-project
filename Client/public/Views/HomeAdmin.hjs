@@ -86,12 +86,9 @@
                     <select id="supplier-filter" class="form-control">
                         <option value="all">All</option>
                         <option value="Schnider">Schnider</option>
-                        <option value="Supplier A">Supplier A</option>
                         <option value="ABB">ABB</option>
                         <option value="Meco">Meco</option>
-                        <option value="AECOM">AECOM</option>
                         <option value="Hitachi">Hitachi</option>
-                        <option value="Adyen">Adyen</option>
                         <!-- Add more suppliers here -->
                     </select>
                 </div>
