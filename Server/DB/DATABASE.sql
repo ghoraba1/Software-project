@@ -65,11 +65,11 @@ CREATE TABLE session (
     session_id serial PRIMARY KEY,
     user_id integer NOT NULL,
     token text NOT NULL,
-    expiresAt timestamp NOT NULL,
+    expiresat timestamp NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE equipmentorder (
+CREATE TABLE equipment_order (
     order_ID serial PRIMARY KEY,
     mainorder_ID INTEGER NOT NULL,
     equipment_ID integer NOT NULL,
