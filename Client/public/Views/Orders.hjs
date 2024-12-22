@@ -8,6 +8,23 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Admin Dashboard - Orders</title>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+            margin: 0; /* Remove default margin */
+        }
+
+        main {
+            flex: 1; /* Make the main content area expand to fill available space */
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
         .equipment-list th, .equipment-list td {
             text-align: center;
             vertical-align: middle;
@@ -27,7 +44,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbarId">
-        <a class="navbar-brand" href="#">Superior Bros</a>
+        <a class="navbar-brand" href="/HomeAdmin">Superior Bros</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -38,10 +55,10 @@
                     <a class="nav-link" href="/UserMangement">User Management Page</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Orders">Orders</a>
+                    <a class="nav-link active" href="/Orders">View Orders</a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <input type="text" class="form-control col-9 ml-2" id="search" placeholder="Search for equipment">
+                    <input type="text" class="form-control col-9 ml-2" id="search" placeholder="Search orders">
                     <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
                 </li>
             </ul>
@@ -222,20 +239,23 @@
         }
 
         // Search functionality
-        $('#searchBtn').on('click', function () {
-            const searchTerm = $('#search').val().trim().toLowerCase();
+        function search(searchword){
+            const searchTerm = searchword;
 
             if (searchTerm) {
                 const filteredOrders = allOrders.filter(order =>
                     order.order_id.toString().toLowerCase().includes(searchTerm) ||
-                    order.username.toLowerCase().includes(searchTerm) ||
-                    (order.equipment && order.equipment.some(equipment => equipment.equipment_name.toLowerCase().includes(searchTerm)))
+                    order.username.toLowerCase().includes(searchTerm)
                 );
 
                 displayOrders(filteredOrders);
             } else {
                 displayOrders(allOrders); // Reset to all orders if search term is empty
             }
+        }
+
+        $('#searchBtn').on('click', function () {
+           search($('#search').val().trim().toLowerCase())
         });
 
         // Filter by date range
@@ -270,7 +290,24 @@
 
         // Initial fetch of orders
         fetchOrders();
+        $('#search').on('keyup', function() {
+            search($('#search').val().trim().toLowerCase());
+        });
+        
+        $('#logoutBtn').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:3000/api/v1/user/logout',
+                success: function () {
+                    window.location.href = '/login'; // Redirect to login page
+                },
+                error: function (error) {
+                    console.error('Error logging out:', error);
+                }
+            }); 
+        });
     });
+
 </script>
 
  </body>
