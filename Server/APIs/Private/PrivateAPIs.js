@@ -374,9 +374,9 @@ return res.status(400).send("You are not an admin")
     
           // Add the cart items to the equipmentorder table
           const equipmentOrderEntries = cartItems.map((item) => ({
-            equipment_id: item.equipment_id,
+            equipment_ID: item.equipment_id,
             quantity: item.quantity,
-            mainorder_id:orderId
+            mainorder_ID:orderId
           }));
     
           await trx('equipmentorder').insert(equipmentOrderEntries);
@@ -565,6 +565,23 @@ app.get('/api/v1/orders', async (req, res) => {
         'users.username',
       );
       
+
+    // const groupedOrders = orders.reduce((acc, curr) => {
+    //   const { order_id, date, username, equipment_name, quantity, equipment_img, model_number } = curr;
+
+    //   if (!acc[order_id]) {
+    //     acc[order_id] = {
+    //       order_id,
+    //       date,
+    //       username,
+    //       equipment: []
+    //     };
+    //   }
+
+    //   acc[order_id].equipment.push({ equipment_name, quantity, equipment_img, model_number });
+    //   return acc;
+    // }, {});
+
 
     res.status(200).json({ orders: Object.values(orders) });
   } catch (error) {
