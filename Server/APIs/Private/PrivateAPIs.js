@@ -60,7 +60,7 @@ function HandlePrivateAPIs(app){
    }
     } )
 
-    app.delete('/api/v1/users/:id',async(req,res)=>
+    app.delete('/api/v1/user/:id',async(req,res)=>
         {
           try{
              const query=`DELETE from users WHERE user_id=${req.params.id}`
