@@ -193,7 +193,7 @@
             equipmentList.empty();
             categories = [];
             suppliers = [];
-
+          
             data.forEach(equipment => {
               if (!categories.includes(equipment.category_name)) {
                 categories.push(equipment.category_name);
@@ -234,7 +234,7 @@
           error: function (error) {
             console.error('Error fetching equipment data:', error);
           }
-        });
+        }) };
 //////////////////////////////////////////////////////////////////////
  $('.star').on('click', function () { 
         var rating = $(this).data('value'); 
@@ -257,7 +257,7 @@
               } 
             });
 ///////////////////////////////////////////////////////////////////////////////
-      }
+      });
 
       // Populate dropdown filters for categories and suppliers
       function populateFilters() {
@@ -386,7 +386,8 @@
             if (data.cart.length === 0) {
               cartItemsContainer.append('<p>Your cart is empty.</p>');
               $('#makeOrderBtn').prop('disabled', true);
-            } else {
+            } 
+            else {
               $('#makeOrderBtn').prop('disabled', false);
               data.cart.forEach(item => {
                 const decreaseDisabled = item.quantity <= 1 ? 'disabled' : '';
@@ -450,7 +451,8 @@
             if (response.newQuantity === 0) {
               // Remove item if quantity is zero
               removeFromCart(cartId);
-            } else {
+            } 
+            else {
               // Reload cart items to reflect the updated quantity
               loadCartItems();
               // Reload equipment list to update available quantities
