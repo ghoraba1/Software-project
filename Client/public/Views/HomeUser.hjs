@@ -211,6 +211,9 @@
                       <p class="card-text">Category: ${equipment.category_name}</p>
                       <p class="card-text">Supplier: ${equipment.supplier_name}</p>
                       <p class="card-text">Status: ${equipment.status}</p>
+                      <div class="d-flex flex-wrap justify-content-center rating-container" data-equipment-id="${equipment.equipment_id}">
+                  ${[1, 2, 3, 4, 5].map(i => `<span class="star " data-value="${i}">&#9733;</span>`).join('')}
+                </div> 
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                       <span class="text-primary font-weight-bold available-quantity">
