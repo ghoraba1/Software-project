@@ -176,7 +176,7 @@ $(document).ready(function() {
             url: `http://localhost:3000/api/v1/user/${userId}`,
             method: "DELETE",
             success: function(response) {
-                alert(response);
+                $('#deleteAlert').show().delay(2000).fadeOut();
                 fetchUsers(); // Refresh the user list
             },
             error: function(xhr, status, error) {
@@ -186,12 +186,19 @@ $(document).ready(function() {
     });
 
     fetchUsers(); // Initial fetch of users
-});
+})
 </script>
 
-<!--ALert--> 
+<!--ALert on update --> 
 <div class="alert alert-success alert-dismissible fade show" role="alert" id="updateAlert" style="display: none;">
   Your account has been updated successfully!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<!--Alert on delete-->
+<div class="alert alert-danger alert-dismissible fade show" role="alert" id="deleteAlert" style="display: none;">
+  User has been deleted successfully!
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
