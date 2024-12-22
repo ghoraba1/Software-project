@@ -89,10 +89,7 @@
             <i class="fas fa-shopping-cart"></i>
           </a>
         </li>
-        <!-- Orders -->
-        <li class="nav-item">
-          <a class="nav-link" href="/orders">Orders</a>
-        </li>
+
         <!-- Profile -->
         <li class="nav-item">
           <a class="nav-link" href="/Profile">
