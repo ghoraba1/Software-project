@@ -89,7 +89,7 @@
                     <select id="category-filter" class="form-control">
                         <option value="all">All</option>
                         <option value="Mechanical">Mechanical</option>
-                        <option value="Electrical">Electrical</option>
+                        <option value="Electronics">Electronics</option>
                         <option value="Civil">Civil</option>
                         <!-- Add more categories here -->
                     </select>
@@ -287,7 +287,7 @@
                         data.forEach(function(item) {
                             $('.equipment-list tbody').append(`
                                 <tr>
-                                    <td>${item.equipment_img}</td>
+                                <td><img src="${item.equipment_img}" alt="Equipment Image" style="max-width: 100px; max-height: 100px;"></td>
                                     <td>${item.equipment_name}</td>
                                     <td>${item.equipment_id}</td>
                                     <td>${item.category_name}</td>
@@ -413,7 +413,7 @@ function applyFilters() {
                     data.forEach(function(item) {
                         $('.equipment-list tbody').append(`
                             <tr>
-                                <td>${item.equipment_img}</td>
+                                <td><img src="${item.equipment_img}" alt="Equipment Image" style="max-width: 100px; max-height: 100px;"></td>
                                 <td>${item.equipment_name}</td>
                                 <td>${item.equipment_id}</td>
                                 <td>${item.category_name}</td>
@@ -589,7 +589,7 @@ $('#editEquipmentForm').submit(function (e) {
   // Send the PUT request to update the equipment
   $.ajax({
     type: 'PUT',
-    url: `http://localhost:3000/api/v1/equipment_edit/${$('#editEquipmentForm').data('equipment-id')}`,
+    url: `http://localhost:3000/api/v1/equipment/${$('#editEquipmentForm').data('equipment-id')}`,
     data:  JSON.stringify(updatedData),
     contentType: 'application/json',
     success: function (response) {
