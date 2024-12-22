@@ -23,12 +23,12 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/UserMangement">
-                        <span class="mr-2">User Management Page</span>
+                        <span class="mr-2">User Management </span>
                         <i class="fas fa-users"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/Orders">Orders</a>
+                    <a class="nav-link" href="/Orders">View Orders</a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
                     <input type="text" class="form-control col-9 ml-2" id="search" placeholder="Search for user">
@@ -204,6 +204,19 @@ $(document).ready(function() {
             user.role.toLowerCase().includes(searchTerm)
         );
         renderUsers(filteredUsers);
+    });
+    
+        $('#logoutBtn').click(function () {
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/api/v1/user/logout',
+        success: function () {
+          window.location.href = '/login'; // Redirect to login page
+        },
+        error: function (error) {
+          console.error('Error logging out:', error);
+        }
+      });
     });
 
 
