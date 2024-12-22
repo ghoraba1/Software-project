@@ -381,7 +381,7 @@ return res.status(400).send("You are not an admin")
           const [order] = await trx('orders').insert(
             {
               user_id: user.user_id,
-              order_date: DB.fn.now(),
+              date: DB.fn.now(),
             },
             ['order_id'] // Return the order_id from the inserted row
           );
@@ -390,9 +390,10 @@ return res.status(400).send("You are not an admin")
     
           // Add the cart items to the equipmentorder table
           const equipmentOrderEntries = cartItems.map((item) => ({
-            order_ID: orderId,
+          
             equipment_ID: item.equipment_id,
             quantity: item.quantity,
+            mainorder_ID:orderId
           }));
     
           await trx('equipmentorder').insert(equipmentOrderEntries);

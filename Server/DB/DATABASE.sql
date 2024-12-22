@@ -71,7 +71,9 @@ CREATE TABLE session (
 
 CREATE TABLE equipment_order (
     order_ID serial PRIMARY KEY,
+    mainorder_ID INTEGER NOT NULL,
     equipment_ID integer NOT NULL,
     quantity integer NOT NULL,
+     FOREIGN KEY (mainorder_ID) REFERENCES Orders(order_ID),
     FOREIGN KEY (equipment_ID) REFERENCES equipment(equipment_ID) ON DELETE CASCADE
 );
