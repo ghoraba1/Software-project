@@ -146,7 +146,6 @@
           </div>
           <div class="form-group">
             <label for="edit-equipment-img">Image URL</label>
-            <input type="text" class="form-control" id="edit-equipment-img" required>
           </div>
           <div class="form-group">
             <label for="edit-rating">Rating</label>
@@ -214,10 +213,8 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>Preview</strong> 
-                    <img id="modal-equipment-img" src="/uploads/1734692543527-image2s.jpg" alt="Preview Image" style="max-width: 300px; max-height: 300px;"></p>
+                    <img id="modal-equipment-img" src="/uploads" alt="Preview Image" style="max-width: 300px; max-height: 300px;"></p>
                     <p><strong>Name:</strong> <span id="modal-equipment-name"></span></p>
-                    <p><strong>ID:</strong> <span id="modal-equipment-id"></span></p>
-                    <!-- needed for id selection -->
                     <p><strong>Category:</strong> <span id="modal-category-name"></span></p>
                     <p><strong>Rating</strong> <span id="modal-equipment-rate"></span></p>
                     <p><strong>Supplier:</strong> <span id="modal-supplier-name"></span></p>
@@ -465,7 +462,7 @@ function applyFilters() {
 
 $('#upload-image-btn').click(function() {
     const equipmentId = $('#edit-equipment-id').text(); // Fetch the actual ID from the modal content
-    
+
     if (!equipmentId || isNaN(equipmentId)) { // Validate that it's a valid numeric ID
         alert('Invalid or missing Equipment ID.');
         return;
@@ -487,7 +484,9 @@ $('#upload-image-btn').click(function() {
         processData: false,
         success: function(response) {
             alert('Image uploaded successfully!');
-            $('#editModal').modal('hide'); // Close the modal on success
+            //const newImageUrl = equipment.equipment_id;
+            //    $('#edit-equipment-img').val(newImageUrl);
+            //$('#detailsModal').modal('hide'); // Close the modal on success
             fetchAndDisplayEquipment(); // Refresh the equipment list
         },
         error: function(xhr, status, error) {
@@ -581,7 +580,7 @@ $('#editEquipmentForm').submit(function (e) {
   // Send the PUT request to update the equipment
   $.ajax({
     type: 'PUT',
-    url: `http://localhost:3000/api/v1/equipment/${$('#editEquipmentForm').data('equipment-id')}`,
+    url: `http://localhost:3000/api/v1/equipment_edit/${$('#editEquipmentForm').data('equipment-id')}`,
     data:  JSON.stringify(updatedData),
     contentType: 'application/json',
     success: function (response) {
@@ -593,12 +592,7 @@ $('#editEquipmentForm').submit(function (e) {
       console.error('Error updating equipment:', error);
       alert('Error updating equipment');
     }
-  });
-});
-
+});});
         </script>
     </body>
     </html>
-
-
-
