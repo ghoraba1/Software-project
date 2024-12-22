@@ -16,6 +16,10 @@
   <style>
 .checked {
   color: orange;
+
+}
+.star{
+  cursor: pointer;
 }
     .filters-container {
       margin: 20px 0;
@@ -230,14 +234,6 @@
                 </div>`;
               equipmentList.append(equipmentItem);
             });
-
-            populateFilters();
-            attachAddToCartEvent();
-          },
-          error: function (error) {
-            console.error('Error fetching equipment data:', error);
-          }
-        }) };
 //////////////////////////////////////////////////////////////////////
  $('.star').on('click', function () { 
         var rating = $(this).data('value'); 
@@ -259,8 +255,17 @@
                 alert('Error submitting rating.'); 
               } 
             });
-///////////////////////////////////////////////////////////////////////////////
+
       });
+///////////////////////////////////////////////////////////////////////////////////////////
+            populateFilters();
+            attachAddToCartEvent();
+          },
+          error: function (error) {
+            console.error('Error fetching equipment data:', error);
+          }
+        }) 
+        };
 
       // Populate dropdown filters for categories and suppliers
       function populateFilters() {
