@@ -153,8 +153,7 @@
           </div>
           {{!-- <div class="form-group">
             <label for="edit-equipment-img">Image URL</label>
-            <input type="text" class="form-control" id="edit-equipment-img" required>
-          </div> --}}
+          </div>
           <div class="form-group">
             <label for="edit-rating">Rating</label>
             <input type="number" class="form-control" id="edit-rating" required>
@@ -206,7 +205,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>Preview</strong> <span id="modal-equipment-img"></span></p>
+                    <p><strong>Preview</strong> 
+                    <img id="modal-equipment-img" src="/uploads" alt="Preview Image" style="max-width: 300px; max-height: 300px;"></p>
                     <p><strong>Name:</strong> <span id="modal-equipment-name"></span></p>
                     <p><strong>Category:</strong> <span id="modal-category-name"></span></p>
                     <p><strong>Rating</strong> <span id="modal-equipment-rate"></span></p>
@@ -434,6 +434,59 @@ function applyFilters() {
     });
     // Event delegation for dynamically generated elements
     // Event delegation for dynamically generated elements
+
+// Image Upload - Preview and Submit
+            $('#equipment-image').change(function() {
+                const file = this.files[0];
+                //console.log(temp);
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#uploaded-image-preview').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                    selectedImageFile = file;
+                }
+            });
+
+$('#upload-image-btn').click(function() {
+    const equipmentId = $('#edit-equipment-id').text(); // Fetch the actual ID from the modal content
+
+    if (!equipmentId || isNaN(equipmentId)) { // Validate that it's a valid numeric ID
+        alert('Invalid or missing Equipment ID.');
+        return;
+    }
+
+    if (!selectedImageFile) {
+        alert('No image file selected.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('equipment_img', selectedImageFile);
+
+    $.ajax({
+        url: `http://localhost:3000/api/v1/equipment/update-image/${equipmentId}`, // Use the actual ID
+        method: 'PUT',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            alert('Image uploaded successfully!');
+            //const newImageUrl = equipment.equipment_id;
+            //    $('#edit-equipment-img').val(newImageUrl);
+            //$('#detailsModal').modal('hide'); // Close the modal on success
+            fetchAndDisplayEquipment(); // Refresh the equipment list
+        },
+        error: function(xhr, status, error) {
+            console.error('Error updating image:', error);
+            alert('Image failed to upload.');
+        }
+    });
+});
+
+
+
     $(document).on('click', '.delete', function(){
         var equipmentID = $(this).data('id');
         $.ajax({
@@ -513,7 +566,7 @@ $('#editEquipmentForm').submit(function (e) {
   // Send the PUT request to update the equipment
   $.ajax({
     type: 'PUT',
-    url: `http://localhost:3000/api/v1/equipment/${$('#editEquipmentForm').data('equipment-id')}`,
+    url: `http://localhost:3000/api/v1/equipment_edit/${$('#editEquipmentForm').data('equipment-id')}`,
     data:  JSON.stringify(updatedData),
     contentType: 'application/json',
     success: function (response) {
@@ -525,12 +578,7 @@ $('#editEquipmentForm').submit(function (e) {
       console.error('Error updating equipment:', error);
       alert('Error updating equipment');
     }
-  });
-});
-
+});});
         </script>
     </body>
     </html>
-
-
-

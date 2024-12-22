@@ -125,6 +125,10 @@ function HandlePrivateAPIs(app){
    }
       });
 
+
+
+      
+
     app.delete('/api/v1/equipment/:id', async (req, res) => {
       user = await get_user(req,res);
       if (!user) {
@@ -208,6 +212,44 @@ else{
   
 });
 
+
+//PUT for edit so it doesnt interfere with images
+app.put('/api/v1/equipment_edit/:id', async (req, res) => {
+  user = await get_user(req,res);
+  if (!user) {
+     return res.status(403).json({ message: 'Unauthorized access' }); // Stops execution after redirection or error
+ }
+if(user.role == "admin"){
+   try{
+    const { equipment_name, equipment_img, rating, model_number,
+      purchase_date, quantity, status, location, category_id, supplier_id } = req.body;
+   console.log(req.body);
+   const query = `UPDATE "equipment"
+                   SET
+                   equipment_name = '${equipment_name}',
+                   rating = ${rating},
+                   model_number = ${model_number},
+                   purchase_date = '${purchase_date}',
+                   quantity = '${quantity}',
+                   status = '${status}',
+                   location = '${location}',
+                   category_id = '${category_id}',
+                   supplier_id = '${supplier_id}'
+                   WHERE equipment_id = ${req.params.id}`;
+ const result = await DB.raw(query);
+ return res.status(200).json("Succesfully updated.");
+   }
+    catch(err){
+      console.log("Error:", err.message);
+    return res.status(400).json("Unable to update equipment.");
+   }   
+}
+else{
+   return res.status(400).send("You are not an admin")
+}
+  });
+
+
 //get image
 
 app.get('/get-image', (req, res) => {
@@ -216,7 +258,7 @@ app.get('/get-image', (req, res) => {
 }
 if(user.role == "admin"){
   try{
-  const imagePath = '/uploads/1734692543527-image2s.jpg'; // Replace with your database query result
+  const imagePath = '/uploads/1734692543527-image2s.jpg'; 
   res.json({ imagePath });
 }
 catch(err){
@@ -553,81 +595,28 @@ app.post('/api/v1/user/logout', async function(req, res) {
 });  
 
 // Get all orders with user and equipment details
-
 app.get('/api/v1/orders', async (req, res) => {
   try {
-    // Group orders with their respective equipment details
     const orders = await DB('orders')
       .join('users', 'orders.user_id', '=', 'users.user_id')
+      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.mainorder_id')
+      .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
       .select(
         'orders.order_id',
         'orders.date',
         'users.username',
+        'equipment.equipment_name',
+        'equipmentorder.quantity',
+        'equipment.equipment_img',
+        'equipment.model_number'
       );
-      
 
-    // const groupedOrders = orders.reduce((acc, curr) => {
-    //   const { order_id, date, username, equipment_name, quantity, equipment_img, model_number } = curr;
-
-    //   if (!acc[order_id]) {
-    //     acc[order_id] = {
-    //       order_id,
-    //       date,
-    //       username,
-    //       equipment: []
-    //     };
-    //   }
-
-    //   acc[order_id].equipment.push({ equipment_name, quantity, equipment_img, model_number });
-    //   return acc;
-    // }, {});
-
-
-    res.status(200).json({ orders: Object.values(orders) });
+    res.status(200).json({ orders });
   } catch (error) {
     console.error('Error fetching orders:', error.message);
     res.status(500).json({ error: 'Failed to fetch orders' });
   }
 });
-
-//-----------------------
-app.get('/api/v1/orders/:orderId', async (req, res) => {
-  try {
-      const { orderId } = req.params;
-      const orderDetails = await DB('orders')
-          .where('orders.order_id', orderId)
-          .join('users', 'orders.user_id', '=', 'users.user_id')
-          .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.mainorder_id')
-          .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
-          .select(
-              'orders.order_id',
-              'orders.date',
-              'users.username',
-              'equipment.equipment_name',
-              'equipmentorder.quantity',
-              'equipment.equipment_img',
-              'equipment.model_number'
-          );
-
-      const formattedOrder = {
-          order_id: orderId,
-          date: orderDetails[0]?.date,
-          username: orderDetails[0]?.username,
-          equipment: orderDetails.map(item => ({
-              equipment_name: item.equipment_name,
-              quantity: item.quantity,
-              model_number: item.model_number,
-              equipment_img: item.equipment_img,
-          })),
-      };
-
-      res.status(200).json({ order: formattedOrder });
-  } catch (error) {
-      console.error('Error fetching order details:', error.message);
-      res.status(500).json({ error: 'Failed to fetch order details' });
-  }
-});
-
 
 // Start
 }
