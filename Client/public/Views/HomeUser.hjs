@@ -314,6 +314,9 @@
                         <p class="card-text">Category: ${item.category_name}</p>
                         <p class="card-text">Supplier: ${item.supplier_name}</p>
                         <p class="card-text">Status: ${item.status}</p>
+                        <div class="d-flex flex-wrap justify-content-center rating-container" data-equipment-id="${item.equipment_id}">
+                  ${[1, 2, 3, 4, 5].map(i => `<span class="star " data-value="${i}">&#9733;</span>`).join('')}
+                </div> 
                       </div>
                       <div class="card-footer d-flex justify-content-between">
                         <span class="text-primary font-weight-bold available-quantity">
@@ -328,7 +331,28 @@
                 equipmentList.append(equipmentItem);
               }
             });
+ $('.star').on('click', function () { 
+        var rating = $(this).data('value'); 
+        var equipmentId = $(this).closest('.rating-container').data('equipment-id'); 
+        $(this).siblings().removeClass('checked'); 
+        $(this).prevAll().addBack().addClass('checked'); 
+            $.ajax({ 
+              url: 'http://localhost:3000/api/v1/rating/new', 
+              method: 'POST', 
+              contentType: 'application/json', 
+              data: JSON.stringify({
+                equipment_id: equipmentId, 
+                score: rating
+              }), 
+              success: function (response) { 
+                alert('Thank you for rating!'); 
+              }, 
+              error: function (error) { 
+                alert('Error submitting rating.'); 
+              } 
+            });
 
+      });
             attachAddToCartEvent();
           },
           error: function (error) {
