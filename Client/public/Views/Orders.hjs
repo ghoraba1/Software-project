@@ -53,12 +53,21 @@
     <div class="table-responsive">
         <h1 class="text-center mb-4">Orders</h1>
         <li class="nav-item d-flex align-items-center">
-    <label for="startDate" class="mr-2">From:</label>
-    <input type="date" class="form-control mr-2" id="startDate">
-    <label for="endDate" class="mr-2">To:</label>
-    <input type="date" class="form-control mr-2" id="endDate">
-    <button class="btn btn-secondary" id="filterDateBtn">Filter</button>
+            <label for="startDate" class="mr-2">From:</label>
+            <input type="date" class="form-control mr-2" id="startDate">
+            <label for="endDate" class="mr-2">To:</label>
+            <input type="date" class="form-control mr-2" id="endDate">
+            <button class="btn btn-secondary" id="filterDateBtn">Filter</button>
+        </li>
+        <li class="nav-item d-flex align-items-center">
+    <label for="sortDate" class="mr-2">Sort By:</label>
+    <select class="form-control mr-2" id="sortDate">
+        <option value="">Select</option>
+        <option value="asc">Date (Ascending)</option>
+        <option value="desc">Date (Descending)</option>
+    </select>
 </li>
+
 
         <table class="table table-bordered equipment-list">
             <thead class="thead-dark">
@@ -120,7 +129,7 @@
     <!-- JavaScript -->
    <script>
     $(document).ready(function () {
-        let allOrders = []; // Store all orders for filtering
+        let allOrders = []; // Store all orders for filtering and sorting
 
         // Fetch and display orders
         function fetchOrders() {
@@ -129,7 +138,7 @@
                 method: 'GET',
                 success: function (response) {
                     if (response.orders && response.orders.length > 0) {
-                        allOrders = response.orders; // Save all orders for filtering
+                        allOrders = response.orders; // Save all orders for filtering and sorting
                         displayOrders(allOrders); // Display all orders initially
                     } else {
                         $('.equipment-list tbody').html('<tr><td colspan="7">No orders found</td></tr>');
@@ -244,6 +253,19 @@
             } else {
                 alert('Please select both start and end dates.');
             }
+        });
+
+        // Sort by date
+        $('#sortDate').on('change', function () {
+            const sortOrder = $(this).val();
+
+            if (sortOrder === 'asc') {
+                allOrders.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortOrder === 'desc') {
+                allOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+
+            displayOrders(allOrders); // Update the table with sorted orders
         });
 
         // Initial fetch of orders
