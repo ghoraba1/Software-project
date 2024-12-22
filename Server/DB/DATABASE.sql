@@ -69,7 +69,7 @@ CREATE TABLE session (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE equipment_order (
+CREATE TABLE equipmentorder (
     order_ID serial PRIMARY KEY,
     mainorder_ID INTEGER NOT NULL,
     equipment_ID integer NOT NULL,
