@@ -103,7 +103,7 @@ let result = await DB.raw(`select exists (
   }
  //if the user is logged in, but his session ended while he is using the website, he must be redirected to  page (or the '/')
  //note: we define the session period, we can make it 5min, 4 hours or anything
-  if (new Date() > userSession.expiresAt) {
+  if (new Date() > userSession.expiresat) {
     console.log("expired session");
     return res.status(301).redirect('/');
   }
