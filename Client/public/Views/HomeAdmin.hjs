@@ -219,6 +219,12 @@
                     <p><strong>Location:</strong> <span id="modal-location"></span></p>
                     <p><strong>Category ID</strong> <span id="modal-category-id"></span></p>
                 </div>
+                <!--oh-->
+                          <div class="form-group">
+            <label for="equipment-image">Upload Equipment Image:</label>
+            <input type="file" class="form-control-file" id="equipment-image" accept="image/*">
+          </div>
+          
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>

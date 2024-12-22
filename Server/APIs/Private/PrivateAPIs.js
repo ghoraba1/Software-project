@@ -285,11 +285,11 @@ return res.status(400).send("You are not an admin")
             return res.status(403).json({ message: 'Only standard users can add ratings' });
           }
        
-          const { equipment_id, rating} = req.body;
+          const { equipment_id, score} = req.body;
           await DB('rating').insert({
             user_id: user.user_id,
             equipment_id,
-            rating
+            score
           });
     
           res.status(201).json({ message:'Successfully added rating'});
