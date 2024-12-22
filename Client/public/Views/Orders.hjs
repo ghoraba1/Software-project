@@ -188,7 +188,7 @@
 
                         // Populate modal fields
                         $('#modalOrderId').text(order.order_id);
-                        $('#modalOrderDate').text(new Date(order.date).toISOString().split('T')[0]);
+                        $('#modalOrderDate').text(new Date(order.date).toLocaleDateString());
                         $('#modalUsername').text(order.username);
 
                         // Populate equipment list in modal

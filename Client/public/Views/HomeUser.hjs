@@ -228,33 +228,7 @@
               equipmentList.append(equipmentItem);
             });
 //////////////////////////////////////////////////////////////////////////////////////
- $('.star').on('click', function () { 
-        var rating = $(this).data('value'); 
-        var equipmentId = $(this).closest('.rating-container').data('equipment-id'); 
-        $(this).siblings().removeClass('checked'); 
-        $(this).prevAll().addBack().addClass('checked'); 
-            $.ajax({ 
-              url: 'http://localhost:3000/api/v1/rating/new', 
-              method: 'POST', 
-              contentType: 'application/json', 
-              data: JSON.stringify({
-                equipment_id: equipmentId, 
-                score: rating
-              }), 
-              success: function (response) { 
-                alert('Thank you for rating!'); 
-              }, 
-              error: function (error) { 
-                alert('Error submitting rating.'); 
-              } 
-            });
-////////////////////////////////////////////////////////////////////////////////////////
-            populateFilters();
-            attachAddToCartEvent();
-          },
-          error: function (error) {
-            console.error('Error fetching equipment data:', error);
-          }
+ 
         });
       }
 
