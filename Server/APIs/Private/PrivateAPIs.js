@@ -4,21 +4,6 @@ const {get_session_token} = require('../../Middleware/Sec_functions.js');
 const multer = require('multer');
 
 function HandlePrivateAPIs(app){
-    // const AdminCheck = async (req, res, next) => {
-    //     try {
-    //       const user = await get_user(req);
-    //       //checks if user is admin using the get_user func from middleware.
-    //       if (user.role !== "admin") {
-    //         return res.status(401).json({ error: "User not admin." });
-    //       }
-    //       //if admin proceeds, if not code doesn't send.
-    //       next();
-    //     } catch (error) {
-    //       console.error("Error:", error);
-    //       return res.status(400).send("Authorization failed.");
-    //     }
-    //    next();
-    //   };
 
 //user APIs----------------------------------------------------
     app.get('/api/v1/user/profile',async (req,res)=>{ ///////////////////////////////////////////////////////
