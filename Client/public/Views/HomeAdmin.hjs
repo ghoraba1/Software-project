@@ -405,7 +405,7 @@ function applyFilters() {
                 $('#search').on('keyup', function() {
                     applyFilters();
                 });
-                    $('#logoutBtn').click(function () {
+            $('#logoutBtn').click(function () {
       $.ajax({
         type: 'POST',
         url: 'http://localhost:3000/api/v1/user/logout',

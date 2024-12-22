@@ -4,21 +4,6 @@ const {get_session_token} = require('../../Middleware/Sec_functions.js');
 const multer = require('multer');
 
 function HandlePrivateAPIs(app){
-    // const AdminCheck = async (req, res, next) => {
-    //     try {
-    //       const user = await get_user(req);
-    //       //checks if user is admin using the get_user func from middleware.
-    //       if (user.role !== "admin") {
-    //         return res.status(401).json({ error: "User not admin." });
-    //       }
-    //       //if admin proceeds, if not code doesn't send.
-    //       next();
-    //     } catch (error) {
-    //       console.error("Error:", error);
-    //       return res.status(400).send("Authorization failed.");
-    //     }
-    //    next();
-    //   };
 
 //user APIs----------------------------------------------------
     app.get('/api/v1/user/profile',async (req,res)=>{ ///////////////////////////////////////////////////////
@@ -389,9 +374,9 @@ return res.status(400).send("You are not an admin")
     
           // Add the cart items to the equipmentorder table
           const equipmentOrderEntries = cartItems.map((item) => ({
-            order_id: orderId,
-            equipment_id: item.equipment_id,
+            equipment_ID: item.equipment_id,
             quantity: item.quantity,
+            mainorder_ID:orderId
           }));
     
           await trx('equipmentorder').insert(equipmentOrderEntries);
@@ -574,7 +559,7 @@ app.get('/api/v1/orders', async (req, res) => {
     // Group orders with their respective equipment details
     const orders = await DB('orders')
       .join('users', 'orders.user_id', '=', 'users.user_id')
-      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.order_id')
+      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.mainorder_id')
       .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
       .select(
         'orders.order_id',
