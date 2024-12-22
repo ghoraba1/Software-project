@@ -375,7 +375,6 @@ return res.status(400).send("You are not an admin")
     
           // Add the cart items to the equipmentorder table
           const equipmentOrderEntries = cartItems.map((item) => ({
-          
             equipment_ID: item.equipment_id,
             quantity: item.quantity,
             mainorder_ID:orderId
@@ -559,7 +558,7 @@ app.get('/api/v1/orders', async (req, res) => {
   try {
     const orders = await DB('orders')
       .join('users', 'orders.user_id', '=', 'users.user_id')
-      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.order_id')
+      .join('equipmentorder', 'orders.order_id', '=', 'equipmentorder.mainorder_id')
       .join('equipment', 'equipmentorder.equipment_id', '=', 'equipment.equipment_id')
       .select(
         'orders.order_id',

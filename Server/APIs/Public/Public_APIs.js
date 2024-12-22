@@ -121,19 +121,19 @@ function HandlePublicAPIs(app){
         // set the expiry time as 30 minutes after the current time
         const token = v4();
         const currentDateTime = new Date();
-        const expiresAt = new Date(+currentDateTime + 30*60*1000); // expire in 30 minutes
+        const expiresat = new Date(+currentDateTime + 30*60*1000); // expire in 30 minutes
   
         // create a session containing information about the user and expiry time
         const session = {
           user_id: user.user_id,
           token,
-          expiresAt,
+          expiresat,
         };
         try {
           await DB('public.session').insert(session);
           // In the response, set a cookie on the client with the name "session_cookie"
           // and the value as the UUID we generated. We also set the expiration time.
-          return res.cookie("session_token", token, { expires: expiresAt }).status(200).json({
+          return res.cookie("session_token", token, { expires: expiresat }).status(200).json({
             message:"login successful",
             user: {
               user_id: user.user_id,
