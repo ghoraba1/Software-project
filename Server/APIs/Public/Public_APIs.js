@@ -121,7 +121,7 @@ function HandlePublicAPIs(app){
         // set the expiry time as 30 minutes after the current time
         const token = v4();
         const currentDateTime = new Date();
-        const expiresAt = new Date(+currentDateTime + 30*60*1000); // expire in 30 minutes
+        const expiresAt = new Date(+currentDateTime + 60*60*1000); // expire in 60 minutes
   
         // create a session containing information about the user and expiry time
         const session = {

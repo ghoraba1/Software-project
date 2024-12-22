@@ -112,13 +112,12 @@ function HandlePrivateAPIs(app){
      }
     if(user.role == "admin"){
        try{
-        const { equipment_name, equipment_img, rating, model_number,
+        const { equipment_name, rating, model_number,
           purchase_date, quantity, status, location, category_id, supplier_id } = req.body;
        console.log(req.body);
        const query = `UPDATE "equipment"
                        SET
                        equipment_name = '${equipment_name}',
-                       equipment_img = '${equipment_img}',
                        rating = ${rating},
                        model_number = ${model_number},
                        purchase_date = '${purchase_date}',

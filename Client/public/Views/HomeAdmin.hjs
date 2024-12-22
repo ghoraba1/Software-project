@@ -138,10 +138,10 @@
             <label for="edit-equipment-name">Name</label>
             <input type="text" class="form-control" id="edit-equipment-name" required>
           </div>
-          <div class="form-group">
+          {{!-- <div class="form-group">
             <label for="edit-equipment-img">Image URL</label>
             <input type="text" class="form-control" id="edit-equipment-img" required>
-          </div>
+          </div> --}}
           <div class="form-group">
             <label for="edit-rating">Rating</label>
             <input type="number" class="form-control" id="edit-rating" required>
@@ -182,7 +182,7 @@
 </div>
 
 
-    <!-- Modal -->
+    <!-- DETAILS Modal -->
     <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
