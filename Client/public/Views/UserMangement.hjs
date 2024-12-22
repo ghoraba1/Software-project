@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbarId">
+        <a class="navbar-brand" href="/HomeAdmin">Superior Bros</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/UserMangement">
+                        <span class="mr-2">User Management Page</span>
+                        <i class="fas fa-users"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Orders">Orders</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <input type="text" class="form-control col-9 ml-2" id="search" placeholder="Search for equipment">
+                    <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
+                </li>
+            </ul>
+            <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
+    <div class="alert alert-success d-none" id="responseMessage" role="alert"></div>
+
+    
+    <div class="container mt-5">
+        <h1 class="text-center">User Management</h1>
+        <table class="table table-striped mt-4 Users" id="userTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- User rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <div class="form-group">
+            <label for="editUsername">Name</label>
+            <input type="text" class="form-control" id="editUsername" required>
+          </div>
+          <div class="form-group">
+            <label for="editEmail">Email</label>
+            <input type="email" class="form-control" id="editEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="editRole">Role</label>
+            <input type="text" class="form-control" id="editRole" required>
+          </div>
+          <div class="form-group">
+            <label for="editPassword">New Password</label>
+            <input type="password" class="form-control" id="editPassword" required>
+          </div>
+          <input type="hidden" id="editUserId">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+    let users = [];
+
+    function fetchUsers() {
+        $.ajax({
+            url: "http://localhost:3000/api/v1/user/view",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                users = data;
+                renderUsers();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+
+    function renderUsers() {
+        const userTableBody = $('#userTable tbody');
+        userTableBody.empty();
+        users.forEach(user => {
+            const row = `
+                <tr>
+                    <td>${user.user_id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <button class="btn btn-primary update" data-id="${user.user_id}">Edit</button>
+                        <button class="btn btn-danger delete" data-id="${user.user_id}">Delete</button>
+                    </td>
+                </tr>
+            `;
+            userTableBody.append(row);
+        });
+    }
+
+    $('#userTable').on('click', '.update', function() {
+        const userId = $(this).data('id');
+        const user = users.find(user => user.user_id === userId);
+        if (user) {
+            $('#editUserId').val(user.user_id);
+            $('#editUsername').val(user.username);
+            $('#editEmail').val(user.email);
+            $('#editRole').val(user.role);
+            $('#editPassword').val("");
+            $('#editUserModal').modal('show');
+        }
+    });
+
+  $('#saveChangesBtn').on('click', function() {
+    const userId = $('#editUserId').val();
+    const newName = $('#editUsername').val();
+    const newEmail = $('#editEmail').val();
+    const newRole = $('#editRole').val();
+    const newPassword = $('#editPassword').val();
+    if (newName || newEmail || newRole || newPassword) {
+        $.ajax({
+            url: `http://localhost:3000/api/v1/user/${userId}`,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                username: newName,
+                email: newEmail,
+                password: newPassword,
+                role: newRole
+            }),
+            success: function(response) {
+                $('#responseMessage').removeClass('d-none').addClass('alert-success').text(response);
+                $('#editUserModal').modal('hide');
+                fetchUsers(); // Refresh the user list
+                setTimeout(function() {
+                    $('#responseMessage').addClass('d-none').removeClass('alert-success').text('');
+                }, 3000); // Message will disappear after 3 seconds
+            },
+            error: function(xhr, status, error) {
+                $('#responseMessage').removeClass('d-none').addClass('alert-danger').text('Error updating user: ' + error);
+                setTimeout(function() {
+                    $('#responseMessage').addClass('d-none').removeClass('alert-danger').text('');
+                }, 3000); // Message will disappear after 3 seconds
+            }
+        });
+    }
+});
+
+$('#userTable').on('click', '.delete', function() {
+    const userId = $(this).data('id');
+    $.ajax({
+        url: `http://localhost:3000/api/v1/user/${userId}`,
+        method: "DELETE",
+        success: function(response) {
+            $('#responseMessage').removeClass('d-none').addClass('alert-success').text(response);
+            fetchUsers(); // Refresh the user list
+            setTimeout(function() {
+                $('#responseMessage').addClass('d-none').removeClass('alert-success').text('');
+            }, 3000); // Message will disappear after 3 seconds
+        },
+        error: function(xhr, status, error) {
+            $('#responseMessage').removeClass('d-none').addClass('alert-danger').text('Error deleting user: ' + error);
+            setTimeout(function() {
+                $('#responseMessage').addClass('d-none').removeClass('alert-danger').text('');
+            }, 3000); // Message will disappear after 3 seconds
+        }
+    });
+});
+
+    fetchUsers(); // Initial fetch of users
+});
+
+</script>
+<footer class="text-center mt-auto py-4 bg-dark text-white">
+  <div class="container">
+    <p>We are a group of Software engineers designing a site to sell products from various companies.</p>
+    <p>Contributors include:</p>
+    <div class="d-flex flex-wrap justify-content-center">
+      <span class="mx-2">Abdelrahman Ghoraba</span>
+      <span class="mx-2">Abdelrahman Elkhouly</span>
+      <span class="mx-2">Mohamed Motawea</span>
+      <span class="mx-2">Ali Wael</span>
+      <span class="mx-2">Ahmad Alaa</span>
+      <span class="mx-2">Omar Atef</span>
+      <span class="mx-2">Ahmad Waleed</span>
+    </div>
+    <p>We hope you like it :)</p>
+    <p>&copy; 2024 The Superior Bros</p>
+  </div>
+</footer>
+
+</body>
+</html>
