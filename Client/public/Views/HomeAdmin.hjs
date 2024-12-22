@@ -9,6 +9,23 @@
         <script src="../Src/EquipmentMangment.js"></script>
         <title>Admin Dashboard</title>
         <style>
+          body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+            margin: 0; /* Remove default margin */
+        }
+
+        main {
+            flex: 1; /* Make the main content area expand to fill available space */
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
             .equipment-list th, .equipment-list td {
                 text-align: center;
                 vertical-align: middle;
@@ -35,36 +52,32 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id = "navbarId">
-        <a class="navbar-brand" href="#">Superior Bros</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
+          <a class="navbar-brand" href="#">Superior Bros</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+          aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav mr-auto">
-            <!-- Cart Icon -->
-            <li class="nav-item">
-            <a class="nav-link" href="/UserMangement">
-                <span class="mr-2">User Management Page</span>
-                <i class="fas fa-shopping-cart"></i>
-            </a>
-            </li>
-            <!-- Order Section -->
-            <li class="nav-item">
-            <a class="nav-link" href="/Orders">Orders</a>
-            </li>
+          <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+              <a class="nav-link" href="/UserMangement">User Management Page</a>
+              </li>
+              <!-- Order Section -->
+              <li class="nav-item">
+              <a class="nav-link" href="/Orders">View Orders</a>
+              </li>
 
-            <!-- Search -->
-            <li class="nav-item d-flex align-items-center">
-            <input type="text" class="form-control col-9       ml-2" id="search" placeholder="Search for equipment">
-            <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
-            </li>
-        </ul>
+              <!-- Search -->
+              <li class="nav-item d-flex align-items-center">
+              <input type="text" class="form-control col-9       ml-2" id="search" placeholder="Search for equipment">
+              <button class="btn btn-primary ml-2" id="searchBtn">Search</button>
+              </li>
+          </ul>
 
-        <!-- Logout Button -->
-        <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
-        </div>
+          <!-- Logout Button -->
+          <button class="btn btn-danger my-2 my-sm-0" id="logoutBtn">Logout</button>
+          </div>
     </nav>
 
         <div class="table-responsive">
