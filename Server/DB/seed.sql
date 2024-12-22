@@ -1,15 +1,59 @@
-INSERT INTO categories (category_name) VALUES ('Mechanical'), ('Electrical'), ('Civil');
-INSERT INTO suppliers (supplier_name, contact_info, address) VALUES 
-('Supplier A', '123-456-7890', '123 Main St'),
-('Supplier B', '987-654-3210', '456 Elm St');
-INSERT INTO users (username, email, password, role, created_at) VALUES 
-('admin', 'admin@example.com', '<hashed_password>', 'admin', '2024-12-06');
+-- Insert categories
+INSERT INTO categories (category_name)
+VALUES 
+('Electronics'),
+('Mechanical'),
+('Civil');
 
-INSERT INTO equipment (equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status,
-          location, category_id, supplier_id) 
-         VALUES
-('Laptop', NULL, 5, 12345, '2023-01-15', 10, 'Available', 'Room 101', 13,9),
-('Projector', NULL, 4, 67890, '2022-05-10', 5, 'InUse', 'Conference Room', 13,10),
-('Printer', NULL, 3, 11223, '2021-08-01', 15, 'UnderMaintenance', 'Room 102', 13,13),
-('Air Conditioner', NULL, 5, 44556, '2023-11-10', 8, 'Available', 'Server Room', 13,14),
-('Microscope', NULL, 5, 78901, '2020-07-21', 3, 'Available', 'Laboratory', 13,14);
+-- Insert suppliers
+INSERT INTO suppliers (supplier_name, contact_info, address)
+VALUES 
+('ABB', 'contact@supplierA.com', '123 Main Street'),
+('Hitachi', 'contact@supplierB.com', '456 Elm Street'),
+('Meco', 'contact@supplierC.com', '789 Pine Street');
+
+
+-- Insert equipment
+INSERT INTO equipment (equipment_name, equipment_img, rating, model_number, purchase_date, quantity, status, location, category_ID, supplier_ID)
+VALUES 
+('Laptop', NULL, 5, 101, '2023-01-15', 10, 'In Use', 'Office A', 1, 1),
+('Desk', NULL, 4, 201, '2023-02-20', 5, 'Available', 'Storage Room', 2, 2),
+('Hammer', NULL, 5, 301, '2022-11-05', 20, 'In Use', 'Workshop', 3, 3),
+('Helmet', NULL, 5, 401, '2022-10-10', 15, 'Available', 'Safety Room', 3, 3);
+
+-- Insert users
+INSERT INTO users (username, email, password, role, created_at)
+VALUES 
+('admin', 'admin@example.com', 'securepassword', 'admin', '2024-01-01'),
+('john_doe', 'john@example.com', 'password123', 'standard_user', '2024-02-01'),
+('jane_smith', 'jane@example.com', 'password456', 'standard_user', '2024-03-01');
+
+-- Insert orders
+INSERT INTO orders (date, user_id)
+VALUES 
+('2024-04-01', 2),
+('2024-04-02', 3);
+
+-- Insert cart
+INSERT INTO cart (quantity, user_ID, equipment_ID)
+VALUES 
+(2, 2, 1),
+(1, 3, 3);
+
+-- Insert ratings
+INSERT INTO rating (comment, score, user_ID, equipment_ID)
+VALUES 
+('Great product!', 5, 2, 1),
+('Good quality', 4, 3, 3);
+
+-- Insert session
+INSERT INTO session (user_id, token, expiresAt)
+VALUES 
+(1, 'token_admin_123', '2024-12-31 23:59:59'),
+(2, 'token_john_123', '2024-12-31 23:59:59');
+
+-- Insert equipment_order
+INSERT INTO equipmentorder (equipment_ID, quantity)
+VALUES 
+(1, 5),
+(3, 2);
