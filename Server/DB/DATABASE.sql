@@ -13,7 +13,7 @@ CREATE TABLE suppliers (
 CREATE TABLE equipment (
     equipment_ID serial PRIMARY KEY,
     equipment_name text NOT NULL,
-    equipment_img bytea,  /*khalleha null 3ady*/  
+    equipment_img varchar(255),  /*khalleha null 3ady*/  
     rating integer DEFAULT '5' NOT NULL,
     model_number integer NOT NULL,
     purchase_date date NOT NULL,
